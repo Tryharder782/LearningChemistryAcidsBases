@@ -1,0 +1,355 @@
+[
+   {
+      "id": "intro",
+      "statement": [
+         "Acids and bases are extremely common, as are the reactions between acids and bases. The driving force is often the hydronium ion reacting with the hydroxide to form water."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "explainTexture",
+      "statement": [
+         "At the macroscopic level, *acids* taste sour, may be damaging to the skin, and react with bases to yield salts. *Bases* taste bitter, feel slippery, and react with acids to form salts. But on a microscopic level there are various definitions by authors."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "explainArrhenius",
+      "statement": [
+         "An *Arrhenius acid* is a substance that dissociates in water into hydrogen ions *(H^+^)* increasing the concentration of H^+^ ions in the solution. An *Arrhenius base* is a substance that dissociates in water into hydroxide *(OH^-^)* ions; increasing the concentration of OH^-^ ions in an aqueous solution (aq)."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "explainBronstedLowry",
+      "statement": [
+         "*The Brønsted-Lowry* definition states that acids are those with the ability to \"donate\" hydrogen ions *(H^+^)*, otherwise known as *protons*, and bases are those that \"accept\" them."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "explainLewis",
+      "statement": [
+         "*The Lewis* definition defines a base (referred to as a Lewis base) to be a compound that can donate an *electron pair*, and an acid (a Lewis acid) to be a compound that can receive this electron pair."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "explainSimpleDefinition",
+      "statement": [
+         "To put it simply, the presence of *H^+^* ions in a solution makes it acidic, while the presence of *OH^-^* makes it basic. Acids and bases are classified in strong and weak. This will depend on how much they can *dissociate* into H^+^ or OH^-^."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "chooseStrongAcid",
+      "statement": [
+         "Strong acids are those that dissociate entirely into H^+^ ions. The reaction of these acids with water goes to completion.",
+         "*Choose a strong acid.*"
+      ],
+      "inputState": {
+         "type": "chooseSubstance",
+         "substanceType": "strongAcid"
+      },
+      "highlights": [
+         "reactionSelection"
+      ],
+      "substanceType": "strongAcid"
+   },
+   {
+      "id": "showPhScale",
+      "statement": [
+         "That awesome colorful scale is a *pH scale!* You can see that [H^+^] and [OH^-^] are related to each other. When both are the same, they're both at *10^-7^ concentration*. At which point, *pH* is said to be neutral: 7. But what is pH?"
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": [
+         "pHScale"
+      ]
+   },
+   {
+      "id": "explainPHConcept",
+      "statement": [
+         "*[H^+^]* presence in a solution can be very small, that's why the concept of *pH* exists. pH is defined as $*pH=-log[H^+^]*$ and is used as a measurement of acidity of a solution. The same thing happens to $[OH^-^]$."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": [
+         "pHFormula"
+      ]
+   },
+   {
+      "id": "explainPOHConcept",
+      "statement": [
+         "*[OH^-^]* presence in a solution can be very small, that's the concept of *pOH* exists. pOH is defined as $*pOH=-log[OH^-^]*$. pOH is related with pH, as in every solution within water: $*pH + pOH = 14*$. "
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": [
+         "pOHFormula"
+      ]
+   },
+   {
+      "id": "explainPRelation",
+      "statement": [
+         "The relation between pH and pOH can be easily seen in the pH scale. This relationship between *pH and pOH* will be better explained later. Just know that the lower the pH is, the more acidic the solution is. But why?"
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "explainPConcentrationRelation1",
+      "statement": [
+         "If you take a look at the pH equation: $*pH=-log[H^+^]*$, the $[H^+^]$ concentration is really small (10 to some negative exponent). The higher the exponent is, the smaller the value, making a high pH one that represents a low $[H^+^]$."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "explainPConcentrationRelation2",
+      "statement": [
+         "In other words, you can notice that the higher the concentration of *$[H^+^]$, then the lower pH is and the more acidic is the solution.* The same thing goes for pOH and $[OH^-^]$. The higher pH is, the lower pOH is and vice versa."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "setWaterLevelStrongAcid",
+      "statement": [],
+      "inputState": {
+         "type": "setWaterLevel"
+      },
+      "highlights": [
+         "waterSlider"
+      ],
+      "substanceType": "strongAcid",
+      "dynamicTextId": "setWaterLevel"
+   },
+   {
+      "id": "addStrongAcid",
+      "statement": [],
+      "inputState": {
+         "type": "addSubstance",
+         "substanceType": "strongAcid"
+      },
+      "highlights": [
+         "beakerTools"
+      ],
+      "substanceType": "strongAcid",
+      "dynamicTextId": "addSubstance",
+      "requiresAction": true
+   },
+   {
+      "id": "showPhVsMolesGraphAcid",
+      "statement": [],
+      "inputState": {
+         "type": "addSubstance",
+         "substanceType": "strongAcid"
+      },
+      "highlights": [
+         "phChart"
+      ],
+      "dynamicTextId": "showPhVsMolesGraph"
+   },
+   {
+      "id": "chooseStrongBase",
+      "statement": [
+         "Strong bases are those that dissociate entirely into OH^-^ ions. The reaction of these bases with water goes to completion.",
+         "*Choose a strong base.*"
+      ],
+      "inputState": {
+         "type": "chooseSubstance",
+         "substanceType": "strongBase"
+      },
+      "highlights": [
+         "reactionSelection"
+      ],
+      "substanceType": "strongBase"
+   },
+   {
+      "id": "setWaterLevelStrongBase",
+      "statement": [],
+      "inputState": {
+         "type": "setWaterLevel"
+      },
+      "highlights": [
+         "waterSlider"
+      ],
+      "substanceType": "strongBase",
+      "dynamicTextId": "setWaterLevel"
+   },
+   {
+      "id": "addStrongBase",
+      "statement": [],
+      "inputState": {
+         "type": "addSubstance",
+         "substanceType": "strongBase"
+      },
+      "highlights": [
+         "beakerTools"
+      ],
+      "substanceType": "strongBase",
+      "dynamicTextId": "addSubstance",
+      "requiresAction": true
+   },
+   {
+      "id": "showPhVsMolesGraphBase",
+      "statement": [],
+      "inputState": {
+         "type": "addSubstance",
+         "substanceType": "strongBase"
+      },
+      "highlights": [],
+      "dynamicTextId": "showPhVsMolesGraph"
+   },
+   {
+      "id": "chooseWeakAcid",
+      "statement": [
+         "Weak acids are those that dissociate partially into H^+^ ions. The reaction of these acids with water goes to equilibrium.",
+         "*Choose a weak acid.*"
+      ],
+      "inputState": {
+         "type": "chooseSubstance",
+         "substanceType": "weakAcid"
+      },
+      "highlights": [
+         "reactionSelection"
+      ],
+      "substanceType": "weakAcid"
+   },
+   {
+      "id": "explainHEquivalence",
+      "statement": [
+         "*H_3_O^+^ and H^+^* ions are used interchangeably, they are the same thing, but one or the other is used for balancing convenience. In this case, for weak acids and bases, H_2_O is written as a reactant in the equations."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "explainDoubleArrow",
+      "statement": [],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": [],
+      "substanceType": "weakAcid",
+      "dynamicTextId": "explainDoubleArrow"
+   },
+   {
+      "id": "explainEquilibrium",
+      "statement": [
+         "As we already know now, equilibrium reactions will go towards the equilibrium state in which the concentrations of all species remain macroscopically constant. More of the acids-base equilibria will be explained later."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": []
+   },
+   {
+      "id": "setWaterLevelWeakAcid",
+      "statement": [],
+      "inputState": {
+         "type": "setWaterLevel"
+      },
+      "highlights": [
+         "waterSlider"
+      ],
+      "substanceType": "weakAcid",
+      "dynamicTextId": "setWaterLevel"
+   },
+   {
+      "id": "addWeakAcid",
+      "statement": [],
+      "inputState": {
+         "type": "addSubstance",
+         "substanceType": "weakAcid"
+      },
+      "highlights": [
+         "beakerTools"
+      ],
+      "substanceType": "weakAcid",
+      "dynamicTextId": "addSubstance",
+      "requiresAction": true
+   },
+   {
+      "id": "chooseWeakBase",
+      "statement": [
+         "Weak bases are those that dissociate partially into OH^-^ ions. The reaction of these bases with water goes to equilibrium.",
+         "*Choose a weak base.*"
+      ],
+      "inputState": {
+         "type": "chooseSubstance",
+         "substanceType": "weakBase"
+      },
+      "highlights": [
+         "reactionSelection"
+      ],
+      "substanceType": "weakBase"
+   },
+   {
+      "id": "setWaterLevelWeakBase",
+      "statement": [],
+      "inputState": {
+         "type": "setWaterLevel"
+      },
+      "highlights": [
+         "waterSlider"
+      ],
+      "substanceType": "weakBase",
+      "dynamicTextId": "setWeakBaseWaterLevel"
+   },
+   {
+      "id": "addWeakBase",
+      "statement": [],
+      "inputState": {
+         "type": "addSubstance",
+         "substanceType": "weakBase"
+      },
+      "highlights": [
+         "beakerTools"
+      ],
+      "substanceType": "weakBase",
+      "dynamicTextId": "addSubstance",
+      "requiresAction": true
+   },
+   {
+      "id": "end",
+      "statement": [
+         "*That was great!* Now, let's get more into this acid-bases equilibria and see how it works, and what is good for."
+      ],
+      "inputState": {
+         "type": "none"
+      },
+      "highlights": [],
+      "dynamicTextId": "end"
+   }
+]
