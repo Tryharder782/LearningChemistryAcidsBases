@@ -18,19 +18,23 @@
     "@types/sass": "^1.45.0",
     "color": "^4.2.3",
     "gh-pages": "^6.1.1",
+    "lucide-react": "^0.562.0",
     "matter-js": "^0.19.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-interactive-tutorials": "^0.1.11",
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
+    "recharts": "^3.7.0",
     "sweetalert2": "^11.11.0",
     "typed-scss-modules": "^8.0.1",
     "typescript": "^4.9.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zustand": "^5.0.10"
   },
   "scripts": {
-    "start": "set PORT=5000 && react-scripts start",
+    "start": "set NODE_OPTIONS=--max_old_space_size=4096 && react-scripts start",
+    "start:network": "set NODE_OPTIONS=--max_old_space_size=4096 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -56,9 +60,12 @@
     ]
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.23",
     "css-loader": "^7.1.0",
+    "postcss": "^8.5.6",
     "sass": "^1.74.1",
     "sass-loader": "^14.1.1",
-    "style-loader": "^4.0.0"
+    "style-loader": "^4.0.0",
+    "tailwindcss": "^3.4.19"
   }
 }
