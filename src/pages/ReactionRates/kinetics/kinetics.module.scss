@@ -1,0 +1,97 @@
+.container {
+  display: flex;
+}
+
+.reactionDrawContainer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  // flex-wrap: wrap;
+  // width: 100%;
+  // gap: 30px;
+
+  .reactionCatalyst {}
+
+  .reactionBeaker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .beakerShape {
+      position: relative;
+    }
+
+  }
+}
+
+.reactionContentContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 30px;
+  justify-content: space-around;
+
+  .reactionChartRow {
+    display: flex;
+    justify-content: space-around;
+
+    .chartInA {
+      display: flex;
+      justify-content: flex-end;
+      position: relative;
+      // height: 212px;
+      margin-top: 15px;
+      width: 270px;
+      // background-color: aqua;
+
+      .txtInK {
+        position: absolute;
+        right: 230px;
+        top: 110px;
+      }
+      .txtT {
+        position: absolute;
+        right: 100px;
+        top: 220px;
+      }
+      .txtSlope {
+        position: absolute;
+        right: 100px;
+        top: 180px;
+      }
+
+      .txtEnergy {
+        position: absolute;
+        right: 220px;
+        top: 100px;
+        transform: rotate(-90deg);
+      }
+      .txtReactants {
+        position: absolute;
+        right: 150px;
+        top: 220px;
+      }
+      .txtProducts {
+        position: absolute;
+        right: 10px;
+        top: 220px;
+      }
+    }
+  }
+
+  .reactionContentRow {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+
+    .mathContent {
+      font-size: 16px;
+      width: 270px;
+
+      [class*="mathjaxRow"] {
+        flex-direction: column;
+      }
+    }
+  }
+}

@@ -1,0 +1,93 @@
+.horizBtnGroup {
+  display: flex;
+  justify-content: space-between;
+  width: 86px;
+
+  .btnUp {
+    width: calc(35% - 3px);
+    height: 50px;
+    line-height: 50px;
+    font-size: 30px;
+    border: none;
+    border-radius: 6px;
+    // background: #ddd;
+    background: transparent;
+    cursor: pointer;
+    user-select: none;
+    color: black;
+
+    &:active {
+      // background: #bbb;
+      background: transparent;
+    }
+    &:disabled {
+      cursor: default;
+      color: rgb(172, 172, 172);
+    }
+  }
+
+  .btnDown {
+    width: calc(35% - 3px);
+    height: 50px;
+    line-height: 50px;
+    font-size: 30px;
+    border: none;
+    border-radius: 6px;
+    // background: #ddd;
+    background: transparent;
+    cursor: pointer;
+    user-select: none;
+    color: black;
+
+    &:active {
+      // background: #bbb;
+      background: transparent;
+    }
+    &:disabled {
+      cursor: default;
+      color: rgb(172, 172, 172);
+    }
+  }
+}
+
+.vertBtnGroup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 50px;
+  gap: 6px;
+
+  .btnUp {
+    height: calc(35% - 3px);
+    font-size: 30px;
+    border: none;
+    border-radius: 6px;
+    // background: #ddd;
+    background: transparent;
+    cursor: pointer;
+    user-select: none;
+    color: black;
+
+    &:active {
+      // background: #bbb;
+      background: transparent;
+    }
+  }
+
+  .btnDown {
+    height: calc(35% - 3px);
+    font-size: 30px;
+    border: none;
+    border-radius: 6px;
+    // background: #ddd;
+    background: transparent;
+    cursor: pointer;
+    user-select: none;
+    color: black;
+
+    &:active {
+      // background: #bbb;
+      background: transparent;
+    }
+  }
+}

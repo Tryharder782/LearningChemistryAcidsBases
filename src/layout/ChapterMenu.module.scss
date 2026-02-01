@@ -1,0 +1,121 @@
+.chapterMenuContainer {
+  position: fixed;
+  top: 25px;
+  right: 55px;
+  background: transparent;
+  z-index: 40;
+  font-size: 16px;
+  font-weight: 700;
+
+  .chapterMenuPanel {
+    transition: all 500ms;
+    opacity: 1; // animation
+    max-height: 0; // animation
+    padding: 0px 50px; //animation
+    background-color: white;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 40px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    border-radius: 20px;
+
+    &::after {
+      // draw Line for tree structure
+      content: '';
+      position: absolute;
+      display: inline-block;
+      background-color: black;
+      width: 2px;
+      height: calc(100% - 30px);
+      right: 15px;
+      top: 10px;
+    }
+
+    &.activeChapterPanel {
+      transition: all 500ms;
+      opacity: 1; // animation
+      max-height: 400px; // animation
+      padding: 10px 50px; //animation
+      box-shadow: 1px 2px 3px 4px rgba(12, 12, 12, 0.2);
+    }
+
+    .menuItem {
+      display: flex;
+      width: max-content;
+      flex-direction: column;
+      align-items: flex-end;
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        display: inline-block;
+        background-color: black;
+        width: 30px;
+        height: 2px;
+        right: -33px;
+        top: 14px;
+      }
+
+      .menuItemPanel {
+        transition: all 500ms;
+        opacity: 0;
+        max-height: 0px;
+
+        // 
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        &.activeMenuItemPane {
+          opacity: 1;
+          max-height: 200px;
+        }
+
+        &::after {
+          // draw Line for tree structure
+          content: '';
+          position: absolute;
+          display: inline-block;
+          background-color: black;
+          width: 2px;
+          height: calc(100% - 43px);
+          right: 12px;
+          top: 32px;
+        }
+      }
+
+      .subItem {
+        // opacity: 0;
+        // max-height: 0px;
+        margin: 10px 40px 10px 10px;
+        cursor: pointer;
+        position: relative;
+
+        font-size: 16px;
+        font-weight: 700;
+        background-color: white;
+        border: none;
+
+        &::after {
+          content: '';
+          position: absolute;
+          display: inline-block;
+          background-color: black;
+          width: 22px;
+          height: 2px;
+          right: -27px;
+          top: 12px;
+        }
+
+        &.activeSubItem {
+          color: rgb(220, 84, 59);
+        }
+      }
+    }
+  }
+}

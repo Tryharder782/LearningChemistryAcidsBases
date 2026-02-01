@@ -1,0 +1,65 @@
+.orderItemAction {
+  position: absolute;
+  width: 112px;
+  left: 85px;
+  top: 35px;
+  z-index: 110;
+
+  .actionCard {
+    padding: 10px 15px;
+    width: 100%;
+    border-radius: 18px;
+    font-size: 20px;
+    font-weight: 700;
+    border: 2px solid rgb(84, 187, 239);
+    background-color: rgb(230, 245, 253);
+
+    position: relative;
+    animation: moveAnimation 3s forwards;
+    .handClose {
+      position: absolute;
+      right: 0;
+      top: 27px;
+      // animation: cssAnimationMove 4s forwards;
+      // transition: all 1s ease;
+    }
+  }
+
+  .handOpen {
+    position: absolute;
+    right: 0;
+    top: 27px;
+    animation: hideAnimation 2s forwards;
+    // transition: all 1s ease;
+  }
+}
+
+@keyframes moveAnimation {
+  0%   {opacity: 0;}
+  25%  {opacity: 0;}
+  50%  {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  100% {
+    transform: translate(-246px, 20px);
+  }
+}
+@keyframes hideAnimation {
+  0%   {opacity: 1;}
+  50% {opacity: 1;}
+  100% {opacity: 0;}
+}
+
+// .icon {
+//   animation: moveIcon 1s ease-in-out 1s forwards;
+// }
+
+// @keyframes moveIcon {
+//   from {
+//     transform: translateX(0);
+//   }
+//   to {
+//     transform: translateX(100px); /* Adjust the distance you want to move the icon */
+//   }
+// }

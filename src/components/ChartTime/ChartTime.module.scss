@@ -1,0 +1,14 @@
+.chartTimeContainer {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  // background-color: aqua;
+  width: 270px;
+  height: 240px;
+  margin-top: 15px;
+}
+
+.chartTime {
+  // position: absolute;
+  right: 0;
+}

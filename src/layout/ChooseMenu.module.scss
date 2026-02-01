@@ -1,0 +1,115 @@
+.ChooseMenuContainer {
+  position: absolute;
+  top: 80px;
+  // right: 6%;
+  right: 6px;
+  // right: 50px;
+  // background: white;
+  z-index: 54;
+
+  .chooseDropDownBtn {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    position: relative;
+    bottom: -5px;
+    border: 2px solid black;
+    transition: 0.4s ease;
+    background-color: white;
+
+    &:before {
+      position: absolute;
+      content: "";
+      display: inline-block;
+      width: 12px;
+      height: 2px;
+      background-color: black;
+      transition: 0.4s ease;
+      transform: rotate(45deg) translate(-50%, -50%);
+      left: 25%;
+      top: 80%;
+    }
+
+    &:after {
+      position: absolute;
+      content: "";
+      display: inline-block;
+      width: 12px;
+      height: 2px;
+      background-color: black;
+      transition: 0.4s ease;
+      transform: rotate(135deg) translate(-50%, -50%);
+      top: 75%;
+      left: 22%;
+    }
+
+    &.active {
+
+      &:before {
+        transform: rotate(-45deg) translate(6px, -11px);
+      }
+
+      &:after {
+        transform: rotate(225deg) translate(4px, 11px);
+      }
+    }
+  }
+
+  .ChooseMenuPanel {
+    transition: all 500ms;
+    opacity: 1; // animation
+    max-height: 0; // animation
+    background-color: white;
+    overflow: hidden;
+    position: absolute;
+    right: 28px;
+    top: 5px;
+    width: max-content;
+    // width: 200px;
+    font-size: 16px;
+    font-weight: 600;
+
+    &.active {
+      opacity: 1; // animation
+      max-height: 200px; // animation
+    }
+
+    .ChooseMenuHeader {
+      display: flex;
+      align-items: center;
+      border: 2px solid black;
+      height: 30px;
+      padding: 0px 10px;
+    }
+
+    .ChooseMenuItemContainer {
+      border: 2px solid black;
+      margin-top: -2px;
+      min-width: max-content;
+
+      .ChooseMenuItem {
+        display: flex;
+        align-items: center;
+        height: 30px;
+        padding: 0px 10px;
+        cursor: pointer;
+        background-color: white;
+        border: none;
+        font-size: 16px;
+        font-weight: 600;
+        width: 100%;
+        color: black;
+
+        &:disabled {
+          color: grey;
+          cursor: default;
+        }
+
+        &.activated {
+          background-color: grey;
+          color: white;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.energyContainer {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  // background-color: chocolate;
+  // width: 250px;
+  // height: 280px;
+
+  .energyImg {
+    position: absolute;
+  }
+
+  .energyDotsContainer {
+    position: absolute;
+    bottom: 1.2px;
+    left: 10.3px;
+    display: flex;
+
+    .energyDotsGrid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(19, 1fr);
+      grid-template-rows: repeat(10, 1fr);
+    }
+    .energyDot {
+      // background-color: rgb(8, 168, 232);
+      width: 9.5px;
+      height: 9.5px;
+      // border-radius: 100%;
+      margin: 0.47px;
+    }
+  }
+}

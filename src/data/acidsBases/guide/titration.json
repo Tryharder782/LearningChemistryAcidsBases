@@ -1,0 +1,112 @@
+{
+  "screen": "titration",
+  "source": {
+    "navigation": "AcidsBases/model/navigation/TitrationScreenState.swift",
+    "viewModel": "AcidsBases/viewmodel/titration/TitrationViewModel.swift",
+    "statements": "AcidsBases/model/statements/TitrationStatements.swift"
+  },
+  "waterLevel": {
+    "minRows": 7,
+    "maxRows": 15,
+    "initialRows": 11
+  },
+  "globalNextRules": [
+    {
+      "when": "inputState == addSubstance",
+      "nextEnabledWhen": "components.currentPreparationModel.hasAddedEnoughSubstance"
+    },
+    {
+      "when": "inputState == addIndicator",
+      "nextEnabledWhen": "indicatorAdded >= maxIndicator"
+    },
+    {
+      "when": "inputState == addTitrant",
+      "nextEnabledWhen": "components.currentTitrantInputLimits.hasAddedEnoughTitrant"
+    },
+    {
+      "autoAdvanceWhen": "inputState == addSubstance && !components.currentPreparationModel.canAddSubstance"
+    },
+    {
+      "autoAdvanceWhen": "inputState == addIndicator && remainingIndicatorAvailable == 0"
+    },
+    {
+      "autoAdvanceWhen": "inputState == addTitrant && !components.currentPreEPTitrantModel.canAddTitrant"
+    },
+    {
+      "autoAdvanceWhen": "inputState == addTitrant && !components.currentPostEPTitrantModel.canAddTitrant"
+    }
+  ],
+  "steps": [
+    { "id": "titr-01", "section": "strongAcid", "state": "PrepareNewSubstanceModel", "statementKey": "TitrationStatements.intro", "inputState": "selectSubstance", "highlights": ["reactionSelection"], "actions": ["substance = strongAcid", "substanceSelectionIsToggled = true", "macroBeakerState = indicator"] },
+    { "id": "titr-02", "section": "strongAcid", "state": "StopInput", "statementKey": "TitrationStatements.explainNeutralization", "inputState": "none" },
+    { "id": "titr-03", "section": "strongAcid", "state": "SetStatement", "statementKey": "TitrationStatements.explainMolecularIonicEquations" },
+    { "id": "titr-04", "section": "strongAcid", "state": "SetStatement", "statementKey": "TitrationStatements.explainTitration" },
+    { "id": "titr-05", "section": "strongAcid", "state": "SetStatement", "statementKey": "TitrationStatements.explainEquivalencePoint" },
+    { "id": "titr-06", "section": "strongAcid", "state": "SetWaterLevel", "statementKey": "TitrationStatements.explainTitrationCurveAndInstructToSetWaterLevel", "inputState": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "titr-07", "section": "strongAcid", "state": "AddSubstance", "statementKey": "TitrationSubstanceStatements.instructToAddStrongAcid", "equationState": "strongAcidAddingSubstance", "inputState": "addSubstance", "highlights": ["container"] },
+    { "id": "titr-08", "section": "strongAcid", "state": "StopInput", "statementKey": "TitrationStatements.explainTitrationStages", "inputState": "none" },
+    { "id": "titr-09", "section": "strongAcid", "state": "SetStatement", "statementKey": "TitrationStatements.explainMolesOfHydrogen" },
+    { "id": "titr-10", "section": "strongAcid", "state": "ShowMacroscopicBeaker", "statementKey": "TitrationStatements.explainIndicator", "highlights": ["macroscopicBeaker"], "actions": ["beakerState = macroscopic"] },
+    { "id": "titr-11", "section": "strongAcid", "state": "AddIndicator", "statementKey": "TitrationStatements.instructToAddIndicator", "inputState": "addIndicator", "highlights": ["indicator"], "actions": ["showIndicatorFill = true"] },
+    { "id": "titr-12", "section": "strongAcid", "state": "SetTitrantMolarity", "statementKey": "TitrationStatements.instructToSetMolarityOfStrongBaseTitrant", "equationState": "strongAcidPreEPFilled", "inputState": "setTitrantMolarity", "highlights": ["burette"], "actions": ["showTitrantFill = true", "deferEdges = top"] },
+    { "id": "titr-13", "section": "strongAcid", "state": "AddTitrantPreEP", "statementKey": "TitrationSubstanceStatements.instructToAddStrongBaseTitrant", "inputState": "addTitrant", "highlights": ["burette"] },
+    { "id": "titr-14", "section": "strongAcid", "state": "StopInput", "statementKey": "TitrationStatements.reachedStrongAcidEquivalencePoint", "inputState": "none" },
+    { "id": "titr-15", "section": "strongAcid", "state": "AddTitrantPostEP", "statementKey": "TitrationStatements.instructToAddStrongBaseTitrantPostEP", "equationState": "strongAcidPostEP", "inputState": "addTitrant", "highlights": ["burette"] },
+    { "id": "titr-16", "section": "strongAcid", "state": "StopInput", "statementKey": "TitrationStatements.endOfStrongAcidTitration", "inputState": "none" },
+
+    { "id": "titr-17", "section": "strongBase", "state": "PrepareNewSubstanceModel", "statementKey": "TitrationStatements.instructToChooseStrongBase", "equationState": "strongBaseBlank", "inputState": "selectSubstance", "highlights": ["reactionSelection"] },
+    { "id": "titr-18", "section": "strongBase", "state": "SetWaterLevel", "statementKey": "TitrationStatements.instructToSetWaterLevelForStrongBaseTitration", "inputState": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "titr-19", "section": "strongBase", "state": "AddSubstance", "statementKey": "TitrationSubstanceStatements.instructToAddStrongBase", "equationState": "strongBaseAddingSubstance", "inputState": "addSubstance", "highlights": ["container"] },
+    { "id": "titr-20", "section": "strongBase", "state": "StopInput", "statementKey": "TitrationStatements.postAddingStrongBaseExplanation1", "inputState": "none" },
+    { "id": "titr-21", "section": "strongBase", "state": "SetStatement", "statementKey": "TitrationStatements.postAddingStrongBaseExplanation2" },
+    { "id": "titr-22", "section": "strongBase", "state": "AddIndicator", "statementKey": "TitrationStatements.instructToAddIndicator", "inputState": "addIndicator", "highlights": ["indicator"], "actions": ["showIndicatorFill = true"] },
+    { "id": "titr-23", "section": "strongBase", "state": "SetTitrantMolarity", "statementKey": "TitrationStatements.instructToSetMolarityOfStrongBaseTitrant", "equationState": "strongBasePreEPFilled", "inputState": "setTitrantMolarity", "highlights": ["burette"], "actions": ["showTitrantFill = true", "deferEdges = top"] },
+    { "id": "titr-24", "section": "strongBase", "state": "AddTitrantPreEP", "statementKey": "TitrationSubstanceStatements.instructToAddStrongBaseTitrant", "inputState": "addTitrant", "highlights": ["burette"] },
+    { "id": "titr-25", "section": "strongBase", "state": "StopInput", "statementKey": "TitrationStatements.reachedStrongAcidEquivalencePoint", "inputState": "none" },
+    { "id": "titr-26", "section": "strongBase", "state": "AddTitrantPostEP", "statementKey": "TitrationStatements.instructToAddStrongAcidTitrantPostEP", "equationState": "strongBasePostEP", "inputState": "addTitrant", "highlights": ["burette"] },
+    { "id": "titr-27", "section": "strongBase", "state": "StopInput", "statementKey": "TitrationStatements.endOfStrongBaseTitration", "inputState": "none" },
+
+    { "id": "titr-28", "section": "weakAcid", "state": "PrepareNewSubstanceModel", "statementKey": "TitrationStatements.instructToChooseWeakAcid", "equationState": "weakAcidBlank", "inputState": "selectSubstance", "highlights": ["reactionSelection"], "actions": ["showPhString = false"] },
+    { "id": "titr-29", "section": "weakAcid", "state": "SetWaterLevel", "statementKey": "TitrationStatements.instructToSetWeakAcidTitrationWaterLevel", "inputState": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "titr-30", "section": "weakAcid", "state": "StopInput", "statementKey": "TitrationSubstanceStatements.explainWeakAcidTitrationReaction", "inputState": "none" },
+    { "id": "titr-31", "section": "weakAcid", "state": "AddSubstance", "statementKey": "TitrationSubstanceStatements.instructToAddWeakAcid", "equationState": "weakAcidAddingSubstance", "inputState": "addSubstance", "highlights": ["container"] },
+    { "id": "titr-32", "section": "weakAcid", "state": "RunWeakSubstanceInitialReaction", "statementKey": "TitrationStatements.runningWeakAcidReaction", "inputState": "none", "autoAdvanceAfterSeconds": 2 },
+    { "id": "titr-33", "section": "weakAcid", "state": "EndOfWeakSubstanceInitialReaction", "statementKey": "TitrationSubstanceStatements.endOfWeakAcidReaction", "equationState": "weakAcidPostInitialReaction", "actions": ["showPhString = true"] },
+    { "id": "titr-34", "section": "weakAcid", "state": "SetStatement", "statementKey": "TitrationSubstanceStatements.explainWeakAcidTitrationStages" },
+    { "id": "titr-35", "section": "weakAcid", "state": "SetStatement", "statementKey": "TitrationStatements.explainIndicator" },
+    { "id": "titr-36", "section": "weakAcid", "state": "AddIndicator", "statementKey": "TitrationStatements.instructToAddIndicator", "equationState": "weakAcidPreEPBlank", "inputState": "addIndicator", "highlights": ["indicator"], "actions": ["showIndicatorFill = true"] },
+    { "id": "titr-37", "section": "weakAcid", "state": "SetTitrantMolarity", "statementKey": "TitrationStatements.instructToSetMolarityOfTitrantOfWeakAcidSolution", "equationState": "weakAcidPreEPFilled", "inputState": "setTitrantMolarity", "highlights": ["burette"], "actions": ["showTitrantFill = true", "deferEdges = top"] },
+    { "id": "titr-38", "section": "weakAcid", "state": "StopInput", "statementKey": "TitrationSubstanceStatements.explainWeakAcidBufferRegion", "inputState": "none" },
+    { "id": "titr-39", "section": "weakAcid", "state": "SetStatement", "statementKey": "TitrationSubstanceStatements.explainWeakAcidHasselbalch" },
+    { "id": "titr-40", "section": "weakAcid", "state": "SetStatement", "statementKey": "TitrationSubstanceStatements.explainWeakAcidBufferMoles" },
+    { "id": "titr-41", "section": "weakAcid", "state": "AddTitrantPreEP", "statementKey": "TitrationSubstanceStatements.instructToAddTitrantToWeakAcid", "inputState": "addTitrant", "highlights": ["burette"] },
+    { "id": "titr-42", "section": "weakAcid", "state": "StopInput", "statementKey": "TitrationSubstanceStatements.reachedWeakAcidMaxBufferCapacity", "inputState": "none" },
+    { "id": "titr-43", "section": "weakAcid", "state": "AddTitrantToWeakSubstancePostMaxBufferCapacity", "statementKey": "TitrationSubstanceStatements.instructToAddTitrantToWeakAcidPostMaxBufferCapacity", "inputState": "addTitrant" },
+    { "id": "titr-44", "section": "weakAcid", "state": "StopInput", "statementKey": "TitrationSubstanceStatements.reachedWeakAcidEquivalencePoint", "inputState": "none" },
+    { "id": "titr-45", "section": "weakAcid", "state": "SetStatement", "statementKey": "TitrationSubstanceStatements.explainWeakAcidEP1", "equationState": "weakAcidAtEP" },
+    { "id": "titr-46", "section": "weakAcid", "state": "SetStatement", "statementKey": "TitrationStatements.explainWeakAcidEP2" },
+    { "id": "titr-47", "section": "weakAcid", "state": "AddTitrantPostEP", "statementKey": "TitrationStatements.instructToAddTitrantToWeakAcidPostEP", "equationState": "weakAcidPostEPPreAddingTitrant", "inputState": "addTitrant", "highlights": ["burette"] },
+    { "id": "titr-48", "section": "weakAcid", "state": "StopInput", "statementKey": "TitrationStatements.endOfWeakAcidTitration", "inputState": "none" },
+
+    { "id": "titr-49", "section": "weakBase", "state": "PrepareNewSubstanceModel", "statementKey": "TitrationStatements.instructToChooseWeakBase", "equationState": "weakBaseBlank", "inputState": "selectSubstance", "highlights": ["reactionSelection"], "actions": ["showPhString = false"] },
+    { "id": "titr-50", "section": "weakBase", "state": "SetWaterLevel", "statementKey": "TitrationStatements.instructToSetWaterLevelOfWeakBaseTitration", "inputState": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "titr-51", "section": "weakBase", "state": "AddSubstance", "statementKey": "TitrationSubstanceStatements.instructToAddWeakBase", "equationState": "weakBaseAddingSubstance", "inputState": "addSubstance", "highlights": ["container"] },
+    { "id": "titr-52", "section": "weakBase", "state": "RunWeakSubstanceInitialReaction", "statementKey": "TitrationStatements.runningWeakAcidReaction", "inputState": "none", "autoAdvanceAfterSeconds": 2 },
+    { "id": "titr-53", "section": "weakBase", "state": "EndOfWeakSubstanceInitialReaction", "statementKey": "TitrationSubstanceStatements.endOfWeakBaseReaction", "equationState": "weakBasePostInitialReaction", "actions": ["showPhString = true"] },
+    { "id": "titr-54", "section": "weakBase", "state": "SetStatement", "statementKey": "TitrationSubstanceStatements.explainWeakBaseTitrationStages" },
+    { "id": "titr-55", "section": "weakBase", "state": "SetStatement", "statementKey": "TitrationStatements.explainIndicator" },
+    { "id": "titr-56", "section": "weakBase", "state": "AddIndicator", "statementKey": "TitrationStatements.instructToAddIndicator", "equationState": "weakBasePreEPBlank", "inputState": "addIndicator", "highlights": ["indicator"], "actions": ["showIndicatorFill = true"] },
+    { "id": "titr-57", "section": "weakBase", "state": "SetTitrantMolarity", "statementKey": "TitrationStatements.instructToSetMolarityTitrantOfWeakBaseSolution", "equationState": "weakBasePreEPFilled", "inputState": "setTitrantMolarity", "highlights": ["burette"], "actions": ["showTitrantFill = true", "deferEdges = top"] },
+    { "id": "titr-58", "section": "weakBase", "state": "StopInput", "statementKey": "TitrationSubstanceStatements.explainWeakBaseBufferRegion", "inputState": "none" },
+    { "id": "titr-59", "section": "weakBase", "state": "SetStatement", "statementKey": "TitrationSubstanceStatements.explainWeakBaseHasselbalch" },
+    { "id": "titr-60", "section": "weakBase", "state": "SetStatement", "statementKey": "TitrationSubstanceStatements.explainWeakBaseBufferMoles" },
+    { "id": "titr-61", "section": "weakBase", "state": "AddTitrantPreEP", "statementKey": "TitrationSubstanceStatements.instructToAddTitrantToWeakBase", "inputState": "addTitrant", "highlights": ["burette"] },
+    { "id": "titr-62", "section": "weakBase", "state": "StopInput", "statementKey": "TitrationSubstanceStatements.reachedWeakBaseMaxBufferCapacity", "inputState": "none" },
+    { "id": "titr-63", "section": "weakBase", "state": "AddTitrantToWeakSubstancePostMaxBufferCapacity", "statementKey": "TitrationSubstanceStatements.instructToAddTitrantToWeakBasePostMaxBufferCapacity", "inputState": "addTitrant" },
+    { "id": "titr-64", "section": "weakBase", "state": "StopInput", "statementKey": "TitrationSubstanceStatements.reachedWeakBaseEquivalencePoint", "inputState": "none" },
+    { "id": "titr-65", "section": "weakBase", "state": "SetStatement", "statementKey": "TitrationSubstanceStatements.explainWeakBaseEP1", "equationState": "weakBaseAtEP" },
+    { "id": "titr-66", "section": "weakBase", "state": "SetStatement", "statementKey": "TitrationStatements.explainWeakBasedEP2" },
+    { "id": "titr-67", "section": "weakBase", "state": "AddTitrantPostEP", "statementKey": "TitrationStatements.instructToAddTitrantToWeakBasePostEP", "equationState": "weakBasePostEPPreAddingTitrant", "inputState": "addTitrant", "highlights": ["burette"] },
+    { "id": "titr-68", "section": "weakBase", "state": "SaveWeakModelTitrantInput", "statementKey": "TitrationStatements.endOfWeakBaseTitration", "inputState": "none", "actions": ["save titration input to persistence"] }
+  ]
+}

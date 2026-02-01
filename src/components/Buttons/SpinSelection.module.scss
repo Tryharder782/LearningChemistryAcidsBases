@@ -1,0 +1,28 @@
+.spinListContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  margin-top: 40px;
+  margin-left: -20px;
+  margin-right: 20px;
+}
+.spinBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(155, 155, 155, 0.562);
+  cursor: pointer;
+  background-color: rgba(169, 145, 255, 0.1);
+  &.checked {
+    background-color: rgba(152, 185, 255, 0.8);
+  }
+
+  span {
+    font-size: 18px;
+  }
+}

@@ -1,0 +1,140 @@
+.burnerContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: -4px;
+  position: relative;
+
+  .burnerFire {
+    position: absolute;
+    left: 50%;
+    top: 14px;
+  }
+
+  .burnerSpins {
+    width: 200px;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: skewX(0) scale(1);
+  }
+  50% {
+    transform: skewX(5deg) scale(0.9);
+  }
+}
+
+@keyframes scaleUpDown {
+  0%,
+  100% {
+    transform: scaleY(1) scaleX(1);
+  }
+  50%,
+  90% {
+    transform: scaleY(1.2);
+  }
+  75% {
+    transform: scaleY(0.95);
+  }
+  80% {
+    transform: scaleX(0.95);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    background-color: #ff7912;
+  }
+  50% {
+    background-color: #ff6200;
+  }
+}
+
+.fire {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  right: 15px;
+  background-color: transparent;
+  &.small {
+    width: 20px;
+    height: 20px;
+    right: 10px;
+    top: 9px;
+  }
+}
+
+.fire-main {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.fire-main .corefire {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(farthest-corner at 10px 0, #ecb5a5 0%, #faab79 95%);
+  transform: scaleX(0.8) rotate(45deg);
+  border-radius: 0 40% 60% 40%;
+  // filter: drop-shadow(0 0 10px #d43322);
+  // filter: blur(2px);
+}
+
+.fire-main-bottom .corefire {
+  position: absolute;
+  top: 30%;
+  left: 15%;
+  width: 70%;
+  height: 70%;
+  background-color: #ff7800;
+  transform: scaleX(0.8) rotate(45deg);
+  border-radius: 0 40% 100% 40%;
+  filter: blur(3px);
+
+  animation: glow 2s ease-out 0;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.fireCenter {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  animation: scaleUpDown 3s ease-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.fireLeft {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  top: 25%;
+  left: -50%;
+  border-radius: 0 40% 60% 40%;
+  filter: drop-shadow(0 0 10px #d43322);
+
+  animation: shake 3s ease-out 0;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+
+.fireRight {
+  position: absolute;
+  width: 70%;
+  height: 70%;
+  top: 25%;
+  right: -50%;
+  border-radius: 0 40% 60% 40%;
+  filter: drop-shadow(0 0 10px #d43322);
+
+  animation: shake 2s ease-out 0;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+}
+

@@ -1,0 +1,102 @@
+.container {
+  // width: 270px;
+  // height: 240px;
+  z-index: 1;
+}
+
+.vertSpins {
+  // position: absolute;
+  position: relative;
+  // top: 0px;
+  // right: 212px;
+  height: 212px;
+  z-index: 1;
+}
+
+// A value slider
+.sliceVertical {
+  position: absolute;
+  bottom: 104px;
+  right: 151px;
+  rotate: -90deg;
+
+  .vertical-slider {
+    height: 225px; // control this for length of vert
+    width: 50px;
+
+    .example-track {
+      // line
+      left: 14px;
+      width: 0px;
+      // width: 3px;
+    }
+
+    .example-thumb {
+      // dot
+      width: 30px;
+      height: 15px;
+
+      &:nth-last-child(1) {
+        z-index: 2 !important;
+      }
+
+      &.disabled {
+        background-color: grey;
+      }
+    }
+
+
+  }
+}
+
+.sliderback {
+  border: 3.5px solid #808080; 
+  border-top: 0px; 
+  border-right: 0px; 
+  border-left: 0px; 
+  position: absolute; 
+  top: 15.7px; 
+  left: 9px; 
+  width: 212px; 
+}
+
+
+.example-track {
+  position: relative;
+  background: black;
+}
+
+.example-thumb {
+  background-color: rgb(220, 84, 59);
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  &:focus-visible {
+    outline: 0;
+  }
+}
+
+.sliceVerticalBar {
+  position: absolute;
+  top: 0px;
+  right: 234px;
+  height: 212px;
+  width: 3px;
+  background-color: black;
+}
+
+.textVert {
+  position: absolute;
+  top: 90px;
+  right: 217px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  font-weight: 600;
+
+  p {
+    margin: 0;
+  }
+}

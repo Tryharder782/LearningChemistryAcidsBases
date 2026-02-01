@@ -1,0 +1,717 @@
+[
+    {
+        "id": "TITRATION-01",
+        "category": "Titration",
+        "question": "Consider a hypothetical weak acid HA that's being titrated with a KOH:\n\nHA + KOH → KA + H_2_O\n\n$55 mL$ of this weak acid are totally neutralized by $135 mL$ of $0.100 M$ KOH. After the weak acid is totally neutralized, what's the concentration of A^-^ ions in the solution?",
+        "options": [
+            "0.071 M",
+            "0.245 M",
+            "0.100 M",
+            "0.055 M"
+        ],
+        "correctAnswer": 0,
+        "explanation": "In a $135 mL$ solution of $0.100 M KOH$, we can determine how many moles of KA are being produced from the neutralization reaction. [A^-^] = 0.0135/0.055 + 0.135 = 0.071 M"
+    },
+    {
+        "id": "TITRATION-02",
+        "category": "Titration",
+        "question": "Consider a strong acid HI that's being titrated with a NaOH:\n\nHI + NaOH → NaI + H_2_O\n\nHow many liters of NaOH $0.100 M$ need to be added to a $200 mL$ solution of $0.500 M$ $HI$ in order to reach the equivalence point?",
+        "options": [
+            "0.5 L",
+            "1 L",
+            "1.5 L",
+            "0.2 L"
+        ],
+        "correctAnswer": 1,
+        "explanation": "To get to the equivalence point, all the acid has to be neutralized. Moles of HI = 0.200 x 0.500 = 0.1 moles. Volume of NaOH = 0.1/0.100 = 1 L"
+    },
+    {
+        "id": "TITRATION-03",
+        "category": "Titration",
+        "question": "According to the titration graph of a weak acid (HA) with a strong base, what is accurate about each point?",
+        "options": [
+            "A: [HA] = [A^-^]\nB: [A^-^] > [HA]\nC: [HA] < [OH^-^]\nD: [OH^-^] > [HA]",
+            "A: [HA] = [A^-^]\nB: [A^-^] > [HA]\nC: [HA] = [OH^-^]\nD: [OH^-^] < [HA]",
+            "A: [HA] = [A^-^]\nB: [A^-^] > [HA]\nC: [HA] = [OH^-^]\nD: [OH^-^] > [HA]",
+            "A: [HA] = [A^-^]\nB: [A^-^] < [HA]\nC: [HA] = [OH^-^]\nD: [OH^-^] > [HA]"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Halfway to the equivalence point [HA] = [A^-^]. After that [A^-^] > [HA]. At equivalence point only A^-^ is left. Afterwards [OH^-^] > [HA]."
+    },
+    {
+        "id": "TITRATION-05",
+        "category": "Titration",
+        "question": "Consider a hypothetical weak acid HA with a $Ka = 10^-4^$. A student prepares a solution with it, and gets the measurement of the pH as 2.5. What's the molarity of the solution?",
+        "options": [
+            "0.0032 M",
+            "0.0500 M",
+            "There is not enough information.",
+            "0.1030 M"
+        ],
+        "correctAnswer": 3,
+        "explanation": "[H^+^] = 10^-2.5^ = 3.16x10^-3^ M. Using Ka = [H^+^][A^-^]/[HA], we solve for initial concentration [HA]o = 0.1030 M"
+    },
+    {
+        "id": "TITRATION-06",
+        "category": "Titration",
+        "question": "In order to fully neutralize a $300 mL$ solution of NaOH, $140 mL$ of HCl $0.120 M$ are used. What was the molarity of the strong base?",
+        "options": [
+            "0.056 M",
+            "0.120 M",
+            "0.300 M",
+            "0.140 M"
+        ],
+        "correctAnswer": 0,
+        "explanation": "M_NaOH_ = M_HCl_ x V_HCl_ / V_NaOH_ = 0.120 x 0.140 / 0.300 = 0.056 M"
+    },
+    {
+        "id": "TITRATION-10",
+        "category": "Titration",
+        "question": "A student is titrating a weak acid (HA, $Ka = 2.7x10^-5^$) with a strong base. At the point at which $[HA] = [A^-^]$, the pH is...?",
+        "options": [
+            "5.2",
+            "4.6",
+            "6.1",
+            "6.9"
+        ],
+        "correctAnswer": 1,
+        "explanation": "At the half-equivalence point pH = pKa. pH = -log(2.7x10^-5^) = 4.6"
+    },
+    {
+        "id": "TITRATION-11",
+        "category": "Titration",
+        "question": "A $250 mL$ solution of $0.150 M$ KOH, was neutralized by adding HI at a concentration of $0.110 M$. How many mililiters of the strong acid were needed to fully neutralize the base?",
+        "options": [
+            "238 mL",
+            "456 mL",
+            "341 mL",
+            "250 mL"
+        ],
+        "correctAnswer": 2,
+        "explanation": "V_HI_ = M_KOH_ x V_KOH_ / M_HI_ = 0.150 x 250 / 0.110 = 341 mL"
+    },
+    {
+        "id": "TITRATION-12",
+        "category": "Titration",
+        "question": "Which of the following would be the definition of an indicator?",
+        "options": [
+            "It's a solution of a known concentration, which is added to another solution.",
+            "It's a solution whose concentration has to be determined by the titration.",
+            "It's an acid or base that partially dissociates into its ions in an aqueous solution.",
+            "It's a weak acid or base that is added to the analyte solution, and it changes color when the equivalence point is reached."
+        ],
+        "correctAnswer": 3,
+        "explanation": "The point at which the indicator makes the solution change color is called the end point because it's usually slightly after the actual equivalence point."
+    },
+    {
+        "id": "TITRATION-18",
+        "category": "Titration",
+        "question": "A student is titrating a solution with $0.25 moles$ of a monoprotic weak acid (HA, $Ka = 2.7x10^-5^$) with a strong base. What would be the pH at the equivalence point? (Consider the volume of the solution at that point to be $500 mL$)",
+        "options": [
+            "9.1",
+            "4.9",
+            "4.6",
+            "9.4"
+        ],
+        "correctAnswer": 0,
+        "explanation": "At equivalence, we have A^-^ (weak base). [A^-^] = 0.5 M. Kb = Kw/Ka. Solving for pOH gives pH = 9.1"
+    },
+    {
+        "id": "TITRATION-20",
+        "category": "Titration",
+        "question": "A monoprotic weak acid and a strong base are mixed in equimolar quantities in a solution. What would be the value of the pH?",
+        "options": [
+            "pH < 7",
+            "pH > 7",
+            "pH = 7",
+            "Not enough information"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The weak acid gets fully neutralized, producing its conjugate base. The presence of this conjugate base raises the pH above 7."
+    },
+    {
+        "id": "TITRATION-23",
+        "category": "Titration",
+        "question": "'Acids can release a proton and bases can accept a proton'. This definition for acids and bases is attributed to:",
+        "options": [
+            "Lewis",
+            "Arrhenius",
+            "Brønsted-Lowry",
+            "It's just a broad definition"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Brønsted-Lowry acids are substances that can release a proton and bases are substances that can accept a proton."
+    },
+    {
+        "id": "TITRATION-24",
+        "category": "Titration",
+        "question": "A student prepares a $200 mL$ solution of $0.01 M Ba(OH)_2_$ in a beaker and titrates it with $0.06 M HCl$. After the addition of $100 mL$ of the titrant, what would be the pH of the solution?",
+        "options": [
+            "2",
+            "1.87",
+            "2.22",
+            "2.17"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Moles OH- initially = 0.004. Moles H+ added = 0.006. Remaining H+ = 0.002 in 300mL. pH = -log(0.0066) = 2.17"
+    },
+    {
+        "id": "TITRATION-27",
+        "category": "Titration",
+        "question": "A student prepares a $200 mL$ solution of $0.300 M HA$ (weak acid, Ka=6.0x10^-5^) and titrates it with $0.100 M KOH$. After adding $100 mL$ of titrant, what is the pH?",
+        "options": [
+            "3.5",
+            "2.5",
+            "4.2",
+            "0.5"
+        ],
+        "correctAnswer": 0,
+        "explanation": "Use Henderson-Hasselbalch. Moles HA left = 0.05, Moles A- produced = 0.01. pH = -log(6x10^-5^) + log(0.01/0.05) = 3.5"
+    },
+    {
+        "id": "PHSCALE-01",
+        "category": "pH Scale",
+        "question": "A student prepares 3 solutions in separate beakers with these soluble salts: KCN, NaCl and KBr. What is a true statement regarding these solutions and their pH?",
+        "options": [
+            "The pH of the KCN solution is lower than 7 while the other two are 7.",
+            "The pH of the KCN solution is higher than 7 while the other two are 7.",
+            "The pH of the NaCl solution is higher than 7 while the other two are lower than 7.",
+            "The pH of the KBr solution is higher than 7 while the other two are higher than 7."
+        ],
+        "correctAnswer": 1,
+        "explanation": "CN^-^ ions have a weak base property, increasing pH. NaCl and KBr are neutral salts."
+    },
+    {
+        "id": "PHSCALE-03",
+        "category": "pH Scale",
+        "question": "Which one would be the conjugate base for this compound: H_2_S?",
+        "options": [
+            "S^2-^",
+            "H_2_SO_4_",
+            "HS^-^",
+            "H_2_SO_3_"
+        ],
+        "correctAnswer": 2,
+        "explanation": "By losing an H^+^, the conjugate base for H_2_S would be HS^-^."
+    },
+    {
+        "id": "PHSCALE-04",
+        "category": "pH Scale",
+        "question": "A student wants to prepare a solution of a strong base 'XOH'. The student proceeds to mix 50 mL of water with 5 mL of XOH 0.05 M. What would the pH be?",
+        "options": [
+            "2.3",
+            "12.7",
+            "1.3",
+            "11.6"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Moles OH = 0.00025. Total Vol = 0.055 L. [OH-] = 0.0045 M. pOH = 2.34, pH = 11.6"
+    },
+    {
+        "id": "PHSCALE-06",
+        "category": "pH Scale",
+        "question": "$0.05 moles$ of a weak acid (HA) are dissolved in a $400 mL$ solution. For this particular weak acid, its $Ka = 2.5x10^-9^$. What would be the pH for this solution?",
+        "options": [
+            "0.9",
+            "8.6",
+            "4.75",
+            "9.5"
+        ],
+        "correctAnswer": 2,
+        "explanation": "[HA] = 0.125 M. X = sqrt(0.125 * Ka). X = 1.767x10^-5. pH = 4.75"
+    },
+    {
+        "id": "PHSCALE-07",
+        "category": "pH Scale",
+        "question": "'Acids can accept an electron pair, while bases can donate an electron pair.' This definition for acids and bases is attributed to:",
+        "options": [
+            "Brønsted-Lowry",
+            "Arrhenius",
+            "Lewis",
+            "It's just a broad definition"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Lewis acids and bases are described as substances that share/accept electron pairs."
+    },
+    {
+        "id": "PHSCALE-09",
+        "category": "pH Scale",
+        "question": "A $0.005 M$ solution of HCl (strong acid) is prepared. What would be the pH of said solution?",
+        "options": [
+            "2.3",
+            "4.6",
+            "11.7",
+            "Not enough information"
+        ],
+        "correctAnswer": 0,
+        "explanation": "pH = -log(0.005) = 2.3"
+    },
+    {
+        "id": "PHSCALE-11",
+        "category": "pH Scale",
+        "question": "A solution of HI is prepared. The pH measured is 2. Which one would be the molarity of HI?",
+        "options": [
+            "0.02 M",
+            "0.01 M",
+            "0.2 M",
+            "0.1 M"
+        ],
+        "correctAnswer": 1,
+        "explanation": "[HI] = 10^-2 = 0.01 M"
+    },
+    {
+        "id": "PHSCALE-15",
+        "category": "pH Scale",
+        "question": "Given an acidic solution prepared with HF (Ka = 3.7x10^-7^), what would be a way to increase its pH?",
+        "options": [
+            "Adding HF",
+            "Adding HCl",
+            "Adding NaF",
+            "There is no way to increase its pH"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Adding NaF adds F- ions, shifting equilibrium to the left, consuming H+ and increasing pH."
+    },
+    {
+        "id": "PHSCALE-19",
+        "category": "pH Scale",
+        "question": "Four $0.01 M$ solutions are in beakers: HI, KOH, NaF, HCN. pH readings are: 1) 2.0, 2) 7.7, 3) 5.6, 4) 12.0. Which solution is which?",
+        "options": [
+            "1: HI, 2: NaF, 3: HCN, 4: KOH",
+            "1: HCN, 2: NaF, 3: HI, 4: KOH",
+            "1: HI, 2: KOH, 3: HCN, 4: NaF",
+            "1: KOH, 2: HCN, 3: NaF, 4: HI"
+        ],
+        "correctAnswer": 0,
+        "explanation": "HI is strong acid (pH 2). NaF is weak base (pH 7.7). HCN is weak acid (pH 5.6). KOH is strong base (pH 12)."
+    },
+    {
+        "id": "PHSCALE-20",
+        "category": "pH Scale",
+        "question": "A student prepares a $100 mL$ solution of $0.05 M KOH$ and titrates it with $0.02 M HCl$. After adding $80 mL$ of titrant, what is the pH?",
+        "options": [
+            "12.53",
+            "12.27",
+            "1.7",
+            "12.7"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Moles OH initially = 0.005. Moles H added = 0.0016. OH remaining = 0.0034 in 180mL. pOH = 1.73, pH = 12.27"
+    },
+    {
+        "id": "PHSCALE-23",
+        "category": "pH Scale",
+        "question": "A solution of which of these substances would most likely result in the furthest value from 7 for the pH?",
+        "options": [
+            "HCN",
+            "NaOH",
+            "H_2_O",
+            "CH_3_COONa"
+        ],
+        "correctAnswer": 1,
+        "explanation": "NaOH is a strong base, so it would have a pH very high (around 13-14), far from 7."
+    },
+    {
+        "id": "BUFFER-01",
+        "category": "Buffer",
+        "question": "H_2_CO_3_ is a diprotic acid with Ka1 = 4.5x10^-7^ and Ka2 = 4.7x10^-11^. What would be the equilibrium constant for the reaction: H_2_CO_3_ ⇄ 2H^+^ + CO_3_^2-^?",
+        "options": [
+            "4.5x10^-7^",
+            "4.7x10^-11^",
+            "2.12x10^-17^",
+            "Cannot be determined"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Multiply the constants: K = Ka1 x Ka2 = 2.12x10^-17^"
+    },
+    {
+        "id": "BUFFER-02",
+        "category": "Buffer",
+        "question": "Which would be the concentration of hydroxide ions for a $0.08 M$ solution of a weak base NaCN (Kb for CN^-^ is 2.0 x10^-5^)?",
+        "options": [
+            "0.08 M",
+            "1.6x10^-6^ M",
+            "2.0 x10^-5^ M",
+            "1.26x10^-3^ M"
+        ],
+        "correctAnswer": 3,
+        "explanation": "[OH-] = sqrt(0.08 * 2.0x10^-5^) = 1.26x10^-3^ M"
+    },
+    {
+        "id": "BUFFER-05",
+        "category": "Buffer",
+        "question": "If you were to prepare a buffer, which pair of substances would you mix in equimolar quantities?",
+        "options": [
+            "HClO_3_ and KClO_3_",
+            "HF and NaF",
+            "HI and NaI",
+            "NaOH and NaCl"
+        ],
+        "correctAnswer": 1,
+        "explanation": "HF is a weak acid and F- is its conjugate base. Mixing them creates a buffer."
+    },
+    {
+        "id": "BUFFER-08",
+        "category": "Buffer",
+        "question": "For any given buffer solution composed by an equimolar mixture of a weak acid and its conjugate base, which of the following statements is true?",
+        "options": [
+            "The pKb of the weak base is equal to the pH of the solution.",
+            "The pKa of the weak acid is equal to the pOH of the solution.",
+            "The pKa of the weak acid is equal to the pH of the solution.",
+            "The pKb of the weak base is equal to the pKa of the weak acid."
+        ],
+        "correctAnswer": 2,
+        "explanation": "According to Henderson-Hasselbalch, if [A-]=[HA], log(1)=0, so pH = pKa."
+    },
+    {
+        "id": "BUFFER-09",
+        "category": "Buffer",
+        "question": "Consider a $100 mL$ solution of $0.500 M$ HF. Adding $100 mL$ of which of the following solutions would result in an equimolar buffer solution?",
+        "options": [
+            "0.100 M NaF",
+            "0.250 M NaOH",
+            "0.500 M HCl",
+            "0.200 M HF"
+        ],
+        "correctAnswer": 1,
+        "explanation": "0.250 M NaOH provides 0.025 moles OH-, neutralizing half of the 0.05 moles HF, resulting in 0.025 moles HF and 0.025 moles F- (equimolar)."
+    },
+    {
+        "id": "BUFFER-11",
+        "category": "Buffer",
+        "question": "Consider a weak acid with a $pKa = 5.5$ that's in solution with its conjugate base. The concentration of the weak acid is 100 times higher than its conjugate base. What would be the pH of the solution?",
+        "options": [
+            "3.5",
+            "4.5",
+            "5.5",
+            "8.5"
+        ],
+        "correctAnswer": 0,
+        "explanation": "pH = pKa + log(1/100) = 5.5 - 2 = 3.5"
+    },
+    {
+        "id": "BUFFER-16",
+        "category": "Buffer",
+        "question": "Consider a weak acid that's being titrated with a strong base. What would the pH be when the concentration of the weak acid and its conjugate base are the same? (Note: $Ka = 10^-5^$)",
+        "options": [
+            "6",
+            "7",
+            "5",
+            "8"
+        ],
+        "correctAnswer": 2,
+        "explanation": "At half-equivalence point, pH = pKa. pH = -log(10^-5^) = 5"
+    },
+    {
+        "id": "BUFFER-20",
+        "category": "Buffer",
+        "question": "What ratio of [Weak Acid]/[Conjugate Base] would result in the most acidic solution?",
+        "options": [
+            "[Weak Acid]/[Conjugate Base] = 1",
+            "[Weak Acid]/[Conjugate Base] = 10",
+            "[Weak Acid]/[Conjugate Base] = 0.1",
+            "[Weak Acid]/[Conjugate Base] = 0.01"
+        ],
+        "correctAnswer": 1,
+        "explanation": "A higher ratio of acid to base means more acid component, lowering the pH (making it more acidic)."
+    },
+    {
+        "id": "BUFFER-22",
+        "category": "Buffer",
+        "question": "For a weak acid with a pKa of 3, which conjugate pair would result in a buffer solution with a pH of 4?",
+        "options": [
+            "[Conjugate Base] = 0.010 M, [Conjugate Acid] = 0.100 M",
+            "[Conjugate Base] = 0.100 M, [Conjugate Acid] = 0.0100 M",
+            "[Conjugate Base] = 0.100 M, [Conjugate Acid] = 0.100 M",
+            "[Conjugate Base] = 0.010 M, [Conjugate Acid] = 0.010 M"
+        ],
+        "correctAnswer": 1,
+        "explanation": "pH = 3 + log(0.100/0.010) = 3 + log(10) = 4."
+    },
+    {
+        "id": "BUFFER-28",
+        "category": "Buffer",
+        "question": "'Acids produce H+ in solution and bases produces OH-'. This definition for acids and bases is attributed to:",
+        "options": [
+            "Lewis",
+            "Brønsted-Lowry",
+            "It's just a broad definition",
+            "Arrhenius"
+        ],
+        "correctAnswer": 3,
+        "explanation": "The Arrhenius theory is based on H^+^ and OH^-^ ions."
+    },
+    {
+        "id": "AQUEOUS-01",
+        "category": "Equilibrium: Aqueous",
+        "question": "Consider the following reaction:\n\n$A_2_B + 2C$ ⇄ $2A + BC_2_$\n\nThe reaction is at equilibrium right now, and the concentrations for all the compounds involved are the following:\n$[A_2_B] = 0.10 M$, $[C] = 0.05 M$, $[A] = 0.02 M$ and $[BC_2_] = 0.01$.\n\nWhat would the equilibrium constant K be for this reaction?",
+        "options": [
+            "0.016 M",
+            "0.040 M",
+            "25 M",
+            "62.5 M"
+        ],
+        "correctAnswer": 0,
+        "explanation": "K = [products]/[reactants] = [A]^2^[BC_2_] / ([A_2_B][C]^2^) = (0.02)^2^(0.01) / ((0.10)(0.05)^2^) = 0.016"
+    },
+    {
+        "id": "AQUEOUS-02",
+        "category": "Equilibrium: Aqueous",
+        "question": "Consider the following reaction:\n\n$3A_(aq)_$ ⇄ $B_(aq)_$\n\nThe solution is in a 2.0 L vessel. At equilibrium, there are 2 moles of B and 5 moles of A. What is true regarding the equilibrium constant?",
+        "options": [
+            "K > 1",
+            "K < 1",
+            "K < 0",
+            "Cannot be determined"
+        ],
+        "correctAnswer": 1,
+        "explanation": "[A] = 2.5 M, [B] = 1.0 M. K = [B]/[A]^3^ = 1.0 / (2.5^3^) = 0.064, so K < 1."
+    },
+    {
+        "id": "AQUEOUS-03",
+        "category": "Equilibrium: Aqueous",
+        "question": "Consider the following reaction taking place in a reactor:\n\n$A + 2B$ ⇄ $3C + D ΔH = 100.0 kJ$\n\nThe reaction is at equilibrium. If you want to increase the ratio [products]/[reactants], what would you do?",
+        "options": [
+            "Reducing the temperature",
+            "Using a catalyst",
+            "Heighten the temperature",
+            "Increasing the pressure"
+        ],
+        "correctAnswer": 2,
+        "explanation": "The reaction is endothermic (ΔH > 0), so heat is a reactant. Increasing temperature shifts the equilibrium to the right (products), increasing K."
+    },
+    {
+        "id": "AQUEOUS-04",
+        "category": "Equilibrium: Aqueous",
+        "question": "Consider the reaction: A_(g)_ ⇄ 2B_(g)_. At 273K, the forward K is 30. What is the constant for the reverse reaction?",
+        "options": [
+            "30",
+            "-30",
+            "0.033",
+            "15"
+        ],
+        "correctAnswer": 2,
+        "explanation": "K_reverse = 1 / K_forward = 1 / 30 = 0.033."
+    },
+    {
+        "id": "AQUEOUS-05",
+        "category": "Equilibrium: Aqueous",
+        "question": "Reaction: $A_(aq)_$ ⇄ $B_(aq)_ + C_(aq)_$. Equilibrium is disturbed by adding more C. After equilibrium is restored, which species has fewer moles per liter compared to the first state?",
+        "options": [
+            "A",
+            "C",
+            "B",
+            "They all decreased"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Adding product C shifts equilibrium left, consuming B and C to produce A. Thus, [B] decreases compared to the initial state."
+    },
+    {
+        "id": "AQUEOUS-07",
+        "category": "Equilibrium: Aqueous",
+        "question": "Reaction: $A + 2B ⇄ 3C$. Initially 1.0g A (100g/mol) and 2.0g B (60g/mol) in 250ml. At equilibrium, 0.10 moles of C are present. What is K?",
+        "options": [
+            "216",
+            "33",
+            "19",
+            "1.43"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Initial moles: A=0.01, B=0.033. Initial M: [A]=0.04, [B]=0.132. At eq: [C]=0.4M. Calculate remaining [A] and [B] based on stoichiometry and solve for K."
+    },
+    {
+        "id": "AQUEOUS-13",
+        "category": "Equilibrium: Aqueous",
+        "question": "How would you describe the relationship between K_1 = [P]/[R] and K_2 = [P]^3/[R]^3?",
+        "options": [
+            "K_2 = K_1",
+            "K_2 = 3K_1",
+            "K_2 = K_1^3",
+            "K_1 = K_2^3"
+        ],
+        "correctAnswer": 2,
+        "explanation": "K_2 is the expression of K_1 cubed. K_2 = K_1^3."
+    },
+    {
+        "id": "AQUEOUS-14",
+        "category": "Equilibrium: Aqueous",
+        "question": "Relationship between K for: (1) A ⇄ B and (2) B ⇄ A?",
+        "options": [
+            "K_1 = K_2",
+            "K_1 = 1/K_2",
+            "K_1 = -K_2",
+            "K_1 = K_2^2"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Reaction 2 is the reverse of Reaction 1. The equilibrium constants are reciprocals: K_1 = 1/K_2."
+    },
+    {
+        "id": "AQUEOUS-20",
+        "category": "Equilibrium: Aqueous",
+        "question": "Reaction: $A + 2B + Heat ⇄ 3C + D$. How can you increase the production of B?",
+        "options": [
+            "Decreasing the temperature",
+            "Adding more B",
+            "Adding more A",
+            "Increasing the temperature"
+        ],
+        "correctAnswer": 0,
+        "explanation": "The reaction is endothermic. B is a reactant. To shift Left (produce B), you must remove heat (decrease temperature)."
+    },
+    {
+        "id": "GASEOUS-01",
+        "category": "Equilibrium: Gaseous",
+        "question": "Reaction: $A_(g)_ + 2B_(g)_$ ⇄ $3C_(g)_ ΔH$ = $-50.0 kJ$. How to increase amount of A at equilibrium?",
+        "options": [
+            "Adding B and lowering temperature",
+            "Adding C and lowering the temperature",
+            "Adding B and increasing temperature",
+            "Adding C and increasing temperature"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Reaction is exothermic. To shift Left (produce A): Add Product (C) or Add Heat (Increase Temp)."
+    },
+    {
+        "id": "GASEOUS-04",
+        "category": "Equilibrium: Gaseous",
+        "question": "Reaction: $3A_(g)_ + 5B_(g)_$ ⇄ $C_(g)_ ΔH$ = $10.0 kJ$. How to increase amount of C at equilibrium?",
+        "options": [
+            "Decrease volume, decrease temperature",
+            "Decrease pressure, decrease temperature",
+            "Decrease volume, increase temperature",
+            "Decrease pressure, remove A and B"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Endothermic reaction with 8 mol gas -> 1 mol gas. Increase products (C) by: Increasing Temp (add heat) and Increasing Pressure (Decrease Volume)."
+    },
+    {
+        "id": "GASEOUS-05",
+        "category": "Equilibrium: Gaseous",
+        "question": "Reaction at 275K: $A_(g)_ + B_(s)_$ ⇄ $C_(g)_ + 2D_(g)_$ with Kc = 1.3x10^-1. What is Kp?",
+        "options": [
+            "2.93",
+            "66.1",
+            "1.3x10^-1",
+            "2.55x10^-4"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Kp = Kc(RT)^Δn. Δn (gas) = (1+2) - 1 = 2. Kp = 0.13 * (0.082*275)^2 = 66.1."
+    },
+    {
+        "id": "GASEOUS-11",
+        "category": "Equilibrium: Gaseous",
+        "question": "Reaction: $A_(g)_ + 2B_(g)_$ ⇄ $4C_(g)_$. 3 moles A, 4 moles B, 2 moles C in 5L tank. What is K?",
+        "options": [
+            "0.33",
+            "0.83",
+            "0.066",
+            "0.16"
+        ],
+        "correctAnswer": 2,
+        "explanation": "[A]=0.6, [B]=0.8, [C]=0.4. K = [C]^4 / ([A][B]^2) = 0.4^4 / (0.6 * 0.8^2) = 0.066."
+    },
+    {
+        "id": "GASEOUS-30",
+        "category": "Equilibrium: Gaseous",
+        "question": "Reaction: $A_(g)_$ ⇄ $2B_(g)_ ΔH > 0$. If temperature is raised, what happens to Kp?",
+        "options": [
+            "Kp would decrease",
+            "Kp stays constant",
+            "Kp would increase",
+            "Not enough information"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Endothermic reaction (ΔH > 0). Increasing temperature shifts equilibrium right and increases the equilibrium constant Kp."
+    },
+    {
+        "id": "SOLUBILITY-01",
+        "category": "Equilibrium: Solubility",
+        "question": "Salt M_2_A_3_ ionizes to M^+3^ and A^-2^. Saturated [A^-2^] = 0.075 M. What is Ksp?",
+        "options": [
+            "5.63x10^-3^",
+            "1.05x10^-6^",
+            "2.4x10^-6^",
+            "0.034"
+        ],
+        "correctAnswer": 1,
+        "explanation": "[A] = 3s = 0.075 -> s = 0.025. [M] = 2s = 0.05. Ksp = [M]^2[A]^3 = (0.05)^2 * (0.075)^3 = 1.05x10^-6."
+    },
+    {
+        "id": "SOLUBILITY-02",
+        "category": "Equilibrium: Solubility",
+        "question": "How many moles of salt MA can dissolve in 5L water if Ksp = 1.2x10^-3?",
+        "options": [
+            "0.03",
+            "1.2x10^-3",
+            "0.15",
+            "6x10^-3"
+        ],
+        "correctAnswer": 2,
+        "explanation": "s = sqrt(Ksp) = sqrt(0.0012) = 0.034 M. Moles = M * V = 0.034 * 5 ≈ 0.17 (Closest option logic: sqrt(1.2E-3) is approx 0.034. 0.03*5 = 0.15)."
+    },
+    {
+        "id": "SOLUBILITY-05",
+        "category": "Equilibrium: Solubility",
+        "question": "Reaction: MA_(s)_ ⇄ $M^+^ + A^-^$. To make MA least soluble, which substance (same Molarity) should be added?",
+        "options": [
+            "YA_2__(s)_",
+            "XA_(s)_",
+            "ZA_3__(s)_",
+            "None"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Common Ion Effect: ZA_3_ produces 3 moles of A^- per mole, creating the highest concentration of the common ion A^-, shifting equilibrium left."
+    },
+    {
+        "id": "SOLUBILITY-07",
+        "category": "Equilibrium: Solubility",
+        "question": "Salt MA_2(s) has Ksp = 8.3x10^-7. What is [A^-] in saturated solution?",
+        "options": [
+            "4.6x10^-4",
+            "0.01184",
+            "8.3x10^-7",
+            "5.92x10^-3"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Ksp = 4s^3. s = cube_root(8.3E-7 / 4) = 0.0059. [A] = 2s = 0.0118."
+    },
+    {
+        "id": "SOLUBILITY-14",
+        "category": "Equilibrium: Solubility",
+        "question": "MX ⇄ M + X (Ksp = 0.5). What is Ksp for: 3MX ⇄ 3M + 3X?",
+        "options": [
+            "1.5",
+            "3.5",
+            "0.5",
+            "0.125"
+        ],
+        "correctAnswer": 3,
+        "explanation": "Multiplying the reaction by 3 raises the K value to the power of 3. K_new = (0.5)^3 = 0.125."
+    },
+    {
+        "id": "SOLUBILITY-19",
+        "category": "Equilibrium: Solubility",
+        "question": "What type of solution is one where Qsp < Ksp?",
+        "options": [
+            "Saturated",
+            "Unsaturated",
+            "Supersaturated",
+            "More info required"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Qsp < Ksp means the ion product is less than the capacity of the solution. It is unsaturated and more salt can dissolve."
+    },
+    {
+        "id": "SOLUBILITY-20",
+        "category": "Equilibrium: Solubility",
+        "question": "Reaction: MX_(s)_ ⇄ $M^+^ + X^-^$. What type of reaction is the reverse?",
+        "options": [
+            "Combustion",
+            "Precipitation",
+            "Single-replacement",
+            "Endothermic"
+        ],
+        "correctAnswer": 1,
+        "explanation": "The reverse reaction joins aqueous ions to form a solid (s). This is precipitation."
+    }
+]

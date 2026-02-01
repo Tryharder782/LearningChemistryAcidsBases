@@ -1,0 +1,28 @@
+.chartTimeContainer {
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  // background-color: aqua;
+  width: 270px;
+  height: 240px;
+  margin-top: 15px;
+
+  .textVert {
+    position: absolute;
+    top: 100px;
+    right: 235px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .textHoriz {
+    position: absolute;
+    top: 230px;
+    right: 80px;
+  }
+}
+
+.chartTime {
+  // position: absolute;
+  right: 0;
+}

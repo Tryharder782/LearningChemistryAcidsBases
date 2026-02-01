@@ -1,0 +1,80 @@
+.container {
+  position: relative;
+  width: 225px;
+}
+
+// Time value slider
+.sliceHorizontal {
+  // position: absolute;
+  // top: 220px; // position
+  // right: -7px;
+  width: 100%; // control this for length of horiz
+
+  .horizontal-slider {
+    width: 100%; // control this for length of horiz
+    height: 30px;
+
+    .example-track {
+      top: 13px;
+      height: 0px;
+      // height: 3px;
+    }
+
+    .example-thumb {
+      width: 15px;
+      height: 30px;
+
+      &.disabled {
+        background-color: grey;
+      }
+    }
+  }
+}
+
+.example-track {
+  position: relative;
+  background: black;
+}
+
+.example-thumb {
+  background-color: rgb(220, 84, 59);
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  &:nth-last-child(1) {
+    z-index: 2 !important;
+  }
+
+  &:focus-visible {
+    outline: 0;
+  }
+}
+
+.sliceHorizontalBar {
+  position: relative;
+  top: 16px;
+
+  // position: absolute;
+  // top: 233px;
+  // right: 0px;
+  height: 3px;
+  width: calc(100% - 20px);
+  background-color: black;
+}
+
+.textHoriz {
+  // position: absolute;
+  // top: 250px;
+  // right: 80px;
+  font-weight: 600;
+
+  p {
+    margin: 0;
+  }
+}
+
+.test1 {
+  position: absolute;
+  top: 250px;
+}

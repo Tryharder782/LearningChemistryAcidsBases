@@ -1,0 +1,71 @@
+{
+  "screen": "intro",
+  "source": {
+    "navigation": "AcidsBases/model/navigation/IntroNavigationModel.swift",
+    "viewModel": "AcidsBases/viewmodel/IntroScreenViewModel.swift",
+    "statements": "AcidsBases/model/statements/IntroStatements.swift"
+  },
+  "waterLevel": {
+    "minRows": 7,
+    "maxRows": 15,
+    "initialRows": 11
+  },
+  "globalNextRules": [
+    {
+      "when": "inputState == addSubstance",
+      "nextEnabledWhen": "components.fractionSubstanceAdded >= 0.5"
+    },
+    {
+      "autoAdvanceWhen": "inputState == addSubstance && !components.canAddSubstance"
+    }
+  ],
+  "steps": [
+    { "id": "intro-01", "state": "SetStatement", "statementKey": "IntroStatements.intro", "highlights": [] },
+    { "id": "intro-02", "state": "SetStatement", "statementKey": "IntroStatements.explainTexture", "highlights": [] },
+    { "id": "intro-03", "state": "SetStatement", "statementKey": "IntroStatements.explainArrhenius", "highlights": [] },
+    { "id": "intro-04", "state": "SetStatement", "statementKey": "IntroStatements.explainBronstedLowry", "highlights": [] },
+    { "id": "intro-05", "state": "SetStatement", "statementKey": "IntroStatements.explainLewis", "highlights": [] },
+    { "id": "intro-06", "state": "SetStatement", "statementKey": "IntroStatements.explainSimpleDefinition", "highlights": [] },
+
+    {
+      "id": "intro-07",
+      "state": "ChooseSubstance",
+      "statementKey": "IntroStatements.chooseStrongAcid",
+      "inputState": "chooseSubstance:strongAcid",
+      "highlights": ["reactionSelection"],
+      "actions": [
+        "availableSubstances = AcidOrBase.substances(forType: strongAcid)",
+        "addNewComponents(type: strongAcid)",
+        "setSubstance(first)",
+        "addMoleculesModel.stopAll()"
+      ]
+    },
+    { "id": "intro-08", "state": "PostChooseSubstance", "statementKey": "IntroStatements.showPhScale", "highlights": ["pHScale"], "inputState": "none" },
+    { "id": "intro-09", "state": "SetStatement", "statementKey": "IntroStatements.explainPHConcept", "highlights": ["pHEquation"] },
+    { "id": "intro-10", "state": "SetStatement", "statementKey": "IntroStatements.explainPOHConcept", "highlights": ["pOHEquation"] },
+    { "id": "intro-11", "state": "SetStatement", "statementKey": "IntroStatements.explainPRelation", "highlights": [] },
+    { "id": "intro-12", "state": "SetStatement", "statementKey": "IntroStatements.explainPConcentrationRelation1", "highlights": [] },
+    { "id": "intro-13", "state": "SetStatement", "statementKey": "IntroStatements.explainPConcentrationRelation2", "highlights": [] },
+
+    { "id": "intro-14", "state": "SetWaterLevel", "statementKey": "IntroStatements.setWaterLevel(substance: strongAcid)", "inputState": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "intro-15", "state": "AddSubstance", "statementKey": "IntroStatements.addSubstance(strongAcid)", "inputState": "addSubstance:strongAcid", "highlights": ["beakerTools"] },
+    { "id": "intro-16", "state": "PostAddSubstance", "statementKey": "IntroStatements.showPhVsMolesGraph", "highlights": ["phChart"], "inputState": "none", "actions": ["graphView = ph"] },
+
+    { "id": "intro-17", "state": "ChooseSubstance", "statementKey": "IntroStatements.chooseStrongBase", "inputState": "chooseSubstance:strongBase", "highlights": ["reactionSelection"] },
+    { "id": "intro-18", "state": "SetWaterLevel", "statementKey": "IntroStatements.setWaterLevel(substance: strongBase)", "inputState": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "intro-19", "state": "AddSubstance", "statementKey": "IntroStatements.addSubstance(strongBase)", "inputState": "addSubstance:strongBase", "highlights": ["beakerTools"] },
+    { "id": "intro-20", "state": "PostAddSubstance", "statementKey": "IntroStatements.showPhVsMolesGraph", "highlights": [], "inputState": "none", "actions": ["graphView = ph"] },
+
+    { "id": "intro-21", "state": "ChooseSubstance", "statementKey": "IntroStatements.chooseWeakAcid", "inputState": "chooseSubstance:weakAcid", "highlights": ["reactionSelection"] },
+    { "id": "intro-22", "state": "PostChooseSubstance", "statementKey": "IntroStatements.explainHEquivalence", "highlights": [], "inputState": "none" },
+    { "id": "intro-23", "state": "SetStatement", "statementKey": "IntroStatements.explainDoubleArrow(weakAcid)", "highlights": [] },
+    { "id": "intro-24", "state": "SetStatement", "statementKey": "IntroStatements.explainEquilibrium", "highlights": [] },
+    { "id": "intro-25", "state": "SetWaterLevel", "statementKey": "IntroStatements.setWaterLevel(substance: weakAcid)", "inputState": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "intro-26", "state": "AddSubstance", "statementKey": "IntroStatements.addSubstance(weakAcid)", "inputState": "addSubstance:weakAcid", "highlights": ["beakerTools"] },
+
+    { "id": "intro-27", "state": "ChooseSubstance", "statementKey": "IntroStatements.chooseWeakBase", "inputState": "chooseSubstance:weakBase", "highlights": ["reactionSelection"] },
+    { "id": "intro-28", "state": "SetWeakBaseWaterLevel", "statementKey": "IntroStatements.setWeakBaseWaterLevel(substance: weakBase)", "inputState": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "intro-29", "state": "AddSubstance", "statementKey": "IntroStatements.addSubstance(weakBase)", "inputState": "addSubstance:weakBase", "highlights": ["beakerTools"] },
+    { "id": "intro-30", "state": "PostAddSubstance", "statementKey": "IntroStatements.end", "highlights": [], "inputState": "none", "actions": ["graphView = ph (showPhChart=false)"] }
+  ]
+}

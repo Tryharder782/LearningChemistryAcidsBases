@@ -1,0 +1,65 @@
+.mathContainer {
+  display: flex;
+  flex-direction: column;
+
+  .mathRow {
+    position: relative;
+
+    .blank {
+      color: transparent !important;
+      background-color: white;
+      border: 1px dashed black;
+    }
+
+    .txtRed {
+      color: rgb(220, 84, 59);
+    }
+
+    span {
+      font-size: 18px;
+      line-height: 18px;
+      position: absolute;
+    }
+
+    .mathTxt1_0 {
+      right: 200px;
+      top: 3px;
+    }
+
+    .mathTxt1_1 {
+      right: 200px;
+      top: 30px;
+    }
+
+    .mathTxt1_2 {
+      right: 122px;
+      top: 3px;
+    }
+
+    .mathTxt1_3 {
+      right: 125px;
+      top: 30px;
+    }
+
+    .mathTxt1_4 {
+      right: 72px;
+      top: 3px;
+    }
+
+    .mathTxt1_5 {
+      right: 72px;
+      top: 30px;
+    }
+
+    .mathTxt1_6 {
+      right: 17px;
+      top: 3px;
+    }
+
+    .mathTxt1_7 {
+      right: 17px;
+      top: 30px;
+    }
+
+  }
+}

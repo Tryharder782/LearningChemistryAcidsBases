@@ -1,0 +1,36 @@
+.reactionDrawContainer {
+  display: flex;
+  // justify-content: center;
+  // flex-wrap: wrap;
+  width: 100%;
+  gap: 70px;
+}
+
+.reactionContentContainer {
+  display: flex;
+  width: 100%;
+  gap: 30px;
+  justify-content: space-around;
+
+}
+
+.reactionContentContainer {
+  .chartInA {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    width: 270px;
+    height: 212px;
+    margin-top: 15px;
+    // width: 300px;
+    // background-color: aqua;
+  }
+
+  .mathContent {
+    font-size: 16px;
+    width: 240px;
+    [class*="mathjaxRow"] {
+      flex-direction: column;
+    }
+  }
+}

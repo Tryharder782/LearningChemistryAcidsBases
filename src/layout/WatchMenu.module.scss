@@ -1,0 +1,95 @@
+.WatchMenuContainer {
+  position: absolute;
+  top: 120px;
+  // right: 6%;
+  right: 6px;
+  // right: 50px;
+  // background: white;
+  z-index: 53;
+
+  .closeIcon {
+    text-decoration: none;
+    background: transparent;
+    box-shadow: none;
+    box-sizing: border-box;
+    cursor: pointer;
+    background: white;
+
+    width: 30px;
+    height: 30px;
+    position: relative;
+    margin: 0;
+
+    &:before {
+      content: "";
+      position: absolute;
+      height: 2px;
+      width: 18px;
+      background-color: black;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(0deg);
+      transition: ease-out .3s all;
+    }
+
+    &:after {
+      content: "";
+      position: absolute;
+      height: 2px;
+      width: 18px;
+      background-color: black;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%) rotate(90deg);
+      transition: ease-out .3s all;
+    }
+
+    &.active {
+      &:before {
+        transform: translate(-50%, -50%) rotate(135deg);
+      }
+
+      &:after {
+        transform: translate(-50%, -50%) rotate(225deg);
+      }
+    }
+  }
+
+  .WatchMenuPanel {
+    transition: all 500ms;
+    opacity: 1; // animation
+    max-height: 0; // animation
+    background-color: white;
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+    top: 30px;
+    width: 200px;
+    display: grid;
+    grid-template: repeat(2, minmax(50px, 1fr)) /repeat(3, minmax(50px, 1fr));
+    font-size: 18px;
+    font-weight: 600;
+
+    &.active {
+      opacity: 1; // animation
+      max-height: 200px; // animation
+      border-bottom: 2px solid black;
+      border-right: 2px solid black;
+    }
+
+    .WatchMenuGridItem {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 2px solid black;
+      margin-right: -2px;
+      margin-bottom: -2px;
+      // margin: -1px;
+
+      // &:nth-child(2),
+      // &:nth-child(2) {
+      //   border-left: solid 2px red;
+      // }
+    }
+  }
+}

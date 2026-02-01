@@ -1,0 +1,56 @@
+.mathContentContainer {
+  margin-left: 30px;
+  margin-top: 20px;
+  font-size: 20px;
+  width: 430px;
+  position: relative;
+  min-width: max-content;
+
+  .mathjaxRow {
+    display: flex;
+    background: white;
+    text-align: left;
+    padding: 7px 10px;
+
+    &.centerAlign {
+      justify-content: space-around;
+    }
+
+  }
+
+  // .mathjaxRow {
+  //   display: flex;
+  //   justify-content: space-around;
+  //   background: white;
+  // }
+
+  .mathjax {
+
+    mjx-container {
+      // text-align: left !important;
+      display: inline !important;
+    }
+
+    mjx-c {
+      font-family: system-ui;
+    }
+  }
+}
+
+.blank {
+  width: 50px;
+  height: 25px;
+  background-color: white;
+  border: 2px dotted black;
+  position: absolute;
+  visibility: hidden;
+
+  &.active {
+    visibility: visible;
+  }
+
+  &.blank_test {
+    left: 73px;
+    top: 115px;
+  }
+}

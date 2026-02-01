@@ -1,0 +1,117 @@
+{
+  "screen": "buffers",
+  "source": {
+    "navigation": "AcidsBases/model/navigation/BufferNavigationModel.swift",
+    "viewModel": "AcidsBases/viewmodel/buffer/BufferScreenViewModel.swift",
+    "statements": "AcidsBases/model/statements/BufferStatements.swift"
+  },
+  "waterLevel": {
+    "minRows": 7,
+    "maxRows": 15,
+    "initialRows": 11
+  },
+  "globalNextRules": [
+    {
+      "when": "input == addMolecule(addWeakSubstance)",
+      "nextEnabledWhen": "weakSubstanceModel.hasAddedEnoughSubstance"
+    },
+    {
+      "when": "input == addMolecule(addSalt)",
+      "nextEnabledWhen": "saltModel.hasAddedEnoughSubstance"
+    },
+    {
+      "when": "input == addMolecule(addStrongSubstance)",
+      "nextEnabledWhen": "strongSubstanceModel.hasAddedEnoughSubstance"
+    },
+    {
+      "autoAdvanceWhen": "input == addMolecule(addWeakSubstance) && !weakSubstanceModel.canAddSubstance"
+    },
+    {
+      "autoAdvanceWhen": "input == addMolecule(addSalt) && !saltModel.canAddSubstance"
+    },
+    {
+      "autoAdvanceWhen": "input == addMolecule(addStrongSubstance) && !strongSubstanceModel.canAddSubstance"
+    }
+  ],
+  "autoStatementUpdates": [
+    {
+      "when": "phase == addWeakSubstance && weakSubstanceModel.hasAddedEnoughSubstance && substance.isAcid",
+      "statementKey": "BufferStatementsForSubstance.midAddingWeakAcid"
+    },
+    {
+      "when": "phase == addWeakSubstance && weakSubstanceModel.hasAddedEnoughSubstance && substance.isBase",
+      "statementKey": "BufferStatementsForSubstance.midAddingWeakBase"
+    },
+    {
+      "when": "phase == addStrongSubstance && strongSubstanceModel.fractionSubstanceAdded >= 0.2 && substance.isAcid",
+      "statementKey": "BufferStatementsForSubstance.midAddingStrongAcid"
+    },
+    {
+      "when": "phase == addStrongSubstance && strongSubstanceModel.fractionSubstanceAdded >= 0.2 && substance.isBase",
+      "statementKey": "BufferStatementsForSubstance.midAddingStrongBase"
+    }
+  ],
+  "steps": [
+    { "id": "buffer-01", "state": "SetStatement", "statementKey": "BufferStatements.intro" },
+    { "id": "buffer-02", "state": "SetStatement", "statementKey": "BufferStatements.explainEquilibriumConstant1" },
+    {
+      "id": "buffer-03",
+      "state": "SelectWeakAcid",
+      "statementKey": "BufferStatements.explainEquilibriumConstant2",
+      "input": "selectSubstance",
+      "highlights": ["reactionSelection"],
+      "actions": ["substanceSelectionIsToggled = true"]
+    },
+    { "id": "buffer-04", "state": "PostSelectSubstance", "statementKey": "BufferStatements.explainWeakAcid", "highlights": ["reactionEquation"], "input": "none" },
+    { "id": "buffer-05", "state": "SetStatement", "statementKey": "BufferStatements.explainKa", "highlights": ["kEquation"] },
+      { "id": "buffer-06", "state": "SetStatement", "statementKey": "BufferStatements.explainHighKa", "highlights": [] },
+    { "id": "buffer-07", "state": "SetStatement", "statementKey": "BufferStatements.explainConjugateBase" },
+    { "id": "buffer-08", "state": "SetStatement", "statementKey": "BufferStatements.explainKb" },
+    { "id": "buffer-09", "state": "SetStatement", "statementKey": "BufferStatements.explainKw" },
+    { "id": "buffer-10", "state": "SetStatement", "statementKey": "BufferStatements.explainP14" },
+    { "id": "buffer-11", "state": "SetStatement", "statementKey": "BufferStatements.explainKaKbNaming", "highlights": ["kWEquation"] },
+    { "id": "buffer-12", "state": "SetStatement", "statementKey": "BufferStatements.explainPKaPKb", "highlights": ["pKEquation"] },
+    { "id": "buffer-13", "state": "SetStatement", "statementKey": "BufferStatements.explainHendersonHasselbalch", "highlights": ["hasselbalchEquation"] },
+    { "id": "buffer-14", "state": "SetWaterLevel", "statementKey": "BufferStatements.instructToSetWaterLevel1", "input": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "buffer-15", "state": "AddWeakAcid", "statementKey": "BufferStatementsForSubstance.instructToAddWeakAcid", "input": "addMolecule:addWeakSubstance", "highlights": ["beakerTools"], "equationState": "acidWithSubstanceConcentration" },
+    { "id": "buffer-16", "state": "RunWeakAcidReaction", "statementKey": "BufferStatementsForSubstance.runningWeakAcidReaction", "input": "none", "autoAdvanceAfterSeconds": 3.0 },
+    { "id": "buffer-17", "state": "EndOfWeakAcidReaction", "statementKey": "BufferStatementsForSubstance.weakAcidEquilibriumReached", "equationState": "acidFilled" },
+    { "id": "buffer-18", "state": "PostWeakAcidReaction", "statementKey": "BufferStatements.introduceBufferSolutions", "equationState": "acidSummary", "actions": ["goToSaltPhase()"] },
+    { "id": "buffer-19", "state": "SetStatement", "statementKey": "BufferStatements.explainBufferSolutions" },
+    { "id": "buffer-20", "state": "SetStatement", "statementKey": "BufferStatements.explainBufferSolutions2" },
+    { "id": "buffer-21", "state": "SetStatement", "statementKey": "BufferStatements.explainBufferUses" },
+    { "id": "buffer-22", "state": "ShowFractionChart", "statementKey": "BufferStatements.explainFractionChart", "highlights": ["bottom-chart-container"], "actions": ["selectedBottomGraph = curve"] },
+    { "id": "buffer-23", "state": "SetStatement", "statementKey": "BufferStatements.explainFractionChartCurrentPosition" },
+    { "id": "buffer-24", "state": "SetStatement", "statementKey": "BufferStatements.explainBufferRange" },
+    { "id": "buffer-25", "state": "SetStatement", "statementKey": "BufferStatements.explainBufferProportions" },
+    { "id": "buffer-26", "state": "SetStatement", "statementKey": "BufferStatements.explainAddingAcidIonizingSalt" },
+    { "id": "buffer-27", "state": "AddSalt", "statementKey": "BufferStatements.instructToAddSalt", "input": "addMolecule:addSalt", "highlights": ["beakerTools"] },
+    { "id": "buffer-28", "state": "PostAdd", "statementKey": "BufferStatementsForSubstance.reachedAcidBuffer", "input": "none" },
+    { "id": "buffer-29", "state": "ShowPhLine", "statementKey": "BufferStatementsForSubstance.showPreviousPhLine", "highlights": ["phChart"], "actions": ["selectedTopView = chart"] },
+    { "id": "buffer-30", "state": "AddStrongSubstance", "statementKey": "BufferStatementsForSubstance.instructToAddStrongAcid", "input": "addMolecule:addStrongSubstance", "highlights": ["beakerTools"], "actions": ["goToStrongSubstancePhase()"] },
+    { "id": "buffer-31", "state": "PostAdd", "statementKey": "BufferStatements.acidBufferLimitReached", "input": "none" },
+
+    { "id": "buffer-32", "state": "SelectWeakBase", "statementKey": "BufferStatements.instructToChooseWeakBase", "input": "selectSubstance", "highlights": ["reactionSelection"], "equationState": "baseBlank", "actions": ["availableSubstances = weakBases", "goToWeakSubstancePhase()"] },
+    { "id": "buffer-33", "state": "PostSelectSubstance", "statementKey": "BufferStatementsForSubstance.choseWeakBase", "highlights": ["reactionEquation"], "input": "none" },
+    { "id": "buffer-34", "state": "SetStatement", "statementKey": "BufferStatementsForSubstance.explainKbEquation", "highlights": ["kEquation"] },
+    { "id": "buffer-35", "state": "SetStatement", "statementKey": "BufferStatements.explainKbOhRelation" },
+    { "id": "buffer-36", "state": "SetStatement", "statementKey": "BufferStatementsForSubstance.explainConjugateAcidPair" },
+    { "id": "buffer-37", "state": "SetStatement", "statementKey": "BufferStatementsForSubstance.explainKa" },
+    { "id": "buffer-38", "state": "SetStatement", "statementKey": "BufferStatementsForSubstance.explainBasicHasselbalch", "highlights": ["hasselbalchEquation"] },
+    { "id": "buffer-39", "state": "SetWaterLevel", "statementKey": "BufferStatements.instructToSetWaterLevelForBase", "input": "setWaterLevel", "highlights": ["waterSlider"] },
+    { "id": "buffer-40", "state": "AddWeakBase", "statementKey": "BufferStatementsForSubstance.instructToAddWeakBase", "input": "addMolecule:addWeakSubstance", "highlights": ["beakerTools"], "equationState": "baseWithSubstanceConcentration" },
+    { "id": "buffer-41", "state": "RunWeakBaseReaction", "statementKey": "BufferStatementsForSubstance.runningWeakBaseReaction", "input": "none", "autoAdvanceAfterSeconds": 3.0 },
+    { "id": "buffer-42", "state": "EndOfWeakBaseReaction", "statementKey": "BufferStatementsForSubstance.reachedBaseEquilibrium", "equationState": "baseFilled" },
+    { "id": "buffer-43", "state": "PostWeakBaseReaction", "statementKey": "BufferStatements.explainBasicHasselbalch", "equationState": "baseSummary", "actions": ["goToSaltPhase()"] },
+    { "id": "buffer-44", "state": "ShowFractionChart", "statementKey": "BufferStatementsForSubstance.explainBufferRange", "highlights": ["bottom-chart-container"], "actions": ["selectedBottomGraph = curve"] },
+    { "id": "buffer-45", "state": "SetStatement", "statementKey": "BufferStatementsForSubstance.calculateBufferRange" },
+    { "id": "buffer-46", "state": "SetStatement", "statementKey": "BufferStatementsForSubstance.explainEqualProportions" },
+    { "id": "buffer-47", "state": "SetStatement", "statementKey": "BufferStatementsForSubstance.explainSalt" },
+    { "id": "buffer-48", "state": "AddSalt", "statementKey": "BufferStatementsForSubstance.instructToAddSaltToBase", "input": "addMolecule:addSalt", "highlights": ["beakerTools"] },
+    { "id": "buffer-49", "state": "PostAdd", "statementKey": "BufferStatementsForSubstance.reachedBasicBuffer", "input": "none" },
+    { "id": "buffer-50", "state": "ShowPhLine", "statementKey": "BufferStatementsForSubstance.showBasePhWaterLine", "highlights": ["phChart"], "actions": ["selectedTopView = chart"] },
+    { "id": "buffer-51", "state": "AddStrongSubstance", "statementKey": "BufferStatementsForSubstance.instructToAddStrongBase", "input": "addMolecule:addStrongSubstance", "highlights": ["beakerTools"], "actions": ["goToStrongSubstancePhase()"] },
+    { "id": "buffer-52", "state": "PostAdd", "statementKey": "BufferStatementsForSubstance.midAddingStrongBase", "inputState": "addSubstance:strongBase", "highlights": [], "requiresAction": true },
+    { "id": "buffer-53", "state": "PostAdd", "statementKey": "BufferStatements.baseBufferLimitReached", "input": "none" }
+  ]
+}

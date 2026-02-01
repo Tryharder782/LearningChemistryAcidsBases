@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  /* background-color: gray; */
+  overflow: hidden;
+  /* Prevent scrolling */
+  touch-action: none;
+  /* Disable touch gestures like scrolling */
+}
+
+#root {
+  background-color: white;
+  min-height: 100vh;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* tutorial text class */
+.sm-botom {
+  font-size: 12px;
+  position: relative;
+  bottom: -3px;
+}
+
+.sm-top {
+  font-size: 12px;
+  position: relative;
+  top: -7px;
+}
+
+.txt-red {
+  color: rgb(220, 84, 59);
+}
+
+.txt-black {
+  color: black !important;
+}
+
+.blankMath {
+  /* color: white;
+  border: 1px solid black;
+  border-style: dashed;
+  min-width: 40px;
+  min-height: 28px; */
+  /* min-height: 25px;
+  top: 5px;
+  position: relative; */
+}
+
+.swal-btn-ok {
+  padding: 10px 20px;
+  font-size: 22px !important;
+  width: 150px;
+  height: 50px;
+}
+
+@layer utilities {
+  .animate-particle-fall {
+    animation: particle-fall 0.8s ease-in forwards;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 2s infinite ease-in-out;
+  }
+
+  .animate-draw {
+    animation: draw 0.5s ease-out forwards;
+  }
+}
+
+@keyframes particle-fall {
+  0% {
+    transform: translateY(0) scale(1.2);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 1;
+    transform: translateY(180px) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(200px) scale(1);
+  }
+}
+
+@keyframes particleFall {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(var(--particle-distance, 300px));
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-subtle {
+
+  0%,
+  100% {
+    transform: translate(-50%, 50%) scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: translate(-50%, 50%) scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1000;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Prevent text selection on interactive UI elements */
+svg,
+img,
+canvas {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

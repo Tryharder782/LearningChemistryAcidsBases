@@ -1,0 +1,125 @@
+.container {
+  // width: 270px;
+  // height: 240px;
+  position: absolute;
+  z-index: 1;
+  width: 220px;
+  top: 220px;
+  right: 0px;
+}
+
+.horizSpins {
+  position: absolute;
+  top: -8px;
+  right: 0px;
+  width: 212px;
+  z-index: 1;
+}
+
+// Time value slider
+.sliceHorizontal {
+  // position: absolute;
+  // top: 220px; // position
+  // right: 10px;
+
+  .horizontal-slider {
+    width: 225px; // control this for length of horiz
+    height: 50px;
+
+    .example-track {
+      top: 13px;
+      height: 0px;
+      // height: 3px;
+    }
+
+    .example-thumb {
+      width: 15px;
+      height: 30px;
+
+      &.disabled {
+        background-color: grey;
+      }
+    }
+  }
+}
+// Time value slider
+.sliceHorizontalMobile {
+  position: absolute;
+  top: 220px; // position
+  left: 60px;
+
+  .horizontal-slider {
+    width: 225px; // control this for length of horiz
+    height: 50px;
+
+    .example-track {
+      top: 13px;
+      height: 0px;
+      // height: 3px;
+    }
+
+    .example-thumb {
+      width: 15px;
+      height: 30px;
+
+      &.disabled {
+        background-color: grey;
+      }
+    }
+  }
+}
+
+.sliderback {
+  border: 3.5px solid #808080; 
+  border-top: 0px; 
+  border-right: 0px; 
+  border-left: 0px; 
+  position: absolute; 
+  top: 16px; 
+  left: 9px; 
+  width: calc(100% - 9px);
+}
+
+.example-track {
+  position: relative;
+  background: black;
+}
+
+.example-thumb {
+  background-color: rgb(220, 84, 59);
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  &:nth-last-child(1) {
+    z-index: 2 !important;
+  }
+  &:focus-visible {
+    outline: 0;
+  }
+}
+
+.sliceHorizontalBar {
+  position: absolute;
+  top: 233px;
+  right: 0px;
+  height: 3px;
+  width: 212px;
+  background-color: black;
+}
+
+.textHoriz {
+  position: absolute;
+  top: 6px;
+  right: 67px;
+  font-weight: 600;
+
+  p {
+    margin: 0;
+  }
+}
+
+.test1{
+  position: absolute;
+  top: 250px;
+}
