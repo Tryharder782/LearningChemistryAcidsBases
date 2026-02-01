@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_Слой_2" data-name="Слой 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 312 312">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        stroke: #000;
+        stroke-miterlimit: 10;
+        stroke-width: 3px;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke-linecap: round;
+      }
+    </style>
+  </defs>
+  <g id="pH_Graphic" data-name="pH Graphic">
+    <rect class="cls-2" x="1.5" y="1.5" width="309" height="309"/>
+    <line class="cls-1" x1="3" y1="100.5" x2="15" y2="100.39"/>
+    <line class="cls-1" x1="2.5" y1="76.61" x2="14.5" y2="76.5"/>
+    <line class="cls-1" x1="3" y1="123.5" x2="15" y2="123.39"/>
+    <line class="cls-1" x1="3" y1="146.5" x2="15" y2="146.39"/>
+    <line class="cls-1" x1="3" y1="194.5" x2="15" y2="194.39"/>
+    <line class="cls-1" x1="3" y1="170.5" x2="15" y2="170.39"/>
+    <line class="cls-1" x1="3" y1="218.5" x2="15" y2="218.39"/>
+    <line class="cls-1" x1="3" y1="240.5" x2="15" y2="240.39"/>
+    <line class="cls-1" x1="3" y1="264.5" x2="15" y2="264.39"/>
+    <line class="cls-1" x1="3" y1="288.5" x2="15" y2="288.39"/>
+    <line class="cls-1" x1="213.52" y1="298.6" x2="213.63" y2="310.6"/>
+    <line class="cls-1" x1="237.41" y1="298.1" x2="237.52" y2="310.1"/>
+    <line class="cls-1" x1="190.52" y1="298.6" x2="190.63" y2="310.6"/>
+    <line class="cls-1" x1="167.52" y1="298.6" x2="167.63" y2="310.6"/>
+    <line class="cls-1" x1="119.52" y1="298.6" x2="119.63" y2="310.6"/>
+    <line class="cls-1" x1="143.52" y1="298.6" x2="143.63" y2="310.6"/>
+    <line class="cls-1" x1="95.52" y1="298.6" x2="95.63" y2="310.6"/>
+    <line class="cls-1" x1="73.52" y1="298.6" x2="73.63" y2="310.6"/>
+    <line class="cls-1" x1="49.52" y1="298.6" x2="49.63" y2="310.6"/>
+    <line class="cls-1" x1="25.52" y1="298.6" x2="25.63" y2="310.6"/>
+  </g>
+</svg>
