@@ -28,7 +28,8 @@ type UseBufferDerivedStateParams = {
 };
 
 type UseBufferDerivedStateResult = {
-   currentRows: number;
+   currentRows: number; // Integer for grid
+   rowsVisible: number; // Float for model
    totalSlots: number;
    modelLevel: number;
    currentMolarity: number;
@@ -54,13 +55,11 @@ export const useBufferDerivedState = ({
    waterLevelMin,
    waterLevelMax
 }: UseBufferDerivedStateParams): UseBufferDerivedStateResult => {
-   const currentRows = useMemo(
-      () => getGridRowsForWaterLevel(waterLevel, waterLevelMin, waterLevelMax),
-      [waterLevel, waterLevelMin, waterLevelMax]
-   );
-
-   const totalSlots = GRID_COLS * currentRows;
    const modelLevel = getModelLevelForWaterLevel(waterLevel, waterLevelMin, waterLevelMax);
+   const rowsVisible = modelLevel * 22; // GRID_ROWS_TOTAL
+   const currentRows = Math.ceil(rowsVisible);
+
+   const totalSlots = GRID_COLS * rowsVisible;
    const currentMolarity = Math.max(1e-10, particleCount / totalSlots);
 
    const isStrongPhaseStep =
@@ -85,7 +84,7 @@ export const useBufferDerivedState = ({
       const finalIonCoordCount = Math.floor(INITIAL_ION_FRACTION * particleCount);
 
       const equilibriumCounts = {
-         substance: particleCount,
+         substance: Math.max(0, particleCount - finalIonCoordCount * 2),
          primary: finalIonCoordCount,
          secondary: finalIonCoordCount
       };
@@ -181,7 +180,8 @@ export const useBufferDerivedState = ({
    ]);
 
    return {
-      currentRows,
+      currentRows, // Integer for grid
+      rowsVisible,  // Float for model
       totalSlots,
       modelLevel,
       currentMolarity,

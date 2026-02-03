@@ -29,6 +29,7 @@ type UseGuideSnapshotsParams = {
 };
 
 type UseGuideSnapshotsResult = {
+   saveSnapshotForStep: (stepId: string) => void;
    restoreSnapshotForStep: (stepId: string) => void;
 };
 
@@ -50,14 +51,14 @@ export const useGuideSnapshots = ({
    const stepSnapshotsRef = useRef<Record<string, BeakerSnapshot>>({});
 
    const saveSnapshotForStep = (stepId: string) => {
-      if (stepSnapshotsRef.current[stepId]) return;
+      // Allow overwriting to ensure we capture the most recent state (e.g. after adding particles)
       stepSnapshotsRef.current[stepId] = {
-      particleCount,
-      saltShakes,
-      displayedSaltShakes,
-      simulationPhase,
-      particles: modelRef.current?.getParticles() || [],
-   };
+         particleCount,
+         saltShakes,
+         displayedSaltShakes,
+         simulationPhase,
+         particles: modelRef.current?.getParticles() || [],
+      };
    };
 
    const restoreSnapshotForStep = (stepId: string) => {
@@ -72,14 +73,11 @@ export const useGuideSnapshots = ({
    };
 
    useEffect(() => {
-      if (snapshotStepIds.includes(currentStepId)) {
-         saveSnapshotForStep(currentStepId);
-      }
-   }, [currentStepId]);
-
-   useEffect(() => {
       stepSnapshotsRef.current = {};
    }, [resetKey]);
 
-   return { restoreSnapshotForStep };
+   return {
+      saveSnapshotForStep,
+      restoreSnapshotForStep
+   };
 };

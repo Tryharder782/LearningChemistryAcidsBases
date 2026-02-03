@@ -57,7 +57,17 @@ export class ParticleGrid {
 
       // If requested more than total slots, clamp
       const maxSlots = GRID_COLS * maxRows;
-      const availableCount = maxSlots - tempOccupied.size;
+
+      // Count only occupied slots within the current effective rows
+      let visibleOccupiedCount = 0;
+      tempOccupied.forEach(key => {
+         const [c, r] = key.split(',').map(Number);
+         if (r < maxRows) {
+            visibleOccupiedCount++;
+         }
+      });
+
+      const availableCount = maxSlots - visibleOccupiedCount;
       const toAdd = Math.min(count, availableCount);
 
       if (toAdd <= 0) return [];

@@ -13,7 +13,7 @@ export type SubstancePart = 'substance' | 'primaryIon' | 'secondaryIon';
 
 export type PrimaryIon = 'hydrogen' | 'hydroxide';
 
-export type SecondaryIon = 'Cl' | 'A' | 'Na' | 'I' | 'Br' | 'K' | 'Li' | 'F' | 'CN' | 'HS' | 'B' | 'HB';
+export type SecondaryIon = 'Cl' | 'A' | 'Na' | 'I' | 'Br' | 'K' | 'Li' | 'F' | 'CN' | 'HS' | 'B' | 'HB' | 'X';
 
 // ============================================
 // CORE INTERFACES

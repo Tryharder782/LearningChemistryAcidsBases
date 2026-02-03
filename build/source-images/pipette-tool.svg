@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_Слой_2" data-name="Слой 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 85 168.01">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        opacity: .3;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-width: 0px;
+      }
+
+      .cls-3 {
+        fill: #f15a24;
+        opacity: .7;
+      }
+    </style>
+  </defs>
+  <g id="_Пипетка" data-name="Пипетка">
+    <rect class="cls-1" x=".5" y="47.01" width="84" height="21"/>
+    <path class="cls-1" d="m57,68.51h-29v79c3.07,5.57,5.91,9.95,8,13,4,5.84,5.43,7.04,7,7,1.88-.05,3.22-1.87,7-8,3-4.88,5.36-9.02,7-12v-79Z"/>
+    <path class="cls-1" d="m63,15.51C60.04,6.4,51.45.29,42,.51c-9.09.21-17.16,6.24-20,15v31h41V15.51Z"/>
+    <path class="cls-2" d="m63,15.51C60.04,6.4,51.45.29,42,.51c-9.09.21-17.16,6.24-20,15v31h41V15.51Z"/>
+    <rect class="cls-2" x=".5" y="47.01" width="16" height="21"/>
+    <rect class="cls-2" x="22.5" y="47.01" width="5" height="21"/>
+    <rect class="cls-2" x="32.5" y="47.01" width="5" height="21"/>
+    <rect class="cls-2" x="42.5" y="47.01" width="5" height="21"/>
+    <rect class="cls-2" x="52.5" y="47.01" width="5" height="21"/>
+    <rect class="cls-2" x="63.5" y="47.01" width="5" height="21"/>
+    <rect class="cls-2" x="73.5" y="47.01" width="5" height="21"/>
+    <circle class="cls-3" cx="42.5" cy="23.01" r="15"/>
+  </g>
+</svg>

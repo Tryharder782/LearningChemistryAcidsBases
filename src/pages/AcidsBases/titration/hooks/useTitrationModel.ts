@@ -19,9 +19,9 @@ const MAX_SUBSTANCE_SHAKES = 21;
 
 const beakerVolumeFromRows = new LinearEquation(
    GRID_ROWS_MIN,
-   0.1,
+   0.15, // Adjusted to make 11 rows = 0.35L
    GRID_ROWS_MAX,
-   0.6
+   0.65
 );
 
 const getDefaultSubstance = (type: SubstanceType): AcidOrBase => {
@@ -55,7 +55,8 @@ export const useTitrationModel = () => {
    const isStrong = substance.type === 'strongAcid' || substance.type === 'strongBase';
    const isAcid = substance.type === 'strongAcid' || substance.type === 'weakAcid';
 
-   const maxSubstance = useMemo(() => MAX_SUBSTANCE_SHAKES * SUBSTANCE_PARTICLES_PER_SHAKE, []);
+   // Dynamic limit matching CogSciKit
+   const maxSubstance = useMemo(() => Math.ceil((GRID_COLS * rows) / 3), [rows]);
 
    const minSubstance = useMemo(() => MIN_SUBSTANCE_SHAKES * SUBSTANCE_PARTICLES_PER_SHAKE, []);
 

@@ -136,11 +136,11 @@
         "options": [
             "Lewis",
             "Arrhenius",
-            "Brønsted-Lowry",
+            "Bronsted-Lowry",
             "It's just a broad definition"
         ],
         "correctAnswer": 2,
-        "explanation": "Brønsted-Lowry acids are substances that can release a proton and bases are substances that can accept a proton."
+        "explanation": "Bronsted-Lowry acids are substances that can release a proton and bases are substances that can accept a proton."
     },
     {
         "id": "TITRATION-24",
@@ -225,7 +225,7 @@
         "category": "pH Scale",
         "question": "'Acids can accept an electron pair, while bases can donate an electron pair.' This definition for acids and bases is attributed to:",
         "options": [
-            "Brønsted-Lowry",
+            "Bronsted-Lowry",
             "Arrhenius",
             "Lewis",
             "It's just a broad definition"
@@ -434,7 +434,7 @@
         "question": "'Acids produce H+ in solution and bases produces OH-'. This definition for acids and bases is attributed to:",
         "options": [
             "Lewis",
-            "Brønsted-Lowry",
+            "Bronsted-Lowry",
             "It's just a broad definition",
             "Arrhenius"
         ],

@@ -38,7 +38,7 @@ export interface ParticleCounts {
 export const GRID_COLS = 19;
 export const GRID_ROWS_TOTAL = 22; // Total rows in the grid (100% water)
 export const GRID_ROWS_MIN = 7;
-export const GRID_ROWS_MAX = 15;
+export const GRID_ROWS_MAX = 17;
 export const GRID_ROWS_DEFAULT = 11;
 export const TOTAL_SLOTS = GRID_COLS * GRID_ROWS_DEFAULT;
 export const MAX_PARTICLES = 43;

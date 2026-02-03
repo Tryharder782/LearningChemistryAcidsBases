@@ -201,7 +201,7 @@ export const weakBaseB = createWeakBase(
    'B', 'B⁻', 'HB', 3,
    ION_COLORS.weakBaseB, ION_COLORS.ionB,
    4e-5, // Kb
-   'HBCl'
+   'HBX'
 );
 
 export const weakBaseF = createWeakBase(

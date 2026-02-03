@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.9d8060b2.css",
+    "main.js": "/static/js/main.f7ef1d62.js",
+    "static/js/453.6b9042b4.chunk.js": "/static/js/453.6b9042b4.chunk.js",
+    "static/media/pentagon-pink.png": "/static/media/pentagon-pink.74ad90021fd36cb345e8.png",
+    "static/media/pentagon-yellow.png": "/static/media/pentagon-yellow.f46b5e86625dbb938775.png",
+    "static/media/pentagon-sky.png": "/static/media/pentagon-sky.1f3ae32097a899787680.png",
+    "static/media/3.png": "/static/media/3.65ebb368d06cc71fff08.png",
+    "static/media/circle.png": "/static/media/circle.6e3057523e327c39269a.png",
+    "static/media/kineticsicon-pressed@3x.png": "/static/media/kineticsicon-pressed@3x.426886e96b3c69c7f462.png",
+    "static/media/turtorialbk.png": "/static/media/turtorialbk.431d254e3c80dec6d7cf.png",
+    "static/media/kineticsicon@3x.png": "/static/media/kineticsicon@3x.f24ac9ea178dae216403.png",
+    "static/media/navpan1.png": "/static/media/navpan1.498f84886f84682fe5f3.png",
+    "static/media/burnerPan.png": "/static/media/burnerPan.277c568406d1c3e80c6e.png",
+    "index.html": "/index.html",
+    "main.9d8060b2.css.map": "/static/css/main.9d8060b2.css.map",
+    "main.f7ef1d62.js.map": "/static/js/main.f7ef1d62.js.map",
+    "453.6b9042b4.chunk.js.map": "/static/js/453.6b9042b4.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9d8060b2.css",
+    "static/js/main.f7ef1d62.js"
+  ]
+}

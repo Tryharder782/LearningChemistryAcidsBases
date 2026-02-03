@@ -42,12 +42,22 @@ export function BufferScreen() {
    const [strongMidAutoAdvanced, setStrongMidAutoAdvanced] = useState(false);
    const [strongAutoAdvanced, setStrongAutoAdvanced] = useState(false);
    const [selectedSubstance, setSelectedSubstance] = useState<AcidOrBase | null>(null);
+   const [chartMode, setChartMode] = useState<'bars' | 'curve' | 'neutralization'>('bars');
 
    const beakerContainerRef = useRef<HTMLDivElement>(null);
    const bottlesContainerRef = useRef<HTMLDivElement>(null);
    const waterLineOffset = useWaterLineOffset(beakerContainerRef, bottlesContainerRef, waterLevel);
 
-   const snapshotStepIds = ['instructToAddSalt', 'instructToAddStrongAcid', 'instructToAddStrongBase', 'acidBufferLimitReached'] as const;
+   const snapshotStepIds = [
+      'instructToAddWeakAcid',
+      'instructToAddSalt',
+      'instructToAddWeakBase',
+      'instructToAddSaltToBase',
+      'instructToAddStrongAcid',
+      'instructToAddStrongBase',
+      'acidBufferLimitReached',
+      'baseBufferLimitReached'
+   ] as const;
 
    // Particle System Model
    // Using useRef to persist the model instance across renders
@@ -88,6 +98,7 @@ export function BufferScreen() {
       activeBottleIndex,
       setActiveBottleIndex,
       markInteraction,
+      saveSnapshotForStep,
       restoreSnapshotForStep,
       hasInteracted
    } = useBufferGuideState({
@@ -104,11 +115,21 @@ export function BufferScreen() {
       resetKey: selectedSubstance?.id
    });
 
+   const [isMobile, setIsMobile] = useState(false);
+   useEffect(() => {
+      const check = () => setIsMobile(window.innerWidth < 768);
+      check();
+      window.addEventListener('resize', check);
+      return () => window.removeEventListener('resize', check);
+   }, []);
+
    const {
       pouringParticles,
       createPour,
       registerBottle
-   } = usePouringParticles(waterLineOffset, bottlesContainerRef, beakerContainerRef);
+   } = usePouringParticles(waterLineOffset, bottlesContainerRef, beakerContainerRef, {
+      offsets: isMobile ? { 0: { x: -10 } } : { 0: { x: -35 } }
+   });
 
    // Sync visual counter with logical counter with animation delay (~600ms for particle animation)
    useEffect(() => {
@@ -136,6 +157,7 @@ export function BufferScreen() {
       currentRows,
       totalSlots: TOTAL_SLOTS,
       modelLevel,
+      rowsVisible,
       currentMolarity,
       saltModel,
       saltParticlesPerShake,
@@ -160,12 +182,14 @@ export function BufferScreen() {
 
    useBufferParticlesSync({
       modelRef,
-      modelLevel,
+      rowsVisible,
       selectedSubstance,
       simulationPhase,
       particleCount,
       saltShakes,
-      currentMolarity
+      currentMolarity,
+      saltModel,
+      displayedSaltSubstanceAdded
    });
    const scientificConcentrations = useScientificConcentrations({
       pH,
@@ -287,6 +311,7 @@ export function BufferScreen() {
       steps: bufferGuideSteps,
       snapshotStepIds,
       restoreSnapshotForStep,
+      saveSnapshotForStep,
       availableSubstances,
       selectedSubstance,
       setSelectedSubstance,
@@ -353,26 +378,19 @@ export function BufferScreen() {
          setStrongAutoAdvanced(false);
          setSimulationPhase('adding');
          setWaterLevel(0.5);
-         setSelectorOpen(true);
       }
 
       if (currentStep.substanceType === 'weakAcid' && selectedSubstance?.type === 'weakBase' && acidSubstanceRef.current) {
          setSelectedSubstance(acidSubstanceRef.current);
       }
-
-      if (currentStep.inputState.type !== 'chooseSubstance') {
-         setSelectorOpen(false);
-      }
    }, [
       currentStep.id,
       currentStep.substanceType,
-      currentStep.inputState.type,
       selectedSubstance,
       setDisplayedSaltShakes,
       setParticleCount,
       setSaltAutoAdvanced,
       setSaltShakes,
-      setSelectorOpen,
       setSelectedSubstance,
       setSimulationPhase,
       setStrongAutoAdvanced,
@@ -381,6 +399,12 @@ export function BufferScreen() {
       setStrongSubstanceAdded,
       setWaterLevel
    ]);
+
+   useEffect(() => {
+      if (currentStep.chartMode) {
+         setChartMode(currentStep.chartMode);
+      }
+   }, [currentStep.chartMode]);
 
    // Beaker ref for potential future use or just container ref
    // beakerContainerRef and bottlesContainerRef declared above
@@ -455,6 +479,8 @@ export function BufferScreen() {
                            animatedCounts={animatedCounts}
                            maxParticles={MAX_PARTICLES}
                            forcedChartMode={currentStep.chartMode}
+                           chartMode={chartMode}
+                           onChartModeChange={setChartMode}
                         />
                      </div>
 
@@ -483,7 +509,7 @@ export function BufferScreen() {
                         canGoBack={currentStepIndex > 0}
                         currentStepIndex={currentStepIndex}
                         totalSteps={bufferGuideSteps.length}
-                        isChooseSubstanceStep={currentStep.inputState.type === 'chooseSubstance'}
+                        isChooseSubstanceStep={currentStep.highlights?.includes('reactionSelection')}
                      />
                   </main>
                </div>

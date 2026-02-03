@@ -13,7 +13,8 @@ import IconTitration from '../../../assets/ui/titration.png'
 import IconTitrationPressed from '../../../assets/ui/titration-pressed.png'
 
 import { useLocation, useNavigate } from 'react-router-dom'
-import { routes } from '../../../constants'
+import { routes, MenuList } from '../../../constants'
+import SvgQuiz from '../../Icons/SvgQuiz'
 
 const NavMenu = () => {
   const [showMenu, setShowMenu] = useState(false)
@@ -40,26 +41,27 @@ interface NavPanelProps {
 const NavPanel = ({ visible = false, onClose }: NavPanelProps) => {
   let location = useLocation()
   const navigate = useNavigate()
-  
+
   const [curMenu, setCurMenu] = useState<string>('introduction')
-  
+
   useEffect(() => {
-    if (location.pathname === routes.introduction.path) {
-      setCurMenu('introduction')
-    } else if (location.pathname === routes.buffers.path) {
-      setCurMenu('buffers')
-    } else if (location.pathname === routes.titration.path) {
-      setCurMenu('titration')
+    const menuNames = Object.keys(routes) as (keyof typeof routes)[]
+    const curRouteMenu = menuNames.find(item => routes[item].path === location.pathname)
+    if (curRouteMenu) {
+      setCurMenu(curRouteMenu)
     }
   }, [location.pathname])
-  
-  const handleMenuItemClick = (menu: 'introduction' | 'buffers' | 'titration') => {
-    navigate(routes[menu].path)
+
+  const handleMenuItemClick = (menu: string) => {
+    const targetRoute = routes[menu as keyof typeof routes]
+    if (targetRoute) {
+      navigate(targetRoute.path)
+    }
     onClose()
   }
 
   return <div className={`${styles.navPanel} ${visible ? styles.active : ''}`}>
-    
+
     <div className={styles.navPanBk}>
       <img
         src={ImgPanelBk}
@@ -67,7 +69,7 @@ const NavPanel = ({ visible = false, onClose }: NavPanelProps) => {
         height={440}
       />
     </div>
-    
+
     <div
       className={`${styles.closeIcon}`}
       onClick={() => onClose()}
@@ -123,32 +125,65 @@ const NavPanel = ({ visible = false, onClose }: NavPanelProps) => {
         <div className={styles.navMenuItem}>
           <img
             className={styles.imgChapter}
-            src={curMenu === 'introduction' ? IconIntroductionPressed : IconIntroduction}
+            src={(curMenu === 'introduction' || curMenu === 'introductionQuiz') ? IconIntroductionPressed : IconIntroduction}
             alt='Introduction'
             onClick={() => {
               handleMenuItemClick('introduction')
             }}
           />
+          <div
+            className={styles.quizIconWrapper}
+            onClick={() => handleMenuItemClick('introductionQuiz')}
+          >
+            <SvgQuiz
+              fillColor={'rgb(68, 150, 247)'}
+              width={40}
+              height={40}
+              isActive={curMenu === 'introductionQuiz'}
+            />
+          </div>
         </div>
         <div className={styles.navMenuItem}>
           <img
             className={styles.imgChapter}
-            src={curMenu === 'buffers' ? IconBufferPressed : IconBuffer}
+            src={(curMenu === 'buffers' || curMenu === 'buffersQuiz') ? IconBufferPressed : IconBuffer}
             alt='Buffer'
             onClick={() => {
               handleMenuItemClick('buffers')
             }}
           />
+          <div
+            className={styles.quizIconWrapper}
+            onClick={() => handleMenuItemClick('buffersQuiz')}
+          >
+            <SvgQuiz
+              fillColor={'rgb(68, 150, 247)'}
+              width={40}
+              height={40}
+              isActive={curMenu === 'buffersQuiz'}
+            />
+          </div>
         </div>
         <div className={styles.navMenuItem}>
           <img
             className={styles.imgChapter}
-            src={curMenu === 'titration' ? IconTitrationPressed : IconTitration}
+            src={(curMenu === 'titration' || curMenu === 'titrationQuiz') ? IconTitrationPressed : IconTitration}
             alt='Titration'
             onClick={() => {
               handleMenuItemClick('titration')
             }}
           />
+          <div
+            className={styles.quizIconWrapper}
+            onClick={() => handleMenuItemClick('titrationQuiz')}
+          >
+            <SvgQuiz
+              fillColor={'rgb(68, 150, 247)'}
+              width={40}
+              height={40}
+              isActive={curMenu === 'titrationQuiz'}
+            />
+          </div>
         </div>
       </div>
     </div>

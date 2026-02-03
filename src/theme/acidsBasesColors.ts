@@ -22,7 +22,7 @@ export const ACIDS_BASES_COLORS = {
       fluorine: '#0B5D3E',      // F- (Dark Teal Green)
       cyanide: '#72AC79',       // CN- (Sage Green)
       ionA: '#B20D30',          // A- (Crimson Red)
-      ionB: '#2D2D2D',          // HB (Dark Gray/Black)
+      ionB: '#000000',          // HB (Black)
       ionHS: '#FF9F0A',         // HS-
    },
 

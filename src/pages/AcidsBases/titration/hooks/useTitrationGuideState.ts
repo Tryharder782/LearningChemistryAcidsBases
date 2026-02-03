@@ -243,7 +243,7 @@ export const useTitrationGuideState = (model: TitrationModel): UseTitrationGuide
             substanceId: model.substance.id
          };
       }
-      if (currentStep.inputState.type === 'selectSubstance') {
+      if (currentStep.highlights.includes('reactionSelection')) {
          setSubstanceSelectorOpen(true);
       } else {
          setSubstanceSelectorOpen(false);

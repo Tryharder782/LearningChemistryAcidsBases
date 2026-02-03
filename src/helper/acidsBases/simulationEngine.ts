@@ -121,9 +121,10 @@ export function getSpeciesCounts(
    const primaryCount = ionCount;
    const secondaryCount = ionCount;
    // For weak acid (HA <-> H+ + A-):
-   // Total particles = [HA] + [A-] (conservation of A)
-   // So substance (HA) = Total - A- (secondaryCount)
-   const substanceCount = Math.max(0, totalParticles - secondaryCount);
+   // REFINED: To maintain constant sphere density visually, each ion pair consumes 2 HA molecules.
+   // totalSpheres = substanceCount + primaryCount + secondaryCount
+   // substanceCount = totalParticles - (primaryCount + secondaryCount)
+   const substanceCount = Math.max(0, totalParticles - (primaryCount + secondaryCount));
 
    return {
       substance: substanceCount,

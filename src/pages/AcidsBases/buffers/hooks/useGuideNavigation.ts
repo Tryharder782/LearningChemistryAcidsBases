@@ -49,10 +49,16 @@ export const useGuideNavigation = ({
    strongMaxSubstance,
    strongSubstanceAdded,
    particleCount,
-   onBackToStrongBase
-}: UseGuideNavigationParams): UseGuideNavigationResult => {
+   onBackToStrongBase,
+   saveSnapshotForStep
+}: UseGuideNavigationParams & { saveSnapshotForStep: (stepId: string) => void }): UseGuideNavigationResult => {
    const navigate = useNavigate();
    const handleNext = () => {
+      // Save snapshot of current step before moving to next
+      if (snapshotStepIds.includes(currentStep.id)) {
+         saveSnapshotForStep(currentStep.id);
+      }
+
       if (currentStep.inputState.type === 'chooseSubstance' && !selectedSubstance) {
          if (availableSubstances.length > 0) {
             setSelectedSubstance(availableSubstances[0]);

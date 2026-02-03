@@ -150,10 +150,10 @@ export const BufferTopRow = ({
                         {pouringParticles.map(pour => (
                            <div
                               key={pour.id}
-                              className="absolute pointer-events-none z-[9999]"
+                              className="fixed pointer-events-none z-[9999]"
                               style={{
-                                 top: `${pour.startY + window.scrollY}px`,
-                                 left: `${pour.startX + window.scrollX}px`,
+                                 top: `${pour.startY}px`,
+                                 left: `${pour.startX}px`,
                                  transform: 'translateX(-50%)'
                               }}
                            >

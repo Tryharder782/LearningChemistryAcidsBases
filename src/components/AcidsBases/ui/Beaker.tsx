@@ -58,7 +58,7 @@ export function Beaker({
          left: `${p.position.col * colWidth + colWidth / 2}%`,
          top: `${p.position.row * rowHeight + rowHeight / 2}%`,
          backgroundColor: p.displayColor,
-         transition: `background-color ${p.transitionMs ?? 500}ms ease`,
+         transition: `background-color ${p.transitionMs ?? 500}ms ease, opacity 300ms ease`,
          transitionDelay: `${p.transitionDelayMs ?? 0}ms`,
          opacity: p.opacity ?? 1,
          width: '12px',
@@ -136,14 +136,15 @@ export function Beaker({
                         );
                      })}
 
-                     {/* Actual particles */}
-                     {particles.filter(p => p.position.row < Math.ceil(gridRows)).map(p => (
-                        <div
-                           key={p.id}
-                           style={getParticleStyle(p)}
-                           className="shadow-sm"
-                        />
-                     ))}
+                     {particles
+                        .filter(p => p.position.row < Math.ceil(gridRows))
+                        .map(p => (
+                           <div
+                              key={p.id}
+                              style={getParticleStyle(p)}
+                              className="shadow-sm"
+                           />
+                        ))}
                      {children}
                   </div>
                )}

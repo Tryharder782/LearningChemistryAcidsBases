@@ -50,6 +50,8 @@ type BufferBottomRowProps = {
    animatedCounts: AnimatedCounts;
    maxParticles: number;
    forcedChartMode?: ChartMode;
+   chartMode?: ChartMode;
+   onChartModeChange?: (mode: ChartMode) => void;
 };
 
 export const BufferBottomRow = ({
@@ -67,7 +69,9 @@ export const BufferBottomRow = ({
    curveMeta,
    animatedCounts,
    maxParticles,
-   forcedChartMode
+   forcedChartMode,
+   chartMode,
+   onChartModeChange
 }: BufferBottomRowProps) => {
    return (
       <div className="grid gap-4 items-start" style={{ gridTemplateColumns: '58% 42%' }}>
@@ -81,6 +85,7 @@ export const BufferBottomRow = ({
                   max={waterLevelMax}
                   onChange={onWaterLevelChange}
                   height={280}
+                  enabled={guideOverrides.highlights?.includes('waterSlider')}
                />
             </Blockable>
 
@@ -113,6 +118,8 @@ export const BufferBottomRow = ({
                animatedCounts={animatedCounts}
                maxParticles={maxParticles}
                forcedMode={forcedChartMode}
+               mode={chartMode}
+               onModeChange={onChartModeChange}
                barsStyle="titration"
             />
          </div>

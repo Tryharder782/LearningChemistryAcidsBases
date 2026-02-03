@@ -61,15 +61,21 @@ export function GuideBubble({
                />
 
                {/* Content Overlay */}
-               <div className="relative z-10 w-full h-full flex flex-col p-2 pr-16 pb-4 justify-center">
+               <div className="relative z-10 w-full h-full flex flex-col p-2 pb-8 pr-16 pb-4 justify-center">
                   {/* Statement text */}
                   <div className={`text-black font-regular overflow-hidden flex flex-col justify-center ${(() => {
                      const fullText = statement.join(' ');
                      const len = fullText.length;
-                     if (len > 450) return 'text-[12px] leading-tight';
-                     if (len > 350) return 'text-[13px] leading-snug';
-                     if (len > 250) return 'text-[14px] leading-normal';
-                     if (len > 150) return 'text-[16px] leading-normal';
+                     const lineCount = statement.length;
+
+                     // Calculate "effective length" considering both characters and lines
+                     // Each line adds visual weight beyond just character count
+                     const effectiveLength = len + (lineCount * 50); // Each line = ~50 chars worth of space
+
+                     if (effectiveLength > 550 || lineCount > 5) return 'text-[12px] leading-tight';
+                     if (effectiveLength > 450 || lineCount > 4) return 'text-[13px] leading-snug';
+                     if (effectiveLength > 350 || lineCount > 3) return 'text-[14px] leading-normal';
+                     if (effectiveLength > 250) return 'text-[16px] leading-normal';
                      return 'text-[18px] leading-relaxed';
                   })()
                      }`}>

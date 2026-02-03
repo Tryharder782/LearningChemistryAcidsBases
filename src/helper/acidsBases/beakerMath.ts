@@ -10,7 +10,7 @@ export const getGridRowsForWaterLevel = (
    const clamped = Math.max(waterLevelMin, Math.min(waterLevelMax, waterLevel));
    const normalized = (clamped - waterLevelMin) / (waterLevelMax - waterLevelMin);
    const rowsFloat = rowsMin + (rowsMax - rowsMin) * normalized;
-   // Always round up so any partially visible row is considered active
+   // Use ceil to ensure partial bottom rows are counted as active
    const availableRows = Math.ceil(rowsFloat);
    return Math.max(rowsMin, Math.min(rowsMax, availableRows));
 };

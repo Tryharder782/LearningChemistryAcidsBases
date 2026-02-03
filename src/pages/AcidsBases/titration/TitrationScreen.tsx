@@ -17,6 +17,7 @@ import { titrationGuideSteps } from '../../../components/AcidsBases/guide/titrat
 import { ReactingBeakerModel } from '../../../helper/acidsBases/particles/ReactingBeakerModel';
 import { useParticleAnimation } from '../../../hooks/useParticleAnimation';
 import type { Particle, MoleculeType } from '../../../helper/acidsBases/particles/types';
+import { GRID_ROWS_DEFAULT, GRID_ROWS_TOTAL } from '../../../helper/acidsBases/particles/types';
 import { useWaterLineOffset } from '../buffers/hooks/useWaterLineOffset';
 import { usePouringParticles } from '../buffers/hooks/usePouringParticles';
 import type { AcidOrBase } from '../../../helper/acidsBases';
@@ -77,12 +78,28 @@ export function TitrationScreen() {
       };
    }, [model.waterLevel]);
 
-   const waterLineOffset = useWaterLineOffset(beakerContainerRef, bottlesContainerRef, model.waterLevel);
-   const { pouringParticles, createPour, registerBottle } = usePouringParticles(
+   const liquidLevel = WATER_LEVEL_MIN + (WATER_LEVEL_MAX - WATER_LEVEL_MIN) * model.waterLevel;
+   const waterLineOffset = useWaterLineOffset(beakerContainerRef, bottlesContainerRef, liquidLevel);
+   const [isMobile, setIsMobile] = useState(false);
+   useEffect(() => {
+      const check = () => setIsMobile(window.innerWidth < 768);
+      check();
+      window.addEventListener('resize', check);
+      return () => window.removeEventListener('resize', check);
+   }, []);
+
+   const {
+      pouringParticles,
+      createPour,
+      registerBottle
+   } = usePouringParticles(
       waterLineOffset,
       bottlesContainerRef,
       beakerContainerRef,
-      { 1: 1, 2: 1 }
+      {
+         particlesPerPour: { 1: 1, 2: 1 },
+         offsets: isMobile ? { 2: { x: -10 } } : { 2: { x: -25 } }
+      }
    );
 
 
@@ -289,8 +306,12 @@ export function TitrationScreen() {
       };
    }, [model.isStrong, model.phase, model.titrantAdded, model.isAcid]);
 
+   // Synchronization logic for particles
+   // Exactly calculated based on pixels visible in Beaker
+   const rowsVisible = liquidLevel * GRID_ROWS_TOTAL;
+
    useEffect(() => {
-      beakerModelRef.current?.setWaterLevel(model.waterLevel);
+      beakerModelRef.current?.setWaterLevel(rowsVisible);
       beakerModelRef.current?.updateParticles(
          particleCounts,
          {
@@ -300,15 +321,9 @@ export function TitrationScreen() {
          },
          weakPreEPTitrantOptions
       );
-   }, [model.waterLevel, model.substance, particleCounts, strongPrimaryColor, weakPrimaryColor, weakPreEPTitrantOptions]);
+   }, [rowsVisible, model.substance, particleCounts, strongPrimaryColor, weakPrimaryColor, weakPreEPTitrantOptions]);
 
    const displayParticles = useParticleAnimation(particles);
-
-   // Calculate grid rows based on water level (matching Buffers behavior)
-   const currentRows = useMemo(
-      () => getGridRowsForWaterLevel(model.waterLevel, WATER_LEVEL_MIN, WATER_LEVEL_MAX),
-      [model.waterLevel]
-   );
 
    const chartCounts = useMemo(() => {
       const counts = { substance: 0, primary: 0, secondary: 0 };
@@ -475,7 +490,7 @@ export function TitrationScreen() {
       ...model.substance,
       id: 'titrant',
       symbol: model.titrantLabel,
-      color: model.substance.primaryColor,
+      color: model.isAcid ? ACIDS_BASES_COLORS.substances.titrant.acid : ACIDS_BASES_COLORS.substances.titrant.base,
       primaryColor: model.substance.primaryColor,
       secondaryColor: model.substance.primaryColor
    };
@@ -488,25 +503,33 @@ export function TitrationScreen() {
 
    const mathValues = useMemo(() => {
       const substanceVolume = model.beakerVolume;
-      const substanceMolarity = model.substanceMolarity;
-      const substanceMoles = substanceVolume * substanceMolarity;
       const titrantVolume = model.titrantVolume;
-      const titrantMolarity = model.titrantMolarity;
-      const titrantMoles = titrantVolume * titrantMolarity;
       const totalVolume = substanceVolume + titrantVolume;
+
+      // Ensure molarities respect auto-ionization threshold for display
+      const displaySubstanceMolarity = Math.max(1e-7, model.substanceMolarity);
+      const displayTitrantMolarity = Math.max(1e-7, model.titrantMolarity);
+
+      // Recalculate moles using threshold molarities
+      const substanceMoles = substanceVolume * displaySubstanceMolarity;
+      const titrantMoles = titrantVolume > 0 ? titrantVolume * displayTitrantMolarity : 0;
+
       const numerator = model.isAcid ? substanceMoles - titrantMoles : titrantMoles - substanceMoles;
       const concentrationFromMoles = totalVolume > 0 ? Math.max(0, numerator) / totalVolume : 0;
-      const hydrogenConcentration = concentrationFromMoles > 0 ? concentrationFromMoles : Math.pow(10, -model.currentPH);
+
+      // Use reported pH to derive the concentration if moles calculation is too close to zero
+      const equilibriumConc = Math.pow(10, -model.currentPH);
+      const hydrogenConcentration = concentrationFromMoles > 1e-12 ? concentrationFromMoles : equilibriumConc;
 
       return {
          substanceLabel: model.substance.symbol,
          titrantLabel: model.titrantLabel,
          substanceMoles,
          substanceVolume,
-         substanceMolarity,
+         substanceMolarity: displaySubstanceMolarity,
          titrantMoles,
          titrantVolume,
-         titrantMolarity,
+         titrantMolarity: displayTitrantMolarity,
          hydrogenConcentration,
          pH: model.currentPH
       };
@@ -705,10 +728,10 @@ export function TitrationScreen() {
                                        {pouringParticles.map(pour => (
                                           <div
                                              key={pour.id}
-                                             className="absolute pointer-events-none z-[9999]"
+                                             className="fixed pointer-events-none z-[9999]"
                                              style={{
-                                                top: `${pour.startY + window.scrollY}px`,
-                                                left: `${pour.startX + window.scrollX}px`,
+                                                top: `${pour.startY}px`,
+                                                left: `${pour.startX}px`,
                                                 transform: 'translateX(-50%)'
                                              }}
                                           >
@@ -740,7 +763,7 @@ export function TitrationScreen() {
                            </div>
 
                            <Blockable element="phChart" overrides={guide.guideOverrides} className="flex flex-col justify-center items-center">
-                              <div id="guide-element-phChart" className="ml-10 w-[200px] h-[200px]">
+                              <div id="guide-element-phChart" className="ml-10 w-[200px] h-[200px]" style={{ border: '1px solid black' }}>
                                  <TitrationGraph
                                     data={graphData}
                                     currentVolume={model.titrantVolume}
@@ -759,12 +782,14 @@ export function TitrationScreen() {
                                  <Blockable element="waterSlider" overrides={guide.guideOverrides}>
                                     <div id="guide-element-waterSlider" style={{ height: toolSizes.sliderHeight }}>
                                        <VerticalSlider
-                                          value={model.waterLevel}
+                                          value={liquidLevel}
                                           min={WATER_LEVEL_MIN}
                                           max={WATER_LEVEL_MAX}
                                           onChange={(value) => {
                                              if (!canSetWater) return;
-                                             model.setWaterLevel(value);
+                                             // Convert absolute level (min..max) back to relative (0..1) for model
+                                             const relative = (value - WATER_LEVEL_MIN) / (WATER_LEVEL_MAX - WATER_LEVEL_MIN);
+                                             model.setWaterLevel(relative);
                                              guide.markInteraction();
                                           }}
                                           height={toolSizes.sliderHeight}
@@ -781,12 +806,12 @@ export function TitrationScreen() {
                                     style={{ width: toolSizes.beakerWidth, height: toolSizes.beakerHeight }}
                                  >
                                     <Beaker
-                                       liquidLevel={model.waterLevel}
+                                       liquidLevel={liquidLevel}
                                        liquidColor={liquidColor}
                                        pH={model.currentPH}
                                        width={toolSizes.beakerWidth}
                                        height={toolSizes.beakerHeight}
-                                       gridRows={currentRows}
+                                       gridRows={rowsVisible}
                                        visualizationMode={model.beakerState === 'macroscopic' ? 'macro' : 'micro'}
                                        particles={model.beakerState === 'microscopic' ? displayParticles : []}
                                     />

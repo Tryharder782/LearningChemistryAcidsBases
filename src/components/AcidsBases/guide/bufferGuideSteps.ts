@@ -43,15 +43,15 @@ export const bufferStatements = {
    ],
 
    explainKw: [
-      `But there's also a *Kw*, for water. This is because water also dissociates, but very little H_2_O dissociates into H^+^ and OH^-^, making the equation for Kw: *$Kw = [H^+^][OH^-^]$*. *Kw* is constant, and at 25°C its value is *10^-14^*.`
+      `But there's also a *Kw*, for water. This is because water also dissociates, but very little H_2_O dissociates into H^+^ and OH^-^, making the equation for Kw: *Kw = [H^+^][OH^-^]*. *Kw* is constant, and at 25°C its value is *10^-14^*.`
    ],
 
    explainP14: [
-      `And since OH^-^ and H^+^ dissociate equally from water, $[OH^-^] = [H^+^]$ and they're *10^-7^*. That's exactly why pH and pOH are both *7 in water*. When applying negative log to both sides of the equation *$Kw = [H^+^][OH^-^]$* we get that *$14 = pH + pOH$*.`
+      `And since OH^-^ and H^+^ dissociate equally from water, $[OH^-^] = [H^+^]$ and they're *10^-7^*. That's exactly why pH and pOH are both *7 in water*. When applying negative log to both sides of the equation *Kw = [H^+^][OH^-^]* we get that *14 = pH + pOH*.`
    ],
 
    explainKaKbNaming: [
-      `For the purposes of this unit, *Ka* is usually called acid dissociation constant, *Kb* is called base dissociation constant and *Kw* is the water dissociation constant. Another way they relate to each other is by *$Kw = Ka \\* Kb$*.`
+      `For the purposes of this unit, *Ka* is usually called acid dissociation constant, *Kb* is called base dissociation constant and *Kw* is the water dissociation constant. Another way they relate to each other is by *Kw = Ka * Kb*.`
    ],
 
    explainPKaPKb: [
@@ -130,7 +130,7 @@ export const bufferDynamicText = {
    ],
 
    explainKb: (s: AcidOrBase) => [
-      `That's where *Kb* comes from. When *${s.secondaryIon}^-^* traps *H^+^* from water, it releases *OH^-^* ions, working as a base. The equation for Kb is: *$Kb = [${s.symbol}][OH^-^]/[${s.secondaryIon}^-^]$*. That'll be the Kb for the conjugate base ${s.secondaryIon}^-^. When *Ka* is large, *Kb* is small, and vice versa.`
+      `That's where *Kb* comes from. When *${s.secondaryIon}^-^* traps *H^+^* from water, it releases *OH^-^* ions, working as a base. The equation for Kb is: $Kb = [${s.symbol}][OH^-^]/[${s.secondaryIon}^-^]$. That'll be the Kb for the conjugate base ${s.secondaryIon}^-^. When *Ka* is large, *Kb* is small, and vice versa.`
    ],
 
    explainHendersonHasselbalch: (s: AcidOrBase) => [
@@ -156,7 +156,7 @@ export const bufferDynamicText = {
    weakAcidEquilibriumReached: (s: AcidOrBase, currentPH: number) => {
       const kaText = scientificValues(s.kA);
       return [
-         `Equilibrium has been reached! That means that this is the maximum number of ions that can be produced by this weak acid. *$Ka = ${kaText}$* and *$pH = ${formatFloat(currentPH)}$* making the solution very acidic. Notice there's plenty of ${s.symbol} remaining.`
+         `Equilibrium has been reached! That means that this is the maximum number of ions that can be produced by this weak acid. *Ka = ${kaText}* and *pH = ${formatFloat(currentPH)}* making the solution very acidic. Notice there's plenty of ${s.symbol} remaining.`
       ];
    },
 
@@ -169,7 +169,7 @@ export const bufferDynamicText = {
    ],
 
    explainBufferRange: (s: AcidOrBase) => [
-      `The *Henderson-Hasselbalch* equation lets us calculate pH of the *buffer*. In this case, variations on ${s.symbol} and ${s.secondaryIon}⁻ ratio will make the pH vary. When ${s.symbol} and ${s.secondaryIon}⁻ are the same value, the *$pH = pKa$*. The buffer range is ±1 from that point.`
+      `The *Henderson-Hasselbalch* equation lets us calculate pH of the *buffer*. In this case, variations on ${s.symbol} and ${s.secondaryIon}⁻ ratio will make the pH vary. When ${s.symbol} and ${s.secondaryIon}⁻ are the same value, the *pH = pKa*. The buffer range is ±1 from that point.`
    ],
 
    explainBufferProportions: (s: AcidOrBase) => [
@@ -223,24 +223,11 @@ export const bufferDynamicText = {
    ],
 
    explainConjugateAcidPair: (s: AcidOrBase) => [
-      `Notice how *${s.secondaryIon}^+^* can react with *OH^-^*. In other words, OH^-^ has the ability to donate a proton *(H^+^)*... wait no.`,
-      // Re-reading logic: "\Notice how *\(secondary)* can react with *\(primary)*. In other words, \(primary) has the ability to donate a proton *(\(hydrogen))*, working as an acid."
-      // Primary is OH-. OH- cannot donate H+. 
-      // Wait, "In other words, \(primary) has the ability to donate...". If primary is H+, ok. If primary is OH-... something is weird in iOS text logic for Base.
-      // Ah, text says: "In other words, \(primary) has the ability to donate a proton". OH- accepts protons. 
-      // Let's assume standard base text: B + H2O <-> BH+ + OH-. 
-      // BH+ (secondary) reacts with OH- to form B + H2O.
-      // Actually iOS text says: "Notice how *\(secondary)* can react with *\(primary)*." (BH+ + OH-).
-      // "In other words, \(primary) has the ability to donate a proton". OH- donates proton?? No. H2O donates proton.
-      // Maybe primary meant H+ context? But for bases primary is OH-.
-      // Let's stick to valid chemistry or clean fix.
-      // Fix: "Notice how *${s.secondaryIon}^+^* can react with *OH^-^*. This is the reverse reaction."
-      // Let's copy iOS text but be careful.
       `Notice how *${s.secondaryIon}^+^* can react with *OH^-^*. ${s.secondaryIon}^+^ is the conjugate acid of *${s.symbol}*. ${s.symbol} and ${s.secondaryIon}^+^ are called *conjugate acid-base pair*.`
    ],
 
    explainKaForBase: (s: AcidOrBase) => [
-      `That's where *Ka* comes from. When *${s.secondaryIon}^+^* donates H^+^ to water, it releases *H_3_O^+^* ions, working as an acid. The equation for Ka is: $Ka = [${s.symbol}][H^+^]/[${s.secondaryIon}^+^]$. That'll be the Ka for the conjugate acid ${s.secondaryIon}^+^. When *Kb* is large, *Ka* is small and vice versa.`
+      `That's where *Ka* comes from. When *${s.secondaryIon}^+^* donates H^+^ to water, it releases *H_3_O^+^* ions, working as an acid. The equation for Ka is: *Ka = [${s.symbol}][H^+^]/[${s.secondaryIon}^+^]*. That'll be the Ka for the conjugate acid ${s.secondaryIon}^+^. When *Kb* is large, *Ka* is small and vice versa.`
    ],
 
    explainBasicHasselbalchDynamic: (s: AcidOrBase) => [
@@ -266,7 +253,7 @@ export const bufferDynamicText = {
    reachedBaseEquilibrium: (s: AcidOrBase, currentPH: number) => {
       const kbText = scientificValues(s.kB);
       return [
-         `Equilibrium has been reached! That means that this is the maximum amount of ions that can be produced by this weak base. *$Kb = ${kbText}$*, and *$pH = ${formatFloat(currentPH)}$* making the solution very basic. Notice that there's plenty of *${s.symbol}* remaining.`
+         `Equilibrium has been reached! That means that this is the maximum amount of ions that can be produced by this weak base. *Kb = ${kbText}*, and *pH = ${formatFloat(currentPH)}* making the solution very basic. Notice that there's plenty of *${s.symbol}* remaining.`
       ];
    },
 
@@ -292,7 +279,7 @@ export const bufferDynamicText = {
    ],
 
    reachedBasicBuffer: (s: AcidOrBase) => [
-      `Awesome! That's what I call a *buffer*. There's equal parts of *${s.secondaryIon}^+^* and *${s.symbol}* now. Notice that *pOH went up*, this is because the *${s.secondaryIon}^+^* trapped the *OH^-^* ions that were free in the solution, decreasing the concentration of *OH^-^* in the solution.`
+      `Awesome! That'll be a *buffer*. There's equal parts of *${s.secondaryIon}^+^* and *${s.symbol}* now. Notice that *pOH went up*, this is because the *${s.secondaryIon}^+^* trapped the *OH^-^* ions that were free in the solution, decreasing the concentration of *OH^-^* in the solution.`
    ],
 
    showBasePhWaterLine: (_s: AcidOrBase) => [
@@ -618,7 +605,7 @@ const baseBufferGuideSteps: GuideStep[] = [
       id: 'explainKbEquation',
       statement: [],
       inputState: { type: 'none' },
-      highlights: [],
+      highlights: ['kEquation'],
       dynamicTextId: 'explainKbEquation',
       substanceType: 'weakBase'
    },
@@ -652,7 +639,7 @@ const baseBufferGuideSteps: GuideStep[] = [
       id: 'explainBasicHasselbalchDynamic',
       statement: [],
       inputState: { type: 'none' },
-      highlights: [], // hasselbalchEquation
+      highlights: ['hasselbalchEquation'],
       dynamicTextId: 'explainBasicHasselbalchDynamic',
       substanceType: 'weakBase'
    },

@@ -27,6 +27,7 @@ import { ReactingBeakerModel } from '../../../helper/acidsBases/particles/Reacti
 import { useParticleAnimation } from '../../../hooks/useParticleAnimation';
 import type { Particle } from '../../../helper/acidsBases/particles/types';
 import { getGridRowsForWaterLevel } from '../../../helper/acidsBases/beakerMath';
+import { GRID_COLS, GRID_ROWS_MIN, GRID_ROWS_MAX, GRID_ROWS_TOTAL } from '../../../helper/acidsBases/particles/types';
 
 const WATER_LEVEL_MIN = 0.31818;
 const WATER_LEVEL_MAX = 0.681818;
@@ -124,11 +125,17 @@ export function GuidedIntroScreen() {
       ? calculatePH(selectedSubstance, effectiveMolarity)
       : 7;
 
+   // Synchronization logic for particles
+   // Exactly calculated based on pixels visible in Beaker
+   const rowsVisible = waterLevel * GRID_ROWS_TOTAL;
+
    // Scale particle counts
-   // Fixed to 50 so that for strong acids (fully dissociated), we get 50 + 50 = 100 ions total at max.
-   // We use 0.1 molarity here to ensure it always matches substance.concentrationAtMaxSubstance
-   // This means per 0.1 "shake", we get 5 + 5 = 10 ions exactly regardless of the molarity slider.
-   const maxParticles = 50;
+   // Dynamic limit matching CogSciKit: (cols * rows) / 3
+   const maxParticles = Math.ceil((GRID_COLS * rowsVisible) / 3);
+
+   useEffect(() => {
+      beakerModelRef.current?.setWaterLevel(rowsVisible);
+   }, [rowsVisible]);
 
    const speciesCounts = useMemo(() => {
       if (!selectedSubstance || substanceAddedFraction <= 0) {
@@ -151,10 +158,6 @@ export function GuidedIntroScreen() {
          secondary: ionCount,
       };
    }, [selectedSubstance, substanceAddedFraction, maxParticles]);
-
-   useEffect(() => {
-      beakerModelRef.current?.setWaterLevel(waterLevel);
-   }, [waterLevel]);
 
    useEffect(() => {
       if (!selectedSubstance) {
@@ -181,11 +184,7 @@ export function GuidedIntroScreen() {
 
    const displayParticles = useParticleAnimation(particles);
 
-   // Calculate grid rows based on water level (matching Buffers behavior)
-   const currentRows = useMemo(
-      () => getGridRowsForWaterLevel(waterLevel, WATER_LEVEL_MIN, WATER_LEVEL_MAX),
-      [waterLevel]
-   );
+
 
 
    // Element ID mappings for highlight overlay
@@ -302,7 +301,9 @@ export function GuidedIntroScreen() {
       waterLineOffset,
       bottlesContainerRef,
       beakerContainerRef,
-      { 0: 1, 1: 1, 2: 1, 3: 1 }
+      {
+         particlesPerPour: { 0: 1, 1: 1, 2: 1, 3: 1 }
+      }
    );
 
    const bottleConfigs = useMemo(() => bottleSlots.map((slot, index) => {
@@ -479,7 +480,7 @@ export function GuidedIntroScreen() {
                                  max={WATER_LEVEL_MAX}
                                  onChange={setWaterLevel}
                                  height={280}
-                                 enabled={inputState.type === 'setWaterLevel'}
+                                 enabled={currentStepData?.highlights.includes('waterSlider')}
                               />
                            </Blockable>
 
@@ -491,7 +492,7 @@ export function GuidedIntroScreen() {
                                  pH={pH}
                                  width={280}
                                  height={350}
-                                 gridRows={currentRows}
+                                 gridRows={rowsVisible}
                                  visualizationMode="micro"
                                  particles={displayParticles}
                               />
@@ -504,7 +505,7 @@ export function GuidedIntroScreen() {
                         {/* Top: Substance Selector & Chapters */}
                         <div className="flex justify-end items-center gap-2 z-10 -mt-2 flex-shrink-0">
                            <Blockable element="reactionSelection" overrides={{ highlights: currentStepData?.highlights }} className="relative z-50">
-                              <div id="guide-element-reactionSelection" className={inputState.type === 'chooseSubstance' ? 'w-full max-w-xs' : 'w-fit'} style={{ transform: 'translateY(10px)' }}>
+                              <div id="guide-element-reactionSelection" className={currentStepData?.highlights.includes('reactionSelection') ? 'w-full max-w-xs' : 'w-fit'} style={{ transform: 'translateY(10px)' }}>
                                  <SubstanceSelector
                                     substances={availableSubstances}
                                     selected={selectedSubstance}
@@ -529,17 +530,12 @@ export function GuidedIntroScreen() {
                            {/* Controls (Relative Flow) */}
 
                            {/* Equation Display */}
-                           <Blockable
-                              element="pHEquation"
-                              relatedElements={['pHFormula', 'pOHFormula', 'pHSumEquation']}
-                           >
-                              <div className="pt-2 pb-4">
-                                 <EquationDisplay
-                                    equations={createDynamicEquations(pH)}
-                                    highlightedIndex={inputState.type === 'none' ? undefined : 0}
-                                 />
-                              </div>
-                           </Blockable>
+                           <div className="pt-2 pb-4">
+                              <EquationDisplay
+                                 equations={createDynamicEquations(pH)}
+                                 highlightedIndex={inputState.type === 'none' ? undefined : 0}
+                              />
+                           </div>
                            {/* Old selector location removed */}
 
                         </div>

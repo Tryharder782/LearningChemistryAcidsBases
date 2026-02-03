@@ -37,6 +37,7 @@ type UseBufferGuideStateResult = {
    activeBottleIndex: number | null;
    setActiveBottleIndex: Dispatch<SetStateAction<number | null>>;
    markInteraction: () => void;
+   saveSnapshotForStep: (stepId: string) => void;
    restoreSnapshotForStep: (stepId: string) => void;
 };
 
@@ -69,17 +70,24 @@ export const useBufferGuideState = ({
 
       setHasInteracted(false);
 
+      // Auto-open logic: open selector if step highlights the selector
+      if (currentStep.highlights?.includes('reactionSelection')) {
+         setSelectorOpen(true);
+      } else {
+         setSelectorOpen(false);
+      }
+
       const shouldKeepBottleActive =
          prevStepId === 'instructToAddStrongBase' && nextStepId === 'midAddingStrongBase';
 
       if (!shouldKeepBottleActive) {
          setActiveBottleIndex(null);
       }
-   }, [currentStep.id, setActiveBottleIndex]);
+   }, [currentStep.id, currentStep.inputState.type, setSelectorOpen, setActiveBottleIndex]);
 
    const markInteraction = useCallback(() => setHasInteracted(true), []);
 
-   const { restoreSnapshotForStep } = useGuideSnapshots({
+   const { saveSnapshotForStep, restoreSnapshotForStep } = useGuideSnapshots({
       snapshotStepIds,
       currentStepId: currentStep.id,
       particleCount,
@@ -114,6 +122,7 @@ export const useBufferGuideState = ({
       activeBottleIndex,
       setActiveBottleIndex,
       markInteraction,
+      saveSnapshotForStep,
       restoreSnapshotForStep
    };
 };

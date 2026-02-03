@@ -107,6 +107,22 @@ export const routes = {
     path: '/acids/titration',
     type: 'acids',
   },
+  // Acids & Bases Quizzes
+  introductionQuiz: {
+    title: 'Introduction Quiz',
+    path: '/acids/introduction/quiz',
+    type: 'quiz',
+  },
+  buffersQuiz: {
+    title: 'Buffers Quiz',
+    path: '/acids/buffers/quiz',
+    type: 'quiz',
+  },
+  titrationQuiz: {
+    title: 'Titration Quiz',
+    path: '/acids/titration/quiz',
+    type: 'quiz',
+  },
   // 4 - 1
   balanced: {
     title: 'Balanced reactions',
@@ -204,6 +220,9 @@ export const enum MenuList {
   introduction = 'introduction',
   buffers = 'buffers',
   titration = 'titration',
+  introductionQuiz = 'introductionQuiz',
+  buffersQuiz = 'buffersQuiz',
+  titrationQuiz = 'titrationQuiz',
   balanced = 'balanced',
 }
 

@@ -52,6 +52,8 @@ interface BufferChartsProps {
       secondary: number;
    };
    maxParticles?: number;
+   mode?: ChartMode;
+   onModeChange?: (mode: ChartMode) => void;
    forcedMode?: ChartMode;
    showCurveToggle?: boolean;
    barsConfig?: {
@@ -74,6 +76,8 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
    curveMeta,
    animatedCounts,
    maxParticles = 43,
+   mode,
+   onModeChange,
    forcedMode,
    showCurveToggle = true,
    barsConfig,
@@ -81,22 +85,26 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
    barsStyle,
    className = ''
 }) => {
-   const [mode, setMode] = useState<ChartMode>('bars');
+   const [internalMode, setInternalMode] = useState<ChartMode>('bars');
    const isTitration = variant === 'titration';
+
+   // Use controlled mode if provided, otherwise use internal state
+   const activeMode = mode ?? internalMode;
+   const setActiveMode = onModeChange ?? setInternalMode;
 
    // Auto-switch mode if forcedMode prop changes
    useEffect(() => {
       if (forcedMode) {
-         setMode(forcedMode);
+         setActiveMode(forcedMode);
       }
-   }, [forcedMode]);
+   }, [forcedMode, setActiveMode]);
 
    useEffect(() => {
       if (showCurveToggle) return;
-      if (mode === 'curve') {
-         setMode('bars');
+      if (activeMode === 'curve') {
+         setActiveMode('bars');
       }
-   }, [mode, showCurveToggle]);
+   }, [activeMode, showCurveToggle, setActiveMode]);
 
    return (
       <div
@@ -106,24 +114,24 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
          {!isTitration && (
             <div className={`flex gap-6 mb-2 text-lg font-medium`}>
                <button
-                  onClick={() => setMode('bars')}
-                  className={`${mode === 'bars' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
+                  onClick={() => setActiveMode('bars')}
+                  className={`${activeMode === 'bars' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
                   style={{ background: 'none', border: 'none', padding: 0 }}
                >
                   Bars
                </button>
                {showCurveToggle && (
                   <button
-                     onClick={() => setMode('curve')}
-                     className={`${mode === 'curve' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
+                     onClick={() => setActiveMode('curve')}
+                     className={`${activeMode === 'curve' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
                      style={{ background: 'none', border: 'none', padding: 0 }}
                   >
                      Curve
                   </button>
                )}
                <button
-                  onClick={() => setMode('neutralization')}
-                  className={`${mode === 'neutralization' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
+                  onClick={() => setActiveMode('neutralization')}
+                  className={`${activeMode === 'neutralization' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
                   style={{ background: 'none', border: 'none', padding: 0 }}
                >
                   Neutralization
@@ -133,7 +141,7 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
 
          {/* Chart Content */}
          <div className="flex-1 w-full min-h-0 relative">
-            {mode === 'bars' && (
+            {activeMode === 'bars' && (
                <BarsView
                   substance={substance}
                   counts={animatedCounts}
@@ -143,13 +151,13 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
                   barsStyle={barsStyle}
                />
             )}
-            {mode === 'curve' && (
+            {activeMode === 'curve' && (
                <CurveView
                   substance={substance}
                   curveMeta={curveMeta}
                />
             )}
-            {mode === 'neutralization' && (
+            {activeMode === 'neutralization' && (
                <NeutralizationView
                   substance={substance}
                   counts={animatedCounts}
@@ -162,24 +170,24 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
          {isTitration && (
             <div className={`flex gap-6 mt-4  font-semibold justify-center`}>
                <button
-                  onClick={() => setMode('bars')}
-                  className={`${mode === 'bars' ? 'text-orange-500' : 'text-gray-400'}`}
+                  onClick={() => setActiveMode('bars')}
+                  className={`${activeMode === 'bars' ? 'text-orange-500' : 'text-gray-400'}`}
                   style={{ background: 'none', border: 'none', padding: 0 }}
                >
                   Bars
                </button>
                {showCurveToggle && (
                   <button
-                     onClick={() => setMode('curve')}
-                     className={`text-[16px] ${mode === 'curve' ? 'text-orange-500 text-[16px]' : 'text-gray-400'}`}
+                     onClick={() => setActiveMode('curve')}
+                     className={`text-[16px] ${activeMode === 'curve' ? 'text-orange-500 text-[16px]' : 'text-gray-400'}`}
                      style={{ background: 'none', border: 'none', padding: 0 }}
                   >
                      Curve
                   </button>
                )}
                <button
-                  onClick={() => setMode('neutralization')}
-                  className={`${mode === 'neutralization' ? 'text-orange-500' : 'text-gray-400'}`}
+                  onClick={() => setActiveMode('neutralization')}
+                  className={`${activeMode === 'neutralization' ? 'text-orange-500' : 'text-gray-400'}`}
                   style={{ background: 'none', border: 'none', padding: 0 }}
                >
                   Neutralization

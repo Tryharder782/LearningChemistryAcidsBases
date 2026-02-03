@@ -193,6 +193,7 @@ export const useGuideStore = create<GuideStore>((set, get) => {
             highlights: nextStep.highlights,
             waterLevelSet: false,
             hasInteracted: false,
+            substanceSelectorOpen: nextStep.highlights.includes('reactionSelection'),
             ...(isNewSubstanceSection ? { waterLevel: 0.5, substanceAddedFraction: 0 } : {}),
          });
       },
@@ -216,6 +217,7 @@ export const useGuideStore = create<GuideStore>((set, get) => {
             highlights: prevStep.highlights,
             waterLevelSet: false,
             hasInteracted: false,
+            substanceSelectorOpen: prevStep.highlights.includes('reactionSelection'),
             ...(isSetupStep ? { waterLevel: 0.5, substanceAddedFraction: 0 } : {}),
          });
       },
@@ -237,6 +239,7 @@ export const useGuideStore = create<GuideStore>((set, get) => {
             inputState: targetStep.inputState,
             highlights: targetStep.highlights,
             waterLevelSet: false,
+            substanceSelectorOpen: targetStep.highlights.includes('reactionSelection'),
             ...(isBackward && isSetupStep ? { waterLevel: 0.5, substanceAddedFraction: 0 } : {}),
          });
       },

@@ -31,10 +31,14 @@ export const usePouringParticles = (
    waterLineOffset: number | null,
    bottlesContainerRef: React.RefObject<HTMLDivElement | null>,
    beakerContainerRef: React.RefObject<HTMLDivElement | null>,
-   particlesPerPour?: Partial<Record<BottleIndex, number>>
+   config: {
+      particlesPerPour?: Partial<Record<BottleIndex, number>>;
+      offsets?: Partial<Record<BottleIndex, { x?: number; y?: number }>>;
+   } = {}
 ): UsePouringParticlesResult => {
    const [pouringParticles, setPouringParticles] = useState<PouringEntry[]>([]);
    const bottleRefs = useRef<Array<HTMLDivElement | null>>([]);
+   const { particlesPerPour, offsets } = config;
 
    const registerBottle = (bottleIndex: BottleIndex, element: HTMLDivElement | null) => {
       bottleRefs.current[bottleIndex] = element;
@@ -48,8 +52,8 @@ export const usePouringParticles = (
          // const scrollX = window.scrollX || 0;
          // const scrollY = window.scrollY || 0;
 
-         const spawnX = beakerRect.left + beakerRect.width / 2 + 20;
-         const spawnY = beakerRect.top - 10;
+         const spawnX = beakerRect.left + beakerRect.width / 2 + 20 + (offsets?.[bottleIndex]?.x ?? 0);
+         const spawnY = beakerRect.top - 10 + (offsets?.[bottleIndex]?.y ?? 0);
          return { x: spawnX, y: spawnY };
       }
 
@@ -64,8 +68,8 @@ export const usePouringParticles = (
       }
 
       const bottleRect = bottleEl.getBoundingClientRect();
-      const x = bottleRect.left + bottleRect.width / 2;
-      const y = bottleRect.top + bottleRect.height;
+      const x = bottleRect.left + bottleRect.width / 2 + (offsets?.[bottleIndex]?.x ?? 0);
+      const y = bottleRect.top + bottleRect.height + (offsets?.[bottleIndex]?.y ?? 0);
       return { x, y };
    };
 

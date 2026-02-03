@@ -31,7 +31,7 @@ const statements = {
    ],
 
    explainBronstedLowry: [
-      `*The Brønsted-Lowry* definition states that acids are those with the ability to "donate" hydrogen ions *(H^+^)*, otherwise known as *protons*, and bases are those that "accept" them.`
+      `*The Bronsted-Lowry* definition states that acids are those with the ability to "donate" hydrogen ions *(H^+^)*, otherwise known as *protons*, and bases are those that "accept" them.`
    ],
 
    explainLewis: [
@@ -52,11 +52,11 @@ const statements = {
    ],
 
    explainPHConcept: [
-      `*[H^+^]* presence in a solution can be very small, that's why the concept of *pH* exists. pH is defined as $*pH=-log[H^+^]*$ and is used as a measurement of acidity of a solution. The same thing happens to $[OH^-^]$.`
+      `*[H^+^]* presence in a solution can be very small, that's why the concept of *pH* exists. pH is defined as *pH=-log[H^+^]* and is used as a measurement of acidity of a solution. The same thing happens to *[OH^-^]*.`
    ],
 
    explainPOHConcept: [
-      `*[OH^-^]* presence in a solution can be very small, that's the concept of *pOH* exists. pOH is defined as $*pOH=-log[OH^-^]*$. pOH is related with pH, as in every solution within water: $*pH + pOH = 14*$.`
+      `*[OH^-^]* presence in a solution can be very small, that's the concept of *pOH* exists. pOH is defined as *pOH=-log[OH^-^]*. pOH is related with pH, as in every solution within water: *pH + pOH = 14*.`
    ],
 
    explainPRelation: [
@@ -64,11 +64,11 @@ const statements = {
    ],
 
    explainPConcentrationRelation1: [
-      `If you take a look at the pH equation: $*pH=-log[H^+^]*$, the $[H^+^]$ concentration is really small (10 to some negative exponent). The higher the exponent is, the smaller the value, making a high pH one that represents a low $[H^+^]$.`
+      `If you take a look at the pH equation: *pH=-log[H^+^]*, the *[H^+^]* concentration is really small (10 to some negative exponent). The higher the exponent is, the smaller the value, making a high pH one that represents a low *[H^+^]*.`
    ],
 
    explainPConcentrationRelation2: [
-      `In other words, you can notice that the higher the concentration of *$[H^+^]$, then the lower pH is and the more acidic is the solution.* The same thing goes for pOH and $[OH^-^]$. The higher pH is, the lower pOH is and vice versa.`
+      `In other words, you can notice that the higher the concentration of *[H^+^]*, then the lower pH is and the more acidic is the solution. The same thing goes for pOH and *[OH^-^]*. The higher pH is, the lower pOH is and vice versa.`
    ],
 
    chooseStrongBase: [

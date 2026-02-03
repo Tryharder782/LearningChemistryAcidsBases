@@ -146,6 +146,20 @@
   }
 }
 
+@media (min-width: 1024px) {
+  .prevBtn {
+    left: -40px;
+  }
+
+  .nextBtn {
+    right: -40px;
+  }
+
+  .refreshBtn {
+    right: -40px;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding-left: 70px;

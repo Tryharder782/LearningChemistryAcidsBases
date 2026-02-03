@@ -13,18 +13,41 @@ export class ReactingBeakerModel {
    }
 
    /**
-    * Set the effective number of rows based on water level
-    * @param waterLevel Fraction 0-1, where 1 = full beaker
+    * Set the effective number of rows based on absolute visibility
+    * @param rows The floating-point number of rows currently visible on screen
     */
-   setWaterLevel(waterLevel: number) {
-      const rowsFloat = GRID_ROWS_MIN + (GRID_ROWS_MAX - GRID_ROWS_MIN) * waterLevel;
-      const decimal = rowsFloat - Math.floor(rowsFloat);
-      const availableRows = decimal > 0.4 ? Math.ceil(rowsFloat) : Math.floor(rowsFloat);
-      this.effectiveRows = Math.max(GRID_ROWS_MIN, Math.min(GRID_ROWS_MAX, availableRows));
+   setWaterLevel(rows: number) {
+      this.effectiveRows = Math.ceil(rows);
+
+      // Remove particles that are now "above" the water line (out of new floor bounds)
+      const keptParticles: Particle[] = [];
+      const removedParticles: Particle[] = [];
+
+      this.particles.forEach(p => {
+         if (p.position.row < this.effectiveRows) {
+            keptParticles.push(p);
+         } else {
+            removedParticles.push(p);
+         }
+      });
+
+      if (removedParticles.length > 0) {
+         this.particles = keptParticles;
+         // Ensure grid is synced (release occupied slots)
+         removedParticles.forEach(p => this.grid.release(p.position));
+         this.notify();
+      } else {
+         // Even if no particles were removed, we might need to notify of row changes
+         this.notify();
+      }
    }
 
    getParticles(): Particle[] {
       return [...this.particles];
+   }
+
+   getEffectiveRows(): number {
+      return this.effectiveRows;
    }
 
    /**
@@ -176,7 +199,7 @@ export class ReactingBeakerModel {
          const delta = deltas[type];
          if (delta < 0) {
             const current = this.particles.filter(p => p.type === type);
-            const toRemove = current.slice(delta); // delta is negative
+            const toRemove = current.slice(0, -delta); // delta is negative
             surplus.push(...toRemove);
          }
       });

@@ -159,12 +159,77 @@ function tokensToReact(tokens: Token[]): ReactNode[] {
 }
 
 /**
+ * Unescape special characters in formulas.
+ * Converts \\* to *, \\+ to +, etc.
+ */
+function unescapeFormula(formula: string): string {
+   return formula.replace(/\\\\/g, '\\').replace(/\\\*/g, '*').replace(/\\\+/g, '+').replace(/\\-/g, '-');
+}
+
+/**
  * Parse formula text for subscripts/superscripts within formula.
+ * Formulas can contain _subscript_ and ^superscript^ but should not
+ * be recursively parsed for bold (*) markers.
  */
 function parseFormula(formula: string): ReactNode[] {
-   // Within formulas, handle _n_ and ^x^ as well
-   const tokens = tokenize(formula);
+   // Unescape any escaped characters first
+   const unescaped = unescapeFormula(formula);
+
+   // Only tokenize for subscript and superscript, not bold
+   const tokens = tokenizeFormula(unescaped);
    return tokensToReact(tokens);
+}
+
+/**
+ * Tokenize formula content (only subscript/superscript, no bold).
+ */
+function tokenizeFormula(text: string): Token[] {
+   const tokens: Token[] = [];
+   let remaining = text;
+   let i = 0;
+
+   while (i < remaining.length) {
+      // Check for subscript: _text_
+      if (remaining[i] === '_') {
+         const endIndex = remaining.indexOf('_', i + 1);
+         if (endIndex !== -1) {
+            if (i > 0) {
+               const textBefore = remaining.substring(0, i);
+               if (textBefore) tokens.push({ type: 'text', value: textBefore });
+            }
+            const content = remaining.substring(i + 1, endIndex);
+            tokens.push({ type: 'subscript', value: content });
+            remaining = remaining.substring(endIndex + 1);
+            i = 0;
+            continue;
+         }
+      }
+
+      // Check for superscript: ^text^
+      if (remaining[i] === '^') {
+         const endIndex = remaining.indexOf('^', i + 1);
+         if (endIndex !== -1) {
+            if (i > 0) {
+               const textBefore = remaining.substring(0, i);
+               if (textBefore) tokens.push({ type: 'text', value: textBefore });
+            }
+            const content = remaining.substring(i + 1, endIndex);
+            tokens.push({ type: 'superscript', value: content });
+            remaining = remaining.substring(endIndex + 1);
+            i = 0;
+            continue;
+         }
+      }
+
+      i++;
+   }
+
+   // Add remaining text
+   if (remaining) {
+      tokens.push({ type: 'text', value: remaining });
+   }
+
+   return tokens;
 }
 
 /**

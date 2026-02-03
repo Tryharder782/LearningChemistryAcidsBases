@@ -78,9 +78,11 @@ function useAnimatedNumber(target: number, durationMs: number = 250): number {
    return value;
 }
 
-// Placeholder box for empty values
 const Placeholder = () => (
-   <div className="inline-block w-10 h-6 border-2 border-dashed border-gray-300 rounded-sm align-middle" />
+   <div
+      className="inline-block w-10 h-6 rounded-sm align-middle"
+      style={{ border: '2px dashed #D1D5DB' }}
+   />
 );
 
 // Styled value (orange)
@@ -90,6 +92,7 @@ const Val = ({ children }: { children: React.ReactNode }) => (
 
 export function BufferEquationsNew({
    className = '',
+   overrides,
    state = 'acidBlank',
    substance,
    pH = 7,
@@ -138,26 +141,34 @@ export function BufferEquationsNew({
    const pOH = 14 - pH;
    const animatedPOH = useAnimatedNumber(pOH);
 
-   // Grid config matching TitrationMathPanel exactly
-   const gridClass = "grid gap-y-1 w-fit font-sans text-base text-gray-900 items-center justify-items-center";
+   // Grid config
+   const gridClass = "grid gap-y-1 w-fit font-sans text-base text-gray-900 items-center justify-items-center relative";
    const colStyle = { gridTemplateColumns: 'max-content 24px max-content 24px max-content 48px max-content 24px max-content 24px max-content' };
    const span3 = "row-span-3 self-center";
-   const lineClass = "col-span-3 border-b border-black w-full h-px self-center";
+
+   // Grid spacing 
+   const gridSpacer = <div className="col-span-11 h-4" />;
+   const rowSpacer = <div className="col-span-11 h-2" />;
 
    return (
-      <div className={`flex flex-col gap-1 text-base font-sans ${className}`}>
-         {/* ======== BLOCK 1: Ka Definition ======== */}
+      <div className={`${className}`}>
          <div className={gridClass} style={colStyle}>
-            {/* Row 1-3: Ka = [H+][A-]/[HA]    pKa = -log(Ka) */}
-            {/* Left side */}
+            {/* Highlight Target Overlays (Invisible) */}
+            <div id="guide-element-kEquation" className="pointer-events-none absolute" style={{ gridRow: '1 / 8', gridColumn: '1 / 6', width: '100%', height: '100%', zIndex: -1 }} />
+            <div id="guide-element-pKEquation" className="pointer-events-none absolute" style={{ gridRow: '1 / 8', gridColumn: '7 / 12', width: '100%', height: '100%', zIndex: -1 }} />
+            <div id="guide-element-hasselbalchEquation" className="pointer-events-none absolute" style={{ gridRow: '9 / 16', gridColumn: '1 / 6', width: '100%', height: '100%', zIndex: -1 }} />
+            <div id="guide-element-kWEquation" className="pointer-events-none absolute" style={{ gridRow: '9 / 16', gridColumn: '7 / 12', width: '100%', height: '100%', zIndex: -1 }} />
+            {/* ======== ROW 1: Ka & pKa Definitions ======== */}
+            {/* Left side: Ka = [H+][A-]/[HA] */}
             <div className={span3}>{kTerm}</div>
             <div className={span3}>=</div>
-            {/* Fraction numerator */}
             <div>[{primaryIonLabel}]</div>
             <div>·</div>
-            <div>[{secondaryIonLabel}]</div>
-            {/* Spacer */}
+            <div className="-translate-x-6">[{secondaryIonLabel}]</div>
+
+            {/* Spacer Col 6 */}
             <div className={`w-8 ${span3}`} />
+
             {/* Right side: pKa = -log(Ka) OR pH sum */}
             {showPKEquations ? (
                <>
@@ -176,27 +187,31 @@ export function BufferEquationsNew({
             ) : (
                <div className={`${span3} col-span-5`} />
             )}
-            {/* Fraction line */}
-            <div className={lineClass} />
-            {/* Fraction denominator */}
-            <div>[{substanceLabel}]</div>
-            <div />
-            <div />
-         </div>
 
-         {/* ======== BLOCK 2: Ka Values ======== */}
-         <div className={gridClass} style={colStyle}>
-            {/* Left side */}
+            {/* Fraction line (Left) */}
+            <div className="col-span-3 self-center" style={{ borderBottom: '1px solid black', width: '100%', height: '1px' }} />
+
+            {/* Fraction denominator (Left) */}
+            <div className="col-span-3 self-center -translate-x-6">[{substanceLabel}]</div>
+            <div />
+            <div />
+
+            {/* ROW SPACER */}
+            {rowSpacer}
+
+            {/* ======== ROW 2: Ka & pKa Values ======== */}
+            {/* Left side values */}
             <div className={span3}>
                {showAllTerms ? <Val>{toScientific(animatedK)}</Val> : <Placeholder />}
             </div>
             <div className={`${span3}`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>=</div>
-            {/* Fraction numerator values */}
             <div>{showIonConcentration ? <Val>{toScientific(animatedValH)}</Val> : <Placeholder />}</div>
             <div><Val>·</Val></div>
-            <div>{showIonConcentration ? <Val>{toScientific(animatedValA)}</Val> : <Placeholder />}</div>
-            {/* Spacer */}
+            <div className="-translate-x-6">{showIonConcentration ? <Val>{toScientific(animatedValA)}</Val> : <Placeholder />}</div>
+
+            {/* Spacer Col 6 */}
             <div className={`w-8 ${span3}`} />
+
             {/* Right side values */}
             {showPKEquations ? (
                <>
@@ -221,91 +236,65 @@ export function BufferEquationsNew({
             ) : (
                <div className={`${span3} col-span-5`} />
             )}
-            {/* Fraction line */}
-            <div className={lineClass} />
-            {/* Fraction denominator value */}
-            <div>{showSubstance ? <Val>{toScientific(animatedValHA)}</Val> : <Placeholder />}</div>
+
+            {/* Fraction line (Left) */}
+            <div className="col-span-3 self-center" style={{ borderBottom: '1px solid black', width: '100%', height: '1px' }} />
+
+            {/* Fraction denominator value (Left) */}
+            <div className={`col-span-3 self-center -translate-x-6`}>{showSubstance ? <Val>{toScientific(animatedValHA)}</Val> : <Placeholder />}</div>
             <div />
             <div />
-         </div>
 
-         {/* Spacer */}
-         <div className="h-2" />
+            {/* BLOCK SPACER */}
+            {gridSpacer}
 
-         {/* ======== BLOCK 3: Kw Definition (acid only) ======== */}
-         {showKwEquations && (
-            <div className={gridClass} style={colStyle}>
-               <div>Kw</div>
-               <div>=</div>
-               <div>Ka</div>
-               <div>x</div>
-               <div>Kb</div>
-               <div className="col-span-6" />
-            </div>
-         )}
-
-         {/* ======== BLOCK 4: Kw Values (acid only) ======== */}
-         {showKwEquations && (
-            <div className={gridClass} style={colStyle}>
-               <div>10⁻¹⁴</div>
-               <div style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>=</div>
-               <div>{showAllTerms ? <Val>{toScientific(animatedKa)}</Val> : <Placeholder />}</div>
-               <div><Val>x</Val></div>
-               <div>{showAllTerms ? <Val>{toScientific(animatedKb)}</Val> : <Placeholder />}</div>
-               <div className="col-span-6" />
-            </div>
-         )}
-
-         {/* ======== BLOCK 5: pH Sum Definition (base only, bottom) ======== */}
-         {showPhSumAtBottom && (
-            <>
-               <div className={gridClass} style={colStyle}>
-                  <div>14</div>
-                  <div>=</div>
-                  <div>pH</div>
-                  <div>+</div>
-                  <div>pOH</div>
-                  <div className="col-span-6" />
-               </div>
-               <div className={gridClass} style={colStyle}>
-                  <div>14</div>
-                  <div style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>=</div>
-                  <div>{showAllTerms ? <Val>{animatedPH.toFixed(2)}</Val> : <Placeholder />}</div>
-                  <div><Val>+</Val></div>
-                  <div>{showAllTerms ? <Val>{animatedPOH.toFixed(2)}</Val> : <Placeholder />}</div>
-                  <div className="col-span-6" />
-               </div>
-            </>
-         )}
-
-         {/* Spacer */}
-         <div className="h-2" />
-
-         {/* ======== BLOCK 6: Henderson-Hasselbalch Definition ======== */}
-         <div className={gridClass} style={colStyle}>
-            {/* pH = pKa + log([A-]/[HA]) */}
+            {/* ======== ROW 3: HH & Kw/pOH Definitions ======== */}
+            {/* Left side: HH (pH = pKa + log...) */}
             <div className={span3}>pH</div>
             <div className={span3}>=</div>
             <div className={span3}>p{kTerm}</div>
             <div className={span3}>+</div>
-            {/* log with large parentheses around fraction */}
             <div className={`${span3} flex items-center`}>
                <span>log</span>
-               <span className="text-3xl leading-none mx-0.5">(</span>
+               <span className="text-3xl font-light mx-0.5" style={{ transform: 'scaleY(1.5)' }}>(</span>
                <span className="inline-flex flex-col items-center">
                   <span>[{secondaryIonLabel}]</span>
-                  <span className="bg-black h-[2px] w-full my-[1px]" />
+                  <span className="bg-black h-[1px] w-full my-[1px]" />
                   <span>[{substanceLabel}]</span>
                </span>
-               <span className="text-3xl leading-none mx-0.5">)</span>
+               <span className="text-3xl font-light mx-0.5" style={{ transform: 'scaleY(1.5)' }}>)</span>
             </div>
-            <div className={`w-8 ${span3}`} />
-            <div className={`${span3} col-span-5`} />
-         </div>
 
-         {/* ======== BLOCK 7: Henderson-Hasselbalch Values ======== */}
-         <div className={gridClass} style={colStyle}>
-            <div className={span3}>
+            {/* Spacer Col 6 */}
+            <div className={`w-8 ${span3}`} />
+
+            {/* Right side: Kw or pH sum */}
+            {showKwEquations ? (
+               <>
+                  <div className={span3}>Kw</div>
+                  <div className={span3}>=</div>
+                  <div className={span3}>{kTerm}</div>
+                  <div className={span3}>x</div>
+                  <div className={span3}>K{isAcid ? 'b' : 'a'}</div>
+               </>
+            ) : showPhSumAtBottom ? (
+               <>
+                  <div className={span3}>14</div>
+                  <div className={span3}>=</div>
+                  <div className={span3}>pH</div>
+                  <div className={span3}>+</div>
+                  <div className={span3}>pOH</div>
+               </>
+            ) : (
+               <div className={`${span3} col-span-5`} />
+            )}
+
+            {/* ROW SPACER */}
+            {rowSpacer}
+
+            {/* ======== ROW 4: HH & Kw/pOH Values ======== */}
+            {/* Left side values (HH) */}
+            <div className={`${span3} `}>
                {showAllTerms ? <Val>{animatedPH.toFixed(2)}</Val> : <Placeholder />}
             </div>
             <div className={`${span3}`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>=</div>
@@ -313,46 +302,42 @@ export function BufferEquationsNew({
                {showAllTerms ? <Val>{animatedPKa.toFixed(2)}</Val> : <Placeholder />}
             </div>
             <div className={`${span3}`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>+</div>
-            {/* log with values */}
             <div className={`${span3} flex items-center`}>
                <Val>log</Val>
-               <span className="text-3xl leading-none mx-0.5" style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>(</span>
+               <span className="text-3xl font-light mx-0.5" style={{ transform: 'scaleY(1.5)', color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>(</span>
                <span className="inline-flex flex-col items-center">
                   <span>{showIonConcentration ? <Val>{toScientific(animatedValA)}</Val> : <Placeholder />}</span>
-                  <span className="bg-black h-[2px] w-full my-[1px]" />
+                  <span className="bg-black h-[1px] w-full my-[1px]" />
                   <span>{showSubstance ? <Val>{toScientific(animatedValHA)}</Val> : <Placeholder />}</span>
                </span>
-               <span className="text-3xl leading-none mx-0.5" style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>)</span>
+               <span className="text-3xl font-light mx-0.5" style={{ transform: 'scaleY(1.5)', color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>)</span>
             </div>
+
+            {/* Spacer Col 6 */}
             <div className={`w-8 ${span3}`} />
-            <div className={`${span3} col-span-5`} />
+
+            {/* Right side values (Kw or pH sum) */}
+            {showKwEquations ? (
+               <>
+                  <div className={span3}>10⁻¹⁴</div>
+                  <div className={`${span3}`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>=</div>
+                  <div className={span3}>{showAllTerms ? <Val>{toScientific(animatedKa)}</Val> : <Placeholder />}</div>
+                  <div className={`${span3}`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>x</div>
+                  <div className={span3}>{showAllTerms ? <Val>{toScientific(animatedKb)}</Val> : <Placeholder />}</div>
+               </>
+            ) : showPhSumAtBottom ? (
+               <>
+                  <div className={span3}>14</div>
+                  <div className={`${span3}`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>=</div>
+                  <div className={span3}><Val>{animatedPH.toFixed(2)}</Val></div>
+                  <div className={`${span3}`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>+</div>
+                  <div className={span3}><Val>{animatedPOH.toFixed(2)}</Val></div>
+               </>
+            ) : (
+               <div className={`${span3} col-span-5`} />
+            )}
          </div>
 
-         {/* ======== BLOCK 8: Summary for acid ======== */}
-         {state === 'acidSummary' && (
-            <>
-               <div className="h-2" />
-               <div className={gridClass} style={colStyle}>
-                  <div>pKa</div>
-                  <div>=</div>
-                  <div className="col-span-3"><Val>{animatedPKa.toFixed(2)}</Val></div>
-                  <div className="col-span-6" />
-               </div>
-            </>
-         )}
-
-         {/* ======== BLOCK 9: Summary for base ======== */}
-         {state === 'baseSummary' && (
-            <>
-               <div className="h-2" />
-               <div className={gridClass} style={colStyle}>
-                  <div>Kb</div>
-                  <div>=</div>
-                  <div className="col-span-3"><Val>{toScientific(animatedKb)}</Val></div>
-                  <div className="col-span-6" />
-               </div>
-            </>
-         )}
       </div>
    );
 }

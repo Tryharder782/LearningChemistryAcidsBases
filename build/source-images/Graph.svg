@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="_Слой_2" data-name="Слой 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 311.5 308.05">
+  <defs>
+    <style>
+      .cls-1, .cls-2, .cls-3 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-1, .cls-3 {
+        stroke-linecap: round;
+      }
+
+      .cls-2, .cls-3 {
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <g id="Graphic_Bars" data-name="Graphic Bars">
+    <polyline class="cls-2" points="1.61 0 1.6 26.32 1.5 306.55 309.96 306.55 309.96 0"/>
+    <path class="cls-3" d="m1.6,26.61l13.4-.05"/>
+    <path class="cls-1" d="m1.69,54.74l13.4-.05"/>
+    <line class="cls-3" x1="15.21" y1="82.84" x2="1.81" y2="82.89"/>
+    <line class="cls-3" x1="15.3" y1="110.98" x2="1.9" y2="111.03"/>
+    <line class="cls-3" x1="16.21" y1="110.8" x2="2.81" y2="110.85"/>
+    <line class="cls-3" x1="16.3" y1="138.93" x2="2.9" y2="138.99"/>
+    <rect class="cls-1" x="9.5" y="26.55" width="300" height="0"/>
+    <rect class="cls-1" x="11.5" y="82.55" width="300" height="0"/>
+    <rect class="cls-1" x="11.5" y="110.55" width="300" height="0"/>
+    <rect class="cls-1" x="8.5" y="138.55" width="300" height="0"/>
+    <line class="cls-3" x1="15.02" y1="167.24" x2="1.62" y2="167.3"/>
+    <line class="cls-3" x1="15.12" y1="195.38" x2="1.72" y2="195.43"/>
+    <line class="cls-3" x1="15.02" y1="223.46" x2="1.62" y2="223.51"/>
+    <line class="cls-3" x1="15.12" y1="251.6" x2="1.72" y2="251.65"/>
+    <line class="cls-3" x1="15.02" y1="279.29" x2="1.62" y2="279.34"/>
+    <rect class="cls-1" x="8.5" y="167.55" width="300" height="0"/>
+    <rect class="cls-1" x="11.5" y="195.55" width="300" height="0"/>
+    <rect class="cls-1" x="8.5" y="223.55" width="300" height="0"/>
+    <rect class="cls-1" x="8.5" y="251.55" width="300" height="0"/>
+    <rect class="cls-1" x="8.5" y="279.55" width="300" height="0"/>
+    <rect class="cls-1" x="8.5" y="54.55" width="300" height="0"/>
+    <line class="cls-3" x1="15.09" y1="54.7" x2="1.69" y2="54.76"/>
+  </g>
+</svg>
