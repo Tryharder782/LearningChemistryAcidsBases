@@ -5,9 +5,8 @@ type RawQuizQuestion = {
   id: string
   category: string
   question: string
-  options: string[]
+  options: { answer: string, explanation: string }[]
   correctAnswer: number
-  explanation: string
 }
 
 // Difficulty mappings extracted from iOS CSV files
@@ -44,7 +43,7 @@ const difficultyMap: Record<string, 'easy' | 'medium' | 'hard'> = {
   'PHSCALE-28': 'medium',
   'PHSCALE-29': 'medium',
   'PHSCALE-30': 'easy',
-  
+
   // Buffer
   'BUFFER-01': 'medium',
   'BUFFER-02': 'easy',
@@ -76,7 +75,7 @@ const difficultyMap: Record<string, 'easy' | 'medium' | 'hard'> = {
   'BUFFER-28': 'easy',
   'BUFFER-29': 'medium',
   'BUFFER-30': 'medium',
-  
+
   // Titration
   'TITRATION-01': 'medium',
   'TITRATION-02': 'medium',
@@ -119,7 +118,7 @@ const categoryIdPrefix: Record<string, string> = {
 
 const toQuizItems = (category: string): QuizItemType[] => {
   const prefix = categoryIdPrefix[category]
-  
+
   return (rawQuestions as RawQuizQuestion[])
     .filter(item => item.category === category)
     // Sort by the numeric part of the ID to maintain CSV order
@@ -129,20 +128,25 @@ const toQuizItems = (category: string): QuizItemType[] => {
       return numA - numB
     })
     .map((item) => {
-      const correct = item.options[item.correctAnswer]
+      // Extract correct answer (at index specified by correctAnswer)
+      const correctOption = item.options[item.correctAnswer]
+      const correct: QuizAnswerType = {
+        answer: correctOption.answer,
+        explanation: correctOption.explanation
+      }
+
+      // Extract other answers (all except the correct one)
       const otherAnswers: QuizAnswerType[] = item.options
         .filter((_, idx) => idx !== item.correctAnswer)
-        .map(answer => ({
-          answer,
-          explanation: item.explanation
+        .map(option => ({
+          answer: option.answer,
+          explanation: option.explanation
         }))
+
       return {
         id: item.id,
         question: item.question,
-        correctAnswer: {
-          answer: correct,
-          explanation: item.explanation
-        },
+        correctAnswer: correct,
         otherAnswers,
         difficulty: difficultyMap[item.id] || 'medium'
       }
@@ -162,16 +166,16 @@ export const getQuestionsByDifficulty = (
   count: number
 ): QuizItemType[] => {
   const difficultyOrder = ['easy', 'medium', 'hard'] as const
-  
+
   // For hard mode (all questions)
   if (count >= questions.length) {
     return questions
   }
-  
+
   // Determine max difficulty based on count (iOS logic)
   // Easy = 5 questions, Medium = 10 questions
   const maxDifficultyIndex = count <= 5 ? 0 : count <= 10 ? 1 : 2
-  
+
   const loop = (diffIndex: number): QuizItemType[] => {
     const maxDiff = difficultyOrder[diffIndex]
     const available = questions.filter(q => {
@@ -179,14 +183,14 @@ export const getQuestionsByDifficulty = (
       return qDiffIndex <= diffIndex
     })
     const filtered = available.slice(0, count)
-    
+
     // If we don't have enough questions, include next difficulty level
     if (filtered.length < count && diffIndex < difficultyOrder.length - 1) {
       return loop(diffIndex + 1)
     }
-    
+
     return filtered
   }
-  
+
   return loop(maxDifficultyIndex)
 }

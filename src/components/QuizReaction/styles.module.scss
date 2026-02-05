@@ -149,11 +149,14 @@
   justify-content: center;
   pointer-events: none;
   z-index: 200;
+  overflow: visible;
 }
 
 .fixedControlsScaled {
   position: relative;
   pointer-events: none;
+  flex-shrink: 0; // Prevent the 1420px container from shrinking on small screens
+  min-width: 1420px;
 }
 
 .fixedBtn {
@@ -178,16 +181,24 @@
 
   @media (max-width: 768px) {
     &.prevBtn {
-      left: 10px !important;
+      left: 5px !important;
+      width: 36px !important;
+      height: 36px !important;
+      font-size: 18px !important;
     }
 
     &.nextBtn {
-      right: 10px !important;
+      right: 5px !important;
+      width: 48px !important;
+      height: 48px !important;
+      font-size: 24px !important;
     }
 
     &.refreshBtn {
-      right: 10px !important;
-      top: 15% !important; // Move refresh button higher on mobile results to avoid overlap
+      right: 5px !important;
+      top: 10% !important;
+      width: 32px !important;
+      height: 32px !important;
     }
   }
 }
@@ -214,16 +225,33 @@
 }
 
 @media (max-width: 768px) {
+  .quizWrapper {
+    width: 85% !important; // Make content narrower to avoid button overlap
+    margin: 0 auto;
+  }
+
   .container {
-    padding-left: 80px;
-    padding-right: 90px;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  .content {
+    padding-left: 10px !important;
+    padding-right: 15px !important;
+  }
+
+  .quizResultCard {
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+    width: auto !important;
   }
 
   .prevBtn {
-    left: 10px;
+    left: 5px;
     bottom: 22%;
-    height: 40px;
-    width: 40px;
+    height: 36px;
+    width: 36px;
+    font-size: 18px;
   }
 
   .nextBtn {
@@ -243,29 +271,34 @@
 }
 
 @media (max-width: 480px) {
+  .quizWrapper {
+    width: 80% !important; // Total narrow on very small screens
+  }
+
   .container {
-    padding-left: 70px;
-    padding-right: 80px;
+    padding-left: 10px !important;
+    padding-right: 15px !important;
   }
 
   .prevBtn {
-    left: 6px;
+    left: 4px;
     bottom: 18%;
-    height: 36px;
-    width: 36px;
+    height: 32px;
+    width: 32px;
+    font-size: 16px;
   }
 
   .nextBtn {
-    right: 6px;
+    right: 4px;
     bottom: 18%;
-    height: 56px;
-    width: 56px;
-    font-size: 28px;
+    height: 44px;
+    width: 44px;
+    font-size: 22px;
   }
 
   .refreshBtn {
-    right: 54px;
-    bottom: calc(18% + 70px);
+    right: 44px;
+    bottom: calc(18% + 60px);
   }
 }
 
