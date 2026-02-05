@@ -1,9 +1,16 @@
 .chapterMenuContainer {
   position: relative;
   background: transparent;
-  z-index: 40;
+  z-index: 250;
   font-size: 16px;
   font-weight: 700;
+
+  &.fixed {
+    position: fixed;
+    top: 25px; // Matches the top offset of the nav menu
+    right: 40px;
+    z-index: 9999; // Ensure it's above other elements
+  }
 
   .chapterMenuPanel {
     transition: all 500ms;

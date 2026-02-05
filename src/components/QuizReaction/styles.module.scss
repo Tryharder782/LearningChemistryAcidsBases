@@ -179,7 +179,7 @@
     top: 290px !important;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     &.prevBtn {
       left: 5px !important;
       width: 36px !important;
@@ -210,7 +210,7 @@
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1025px) {
   .prevBtn {
     left: -40px;
   }
@@ -224,7 +224,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .quizWrapper {
     width: 85% !important; // Make content narrower to avoid button overlap
     margin: 0 auto;
@@ -238,6 +238,7 @@
   .content {
     padding-left: 10px !important;
     padding-right: 15px !important;
+    padding-bottom: 80px !important; // Add more bottom padding for buttons
   }
 
   .quizResultCard {
@@ -247,16 +248,18 @@
   }
 
   .prevBtn {
-    left: 5px;
-    bottom: 22%;
+    left: -10px;
+    bottom: 50%;
+    transform: translateY(50%);
     height: 36px;
     width: 36px;
     font-size: 18px;
   }
 
   .nextBtn {
-    right: 10px;
-    bottom: 22%;
+    right: -10px;
+    bottom: 50%;
+    transform: translateY(50%);
     height: 64px;
     width: 64px;
     font-size: 32px;

@@ -131,7 +131,7 @@ export function BufferScreen() {
       createPour,
       registerBottle
    } = usePouringParticles(waterLineOffset, bottlesContainerRef, beakerContainerRef, {
-      offsets: isMobile ? { 0: { x: -10 } } : { 0: { x: -35 } }
+      offsets: isMobile ? { 0: { x: 0 } } : { 0: { x: 0 } }
    });
 
    // Sync visual counter with logical counter with animation delay (~600ms for particle animation)

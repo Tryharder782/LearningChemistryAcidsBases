@@ -8,12 +8,17 @@ import useFunctions from '../hooks/useFunctions'
 import { PageMenuType } from '../helper/types'
 
 const ChapterMenu = () => {
+  const location = useLocation()
+  const path = location.pathname
+  const isAcidsBases = path.includes('/acids/') || path.includes('introduction') || path.includes('buffers') || path.includes('titration')
+  const isFixed = !isAcidsBases
+
   const [isActive, setIsActive] = useState(false)
   const handleShowChapterList = () => {
     setIsActive(!isActive)
   }
   return <div
-    className={styles.chapterMenuContainer}
+    className={`${styles.chapterMenuContainer} ${isFixed ? styles.fixed : ''}`}
   >
     <DropDownButton
       text='Chapters'
@@ -38,17 +43,17 @@ const ChapterMenuPanel = ({ visible }: ChapterMenuPanelProps) => {
   // Determine current menu based on URL path
   const getCurrentMenuFromPath = () => {
     const path = location.pathname
-    
+
     // Check Acids & bases routes
     if (path.includes('/acids/introduction') || path === routes.introduction.path) return 'introduction'
     if (path.includes('/acids/buffers') || path === routes.buffers.path) return 'buffers'
     if (path.includes('/acids/titration') || path === routes.titration.path) return 'titration'
-    
+
     // Check Reaction rates routes - use context curMenu
     if (path.includes('/reaction/') || path === '/' || path === routes.zero.path) {
       return curMenu
     }
-    
+
     return curMenu
   }
 
@@ -73,10 +78,10 @@ const ChapterMenuPanel = ({ visible }: ChapterMenuPanelProps) => {
     else update = menuItemIndex
     setOpenedMenuIndex(update)
   }
-  
+
   const handleSubItemClick = (subItem: any) => {
     const itemValue = subItem.value
-    
+
     // For Acids & bases pages, navigate directly
     if (itemValue === 'introduction' || itemValue === 'buffers' || itemValue === 'titration') {
       const path = routes[itemValue as keyof typeof routes]?.path
@@ -110,13 +115,13 @@ const ChapterMenuPanel = ({ visible }: ChapterMenuPanelProps) => {
         <div className={`${styles.menuItemPanel} ${openedMenuIndex === menuIndex ? styles.activeMenuItemPane : ''}`}>
           {menuItem.subItems?.map(subItem => {
             const isActiveSubItem = currentMenu === subItem.value
-            
+
             // For Reaction rates - always enable navigation (no need to check availableMenuList for navigation)
             // For Acids & bases - always enable
             const isAcidsBasesItem = ['introduction', 'buffers', 'titration'].includes(subItem.value)
             const isReactionRatesItem = ['zero', 'first', 'second', 'comparison', 'kinetics'].includes(subItem.value)
             const isDisabled = (isAcidsBasesItem || isReactionRatesItem) ? false : true
-            
+
             return <button
               key={subItem.value}
               className={`${styles.subItem} ${isActiveSubItem ? styles.activeSubItem : ''}`}

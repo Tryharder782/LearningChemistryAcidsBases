@@ -1,4 +1,4 @@
-import { useMemo, useState, type RefObject } from 'react';
+import { useMemo, useState, useEffect, type RefObject } from 'react';
 import { createPortal } from 'react-dom';
 import type { AcidOrBase } from '../../../../helper/acidsBases/types';
 import type { BufferSaltModel } from '../../../../helper/acidsBases/BufferSaltModel';
@@ -49,6 +49,14 @@ export const BufferTopRow = ({
    predictedStrongConfig
 }: BufferTopRowProps) => {
    const [topView, setTopView] = useState<'graph' | 'table'>('graph');
+   const [isMobile, setIsMobile] = useState(false);
+
+   useEffect(() => {
+      const check = () => setIsMobile(window.innerWidth < 1024);
+      check();
+      window.addEventListener('resize', check);
+      return () => window.removeEventListener('resize', check);
+   }, []);
    const displaySubstance = selectedSubstance ?? defaultSubstance;
 
    const tableData = useMemo(() => {
@@ -160,7 +168,7 @@ export const BufferTopRow = ({
                               {pour.particles.map((particle) => (
                                  <div
                                     key={particle.id}
-                                    className="absolute w-1.5 h-1.5 md:w-3 md:h-3 rounded-full"
+                                    className={`absolute rounded-full ${isMobile ? 'w-1.5 h-1.5' : 'w-1.5 h-1.5 md:w-3 md:h-3'}`}
                                     style={{
                                        backgroundColor: pour.substance.color,
                                        opacity: 0,
@@ -171,7 +179,7 @@ export const BufferTopRow = ({
                                        animationTimingFunction: 'linear',
                                        animationFillMode: 'forwards',
                                        animationDelay: `${particle.delayMs}ms`,
-                                       boxShadow: `0 0 5px ${pour.substance.color}aa`,
+                                       boxShadow: `0 0 ${isMobile ? '2px' : '5px'} ${pour.substance.color}aa`,
                                        ['--particle-distance' as string]: `${particle.distancePx}px`,
                                     }}
                                  />
@@ -217,34 +225,34 @@ export const BufferTopRow = ({
                   />
                </div>
             ) : (
-               <div className="w-full aspect-[3/2] border-2 border-black rounded-sm bg-white flex items-center justify-center">
+               <div className="w-full aspect-[3/2] rounded-sm bg-white flex items-center justify-center" style={{ border: '2px solid black' }}>
                   <table className="w-full h-full border-collapse text-sm">
                      <thead>
                         <tr>
-                           <th className="border-2 border-black p-2 font-semibold">ICE</th>
-                           <th className="border-2 border-black p-2 font-semibold">{secondaryLabel}</th>
-                           <th className="border-2 border-black p-2 font-semibold">{primaryLabel}</th>
-                           <th className="border-2 border-black p-2 font-semibold">{displaySubstance.symbol}</th>
+                           <th className="p-2 font-semibold" style={{ border: '2px solid black' }}>ICE</th>
+                           <th className="p-2 font-semibold" style={{ border: '2px solid black' }}>{secondaryLabel}</th>
+                           <th className="p-2 font-semibold" style={{ border: '2px solid black' }}>{primaryLabel}</th>
+                           <th className="p-2 font-semibold" style={{ border: '2px solid black' }}>{displaySubstance.symbol}</th>
                         </tr>
                      </thead>
                      <tbody>
                         <tr>
-                           <td className="border-2 border-black p-2 text-center font-medium">Initial</td>
-                           <td className="border-2 border-black p-2 text-center">{formatValue(tableData?.initial.secondary ?? 0)}</td>
-                           <td className="border-2 border-black p-2 text-center">{formatValue(tableData?.initial.primary ?? 0)}</td>
-                           <td className="border-2 border-black p-2 text-center">{formatValue(tableData?.initial.substance ?? 0)}</td>
+                           <td className="p-2 text-center font-medium" style={{ border: '2px solid black' }}>Initial</td>
+                           <td className="p-2 text-center" style={{ border: '2px solid black' }}>{formatValue(tableData?.initial.secondary ?? 0)}</td>
+                           <td className="p-2 text-center" style={{ border: '2px solid black' }}>{formatValue(tableData?.initial.primary ?? 0)}</td>
+                           <td className="p-2 text-center" style={{ border: '2px solid black' }}>{formatValue(tableData?.initial.substance ?? 0)}</td>
                         </tr>
                         <tr>
-                           <td className="border-2 border-black p-2 text-center font-medium">Change</td>
-                           <td className="border-2 border-black p-2 text-center text-red-500 font-semibold">{formatValue(tableData?.change.secondary ?? 0, true)}</td>
-                           <td className="border-2 border-black p-2 text-center text-red-500 font-semibold">{formatValue(tableData?.change.primary ?? 0, true)}</td>
-                           <td className="border-2 border-black p-2 text-center text-red-500 font-semibold">{formatValue(tableData?.change.substance ?? 0, true)}</td>
+                           <td className="p-2 text-center font-medium" style={{ border: '2px solid black' }}>Change</td>
+                           <td className="p-2 text-center text-red-500 font-semibold" style={{ border: '2px solid black' }}>{formatValue(tableData?.change.secondary ?? 0, true)}</td>
+                           <td className="p-2 text-center text-red-500 font-semibold" style={{ border: '2px solid black' }}>{formatValue(tableData?.change.primary ?? 0, true)}</td>
+                           <td className="p-2 text-center text-red-500 font-semibold" style={{ border: '2px solid black' }}>{formatValue(tableData?.change.substance ?? 0, true)}</td>
                         </tr>
                         <tr>
-                           <td className="border-2 border-black p-2 text-center font-medium">Final</td>
-                           <td className="border-2 border-black p-2 text-center text-red-500 font-semibold">{formatValue(tableData?.current.secondary ?? 0)}</td>
-                           <td className="border-2 border-black p-2 text-center text-red-500 font-semibold">{formatValue(tableData?.current.primary ?? 0)}</td>
-                           <td className="border-2 border-black p-2 text-center text-red-500 font-semibold">{formatValue(tableData?.current.substance ?? 0)}</td>
+                           <td className="p-2 text-center font-medium" style={{ border: '2px solid black' }}>Final</td>
+                           <td className="p-2 text-center text-red-500 font-semibold" style={{ border: '2px solid black' }}>{formatValue(tableData?.current.secondary ?? 0)}</td>
+                           <td className="p-2 text-center text-red-500 font-semibold" style={{ border: '2px solid black' }}>{formatValue(tableData?.current.primary ?? 0)}</td>
+                           <td className="p-2 text-center text-red-500 font-semibold" style={{ border: '2px solid black' }}>{formatValue(tableData?.current.substance ?? 0)}</td>
                         </tr>
                      </tbody>
                   </table>
