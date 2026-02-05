@@ -59,6 +59,17 @@ export function VerticalSlider({
       handlePositionChange(e.clientY);
    };
 
+   // Touch handlers
+   const handleTouchStart = (e: React.TouchEvent) => {
+      if (!enabled) return;
+      // Prevent scrolling while dragging slider
+      e.preventDefault();
+      setIsDragging(true);
+      if (e.touches[0]) {
+         handlePositionChange(e.touches[0].clientY);
+      }
+   };
+
    useEffect(() => {
       const handleMouseMove = (e: MouseEvent) => {
          if (isDragging && enabled) {
@@ -70,14 +81,33 @@ export function VerticalSlider({
          setIsDragging(false);
       };
 
+      const handleTouchMove = (e: TouchEvent) => {
+         if (isDragging && enabled && e.touches[0]) {
+            // Prevent scrolling
+            if (e.cancelable) e.preventDefault();
+            handlePositionChange(e.touches[0].clientY);
+         }
+      };
+
+      const handleTouchEnd = () => {
+         setIsDragging(false);
+      };
+
       if (isDragging) {
          window.addEventListener('mousemove', handleMouseMove);
          window.addEventListener('mouseup', handleMouseUp);
+         // Dictionary { passive: false } is crucial for preventing default scroll behavior
+         window.addEventListener('touchmove', handleTouchMove, { passive: false });
+         window.addEventListener('touchend', handleTouchEnd);
+         window.addEventListener('touchcancel', handleTouchEnd);
       }
 
       return () => {
          window.removeEventListener('mousemove', handleMouseMove);
          window.removeEventListener('mouseup', handleMouseUp);
+         window.removeEventListener('touchmove', handleTouchMove);
+         window.removeEventListener('touchend', handleTouchEnd);
+         window.removeEventListener('touchcancel', handleTouchEnd);
       };
    }, [isDragging, handlePositionChange, enabled]);
 
@@ -105,6 +135,7 @@ export function VerticalSlider({
             className={`relative flex items-center justify-center ${enabled ? 'cursor-pointer' : 'cursor-default'}`}
             style={{ height }}
             onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
          >
             <div
                className="absolute bottom-0"
@@ -135,9 +166,21 @@ export function VerticalSlider({
                width: thumbWidth,
                height: thumbHeight,
                fill: enabled ? ACIDS_BASES_COLORS.ui.primary : ACIDS_BASES_COLORS.ui.disabled,
+               overflow: 'visible', // Allow touch target to extend outside
             }}
             onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
          >
+            {/* Extended Touch Target (Invisible Hitbox) */}
+            <rect
+               x="-30"
+               y="-35"
+               width="120"
+               height="100"
+               fill="transparent"
+               stroke="none"
+            />
+            {/* Visual Handle */}
             <rect width="59" height="29" rx="7.2" ry="7.2" />
          </svg>
       </div>

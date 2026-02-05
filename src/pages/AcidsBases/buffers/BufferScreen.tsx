@@ -28,6 +28,9 @@ import { useBufferParticlesSync } from './hooks/useBufferParticlesSync';
 import { useBufferGuideState } from './hooks/useBufferGuideState';
 import NavMenu from '../../../components/AcidsBases/navigation/NavMenu';
 import AcidsBasesLayout from '../../../layout/AcidsBasesLayout';
+import ChapterMenu from '../../../layout/ChapterMenu';
+import { SubstanceSelector } from '../../../components/AcidsBases/interactive/SubstanceSelector';
+import { Blockable } from '../../../components/AcidsBases/guide';
 
 export function BufferScreen() {
    // Local State
@@ -427,6 +430,8 @@ export function BufferScreen() {
       'bottom-chart-container': 'bottom-chart-container'
    };
 
+   const isChooseSubstanceStep = currentStep.highlights?.includes('reactionSelection');
+
    return (
       <AcidsBasesLayout>
          <HighlightOverlay
@@ -434,7 +439,33 @@ export function BufferScreen() {
             highlights={highlights}
             active={!hasInteracted}
          >
-            <NavMenu />
+            <div className="absolute top-4 right-4 flex items-center gap-4 z-[100]">
+               <Blockable element="reactionSelection" overrides={guideOverrides} className="relative">
+                  <div className={isChooseSubstanceStep ? 'w-full max-w-xs' : 'w-fit'}>
+                     <SubstanceSelector
+                        substances={availableSubstances}
+                        selected={selectedSubstance}
+                        onSelect={(s) => {
+                           setSelectedSubstance(s);
+                           setParticleCount(0);
+                           setSimulationPhase('adding');
+                           setWaterLevel(0.5);
+                           setSelectorOpen(false);
+                           markInteraction();
+                        }}
+                        placeholder="Choose a substance"
+                        enabled={isChooseSubstanceStep}
+                        isOpen={selectorOpen}
+                        onOpenChange={setSelectorOpen}
+                        staticMenu={false}
+                        compact={true}
+                        align="right"
+                     />
+                  </div>
+               </Blockable>
+               <ChapterMenu />
+               <NavMenu />
+            </div>
             <div className="h-full bg-white flex flex-col items-center" style={{ overflowY: 'hidden', overflowX: 'hidden' }}>
                {/* Main Content Wrapper */}
                <div className="w-full relative px-6 py-4 h-full flex-1 flex flex-col" style={{ overflowX: 'hidden' }}>

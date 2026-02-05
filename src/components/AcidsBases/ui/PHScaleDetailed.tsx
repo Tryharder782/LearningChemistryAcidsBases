@@ -31,7 +31,7 @@ export function PHScaleDetailed({
 
    // Format concentration in scientific notation
    const formatConc = (c: number) => {
-      if (c >= 1) return c.toFixed(1).replace('.', ',');
+      if (c >= 1) return c.toFixed(1);
 
       const exp = Math.floor(Math.log10(c));
       const mantissa = c / Math.pow(10, exp);
@@ -44,7 +44,7 @@ export function PHScaleDetailed({
          finalExp += 1;
       }
 
-      return `${finalMantissa.toFixed(1).replace('.', ',')}×10${toSuperscript(finalExp)}`;
+      return `${finalMantissa.toFixed(1)}×10${toSuperscript(finalExp)}`;
    };
 
    // Helper for superscript exponents

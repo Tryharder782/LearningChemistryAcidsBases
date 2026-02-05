@@ -31,16 +31,29 @@ export function PHMeter({
       elemX: 0,
       elemY: 0,
       clickOffsetX: 0, // Offset of click relative to element's top-left
-      clickOffsetY: 0
+      clickOffsetY: 0,
+      scale: 1
    });
    const meterRef = useRef<HTMLDivElement>(null);
+
+   // Helper to get current visual scale from transform: scale()
+   const getVisualScale = useCallback(() => {
+      if (!meterRef.current) return 1;
+      const rect = meterRef.current.getBoundingClientRect();
+      const actualWidth = meterRef.current.offsetWidth;
+      if (actualWidth === 0) return 1;
+      return rect.width / actualWidth;
+   }, []);
 
    // Check if meter tip is in liquid (uses Global Coordinates)
    const checkCollision = useCallback((globalX: number, globalY: number) => {
       if (!beakerBounds) return false;
 
-      const tipY = globalY + 80; // Tip is at bottom of meter
-      const tipX = globalX + 20; // Center of meter
+      // The offsets (116, 28) are in design-time CSS pixels.
+      // We must scale them to match viewport pixels for collision with beakerBounds.
+      const scale = getVisualScale();
+      const tipY = globalY + (116 * scale); // Tip is at bottom of meter
+      const tipX = globalX + (28 * scale); // Center of probe stick
 
       // Check if tip is within beaker liquid area
       const inBeakerX = tipX >= beakerBounds.x && tipX <= beakerBounds.x + beakerBounds.width;
@@ -48,13 +61,14 @@ export function PHMeter({
       const inLiquidY = tipY >= liquidTop && tipY <= beakerBounds.y + beakerBounds.height;
 
       return inBeakerX && inLiquidY;
-   }, [beakerBounds]);
+   }, [beakerBounds, getVisualScale]);
 
    // Mouse handlers
    const handleMouseDown = (e: React.MouseEvent) => {
       e.preventDefault();
       setIsDragging(true);
       const rect = meterRef.current?.getBoundingClientRect();
+      const scale = getVisualScale();
       if (rect) {
          dragStart.current = {
             mouseX: e.clientX,
@@ -63,6 +77,27 @@ export function PHMeter({
             elemY: position.y,
             clickOffsetX: e.clientX - rect.left,
             clickOffsetY: e.clientY - rect.top,
+            scale: scale
+         };
+      }
+   };
+
+   // Touch handlers
+   const handleTouchStart = (e: React.TouchEvent) => {
+      e.preventDefault();
+      setIsDragging(true);
+      const rect = meterRef.current?.getBoundingClientRect();
+      const scale = getVisualScale();
+      if (rect && e.touches[0]) {
+         const touch = e.touches[0];
+         dragStart.current = {
+            mouseX: touch.clientX,
+            mouseY: touch.clientY,
+            elemX: position.x,
+            elemY: position.y,
+            clickOffsetX: touch.clientX - rect.left,
+            clickOffsetY: touch.clientY - rect.top,
+            scale: scale
          };
       }
    };
@@ -71,9 +106,12 @@ export function PHMeter({
       const handleMouseMove = (e: MouseEvent) => {
          if (!isDragging) return;
 
+         const currentScale = dragStart.current.scale || 1;
+
          // Calculate new local position (for CSS top/left)
-         const deltaX = e.clientX - dragStart.current.mouseX;
-         const deltaY = e.clientY - dragStart.current.mouseY;
+         // We divide the screen delta by scale to get correct CSS units
+         const deltaX = (e.clientX - dragStart.current.mouseX) / currentScale;
+         const deltaY = (e.clientY - dragStart.current.mouseY) / currentScale;
 
          const newLocalX = dragStart.current.elemX + deltaX;
          const newLocalY = dragStart.current.elemY + deltaY;
@@ -87,6 +125,30 @@ export function PHMeter({
          setIsInLiquid(checkCollision(globalX, globalY));
       };
 
+      const handleTouchMove = (e: TouchEvent) => {
+         if (!isDragging || !e.touches[0]) return;
+
+         // Prevent scrolling
+         if (e.cancelable) e.preventDefault();
+
+         const currentScale = dragStart.current.scale || 1;
+         const touch = e.touches[0];
+
+         const deltaX = (touch.clientX - dragStart.current.mouseX) / currentScale;
+         const deltaY = (touch.clientY - dragStart.current.mouseY) / currentScale;
+
+         const newLocalX = dragStart.current.elemX + deltaX;
+         const newLocalY = dragStart.current.elemY + deltaY;
+
+         setPosition({ x: newLocalX, y: newLocalY });
+
+         // Calculate global position (for collision detection)
+         const globalX = touch.clientX - dragStart.current.clickOffsetX;
+         const globalY = touch.clientY - dragStart.current.clickOffsetY;
+
+         setIsInLiquid(checkCollision(globalX, globalY));
+      };
+
       const handleMouseUp = () => {
          setIsDragging(false);
          setPosition(initialPosition);
@@ -95,11 +157,17 @@ export function PHMeter({
       if (isDragging) {
          window.addEventListener('mousemove', handleMouseMove);
          window.addEventListener('mouseup', handleMouseUp);
+         window.addEventListener('touchmove', handleTouchMove, { passive: false });
+         window.addEventListener('touchend', handleMouseUp);
+         window.addEventListener('touchcancel', handleMouseUp);
       }
 
       return () => {
          window.removeEventListener('mousemove', handleMouseMove);
          window.removeEventListener('mouseup', handleMouseUp);
+         window.removeEventListener('touchmove', handleTouchMove);
+         window.removeEventListener('touchend', handleMouseUp);
+         window.removeEventListener('touchcancel', handleMouseUp);
       };
    }, [isDragging, checkCollision, initialPosition]);
 
@@ -114,6 +182,7 @@ export function PHMeter({
             transition: isDragging ? 'none' : 'all 0.3s ease-out'
          }}
          onMouseDown={handleMouseDown}
+         onTouchStart={handleTouchStart}
       >
          {/* pH Meter Image & Text */}
          <div className="relative w-[120px] h-[120px]">

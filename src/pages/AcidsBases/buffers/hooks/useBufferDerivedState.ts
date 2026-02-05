@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 import type { GuideStep } from '../../../../components/AcidsBases/guide/types';
 import type { AcidOrBase } from '../../../../helper/acidsBases/types';
 import { calculatePH } from '../../../../helper/acidsBases/simulationEngine';
-import { GRID_COLS } from '../../../../helper/acidsBases/particles/types';
+import { GRID_COLS, GRID_ROWS_MIN, GRID_ROWS_MAX } from '../../../../helper/acidsBases/particles/types';
 import { getGridRowsForWaterLevel, getModelLevelForWaterLevel } from '../../../../helper/acidsBases/beakerMath';
 import { BufferSaltModel } from '../../../../helper/acidsBases/BufferSaltModel';
 
@@ -56,7 +56,7 @@ export const useBufferDerivedState = ({
    waterLevelMax
 }: UseBufferDerivedStateParams): UseBufferDerivedStateResult => {
    const modelLevel = getModelLevelForWaterLevel(waterLevel, waterLevelMin, waterLevelMax);
-   const rowsVisible = modelLevel * 22; // GRID_ROWS_TOTAL
+   const rowsVisible = GRID_ROWS_MIN + (GRID_ROWS_MAX - GRID_ROWS_MIN) * modelLevel;
    const currentRows = Math.ceil(rowsVisible);
 
    const totalSlots = GRID_COLS * rowsVisible;

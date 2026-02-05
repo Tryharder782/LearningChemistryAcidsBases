@@ -139,6 +139,44 @@
   font-weight: bold;
 }
 
+.fixedControlsViewport {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 0;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 200;
+}
+
+.fixedControlsScaled {
+  position: relative;
+  pointer-events: none;
+}
+
+.fixedBtn {
+  position: absolute !important;
+  pointer-events: auto;
+  top: 390px !important; // 780 / 2
+  transform: translateY(-50%) !important;
+  bottom: auto !important;
+
+  &.prevBtn {
+    left: 40px !important;
+  }
+
+  &.nextBtn {
+    right: 40px !important;
+  }
+
+  &.refreshBtn {
+    right: 40px !important;
+    top: 290px !important;
+  }
+}
+
 @media (min-width: 769px) {
   .container {
     padding-left: 35px;

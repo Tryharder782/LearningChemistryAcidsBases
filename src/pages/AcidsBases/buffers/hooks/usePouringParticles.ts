@@ -45,25 +45,8 @@ export const usePouringParticles = (
    };
 
    const getBottleAnchor = (bottleIndex: BottleIndex) => {
-      // Special case for Reagent Bottle (0): Anchor to Beaker if available
-      // Using viewport coordinates for Portal rendering
-      if (bottleIndex === 0 && beakerContainerRef && beakerContainerRef.current) {
-         const beakerRect = beakerContainerRef.current.getBoundingClientRect();
-         // const scrollX = window.scrollX || 0;
-         // const scrollY = window.scrollY || 0;
-
-         const spawnX = beakerRect.left + beakerRect.width / 2 + 20 + (offsets?.[bottleIndex]?.x ?? 0);
-         const spawnY = beakerRect.top - 10 + (offsets?.[bottleIndex]?.y ?? 0);
-         return { x: spawnX, y: spawnY };
-      }
-
       const bottleEl = bottleRefs.current[bottleIndex];
-      // Fallback relative logic removed/simplified for viewport alignment?
-      // Actually we still need a fallback.
       if (!bottleEl) {
-         // If no element, we can't really guess viewport coords well.
-         // Fallback to center screen? Or keep old logic?
-         // Let's rely on bottleEl being present.
          return { x: 0, y: 0 };
       }
 

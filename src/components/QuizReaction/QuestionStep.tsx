@@ -11,6 +11,7 @@ interface QuestionStepProps {
   onCorrectAnswer: (val: number) => void
 }
 const QuestionStep = ({ quizItem, selectedAnswers, onSelectAnswers, isCorrectAnswered, onCorrectAnswer }: QuestionStepProps) => {
+  if (!quizItem || !quizItem.question) return null;
   const { question, correctAnswer, allAnswerItems } = quizItem
   const correctAnswerIndex = allAnswerItems?.findIndex((item: { answer: string }) => item.answer === correctAnswer.answer) ?? -1
 

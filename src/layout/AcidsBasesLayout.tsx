@@ -58,8 +58,22 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
 
     handleResize()
     window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+
+    // Manage body scrolling and touch actions
+    if (scrollable.current) {
+      document.body.style.overflow = 'auto'
+      document.body.style.touchAction = 'pan-y'
+    } else {
+      document.body.style.overflow = 'hidden'
+      document.body.style.touchAction = 'none'
+    }
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      document.body.style.overflow = 'hidden'
+      document.body.style.touchAction = 'none'
+    }
+  }, [scrollable.current, children])
 
   return (
     <div
@@ -68,9 +82,11 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        height: '100vh',
+        minHeight: '100vh',
+        height: scrollable.current ? 'auto' : '100vh',
+        width: '100vw',
         justifyContent: 'flex-start',
-        overflowX: 'visible',
+        overflowX: 'hidden',
         overflowY: scrollable.current ? 'auto' : 'hidden',
         background: 'white',
       }}
@@ -80,27 +96,42 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center',
-          overflowX: 'visible',
+          justifyContent: 'flex-start',
+          width: '100%',
+          minHeight: '100vh',
+          height: scrollable.current ? 'auto' : '100%',
+          overflow: scrollable.current ? 'visible' : 'hidden',
         }}
       >
         <div
           style={{
-            width: `${contentSize.width}px`,
-            height: `${contentSize.height}px`,
+            // This wrapper takes the EXACT visual space of the scaled content
+            width: `${contentSize.width * (scale || 1)}px`,
+            height: scrollable.current ? 'auto' : `${contentSize.height * (scale || 1)}px`,
+            minHeight: `${contentSize.height * (scale || 1)}px`,
             position: 'relative',
-            overflowX: 'visible',
-            ...(scale ? {
-              transform: `scale(${scale})`,
-              transformOrigin: 'top center',
-              WebkitTransform: `scale(${scale})`,
-              WebkitTransformOrigin: 'top center',
-              MozTransform: `scale(${scale})`,
-              msTransform: `scale(${scale})`,
-            } : {}),
           }}
         >
-          {children}
+          <div
+            style={{
+              // The actual content at full resolution
+              width: `${contentSize.width}px`,
+              height: scrollable.current ? 'auto' : `${contentSize.height}px`,
+              minHeight: `${contentSize.height}px`,
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              transformOrigin: 'top left',
+              ...(scale ? {
+                transform: `scale(${scale})`,
+                WebkitTransform: `scale(${scale})`,
+                MozTransform: `scale(${scale})`,
+                msTransform: `scale(${scale})`,
+              } : {}),
+            }}
+          >
+            {children}
+          </div>
         </div>
       </div>
     </div>

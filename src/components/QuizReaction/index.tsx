@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { createPortal } from 'react-dom'
 import styles from './styles.module.scss'
 import Buttons from '../Buttons/Buttons'
 import { convertExpToHtml, getItemsRandomlyFromArray, getStorage, setStorage } from '../../helper/functions'
@@ -38,6 +39,23 @@ const QuizReaction = ({
   const [quizList, setQuizList] = useState<QuizItemType[]>([])
   const [selectedAnswer, setSelectedAnswer] = useState<number[][]>([])
   const [correctStep, setCorrectStep] = useState(0)
+  const [scale, setScale] = useState(1)
+
+  useEffect(() => {
+    const calc = () => {
+      const contentSize = { width: 1420, height: 780 }
+      const innerWidth = window.innerWidth
+      const innerHeight = window.innerHeight
+      if (innerWidth < contentSize.width || innerHeight < contentSize.height) {
+        setScale(Math.min(innerWidth / contentSize.width, innerHeight / contentSize.height))
+      } else {
+        setScale(1)
+      }
+    }
+    calc()
+    window.addEventListener('resize', calc)
+    return () => window.removeEventListener('resize', calc)
+  }, [])
 
   const {
     updatePageFromMenu,
@@ -137,30 +155,53 @@ const QuizReaction = ({
     setCorrectStep(v => v + 1)
   }
 
-  const quizControls = (
+  const isResults = quizStep === quizType + 1
+
+  const controls = (
     <>
-      {/* <div className={styles.stepButtons}> */}
       <Buttons.StepButton
         onClick={() => handleStep(-1)}
-        className={styles.prevBtn}
+        className={`${styles.prevBtn} ${isResults ? styles.fixedBtn : ''}`}
       >
         &#9664;
       </Buttons.StepButton>
       <Buttons.StepButton
         onClick={() => handleStep(1)}
-        className={styles.nextBtn}
+        className={`${styles.nextBtn} ${isResults ? styles.fixedBtn : ''}`}
         disabled={!quizType || (quizStep > 0 && quizStep <= quizType && correctStep < quizStep) || (quizStep === quizType + 1 && !nextRoute)}
       >
         &#9654;
       </Buttons.StepButton>
-      {quizStep === quizType + 1 && <Buttons.StepButton
-        onClick={() => handleInitializeQuiz()}
-        className={styles.refreshBtn}
-      >
-        &#8634;
-      </Buttons.StepButton>}
-      {/* </div> */}
+      {isResults && (
+        <Buttons.StepButton
+          onClick={() => handleInitializeQuiz()}
+          className={`${styles.refreshBtn} ${styles.fixedBtn}`}
+        >
+          &#8634;
+        </Buttons.StepButton>
+      )}
     </>
+  )
+
+  const quizControls = isResults ? (
+    createPortal(
+      <div className={styles.fixedControlsViewport}>
+        <div
+          className={styles.fixedControlsScaled}
+          style={{
+            width: `1420px`,
+            height: `780px`,
+            transform: `scale(${scale})`,
+            transformOrigin: 'top center',
+          }}
+        >
+          {controls}
+        </div>
+      </div>,
+      document.body
+    )
+  ) : (
+    controls
   )
 
   const quizContent = (

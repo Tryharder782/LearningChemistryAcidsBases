@@ -131,7 +131,7 @@ export function createDynamicEquations(pH: number): EquationLine[] {
    const formatExp = (n: number) => {
       const s = n.toExponential(1);
       const [coeff, exp] = s.split('e');
-      const cleanCoeff = coeff.replace('.', ',');
+      const cleanCoeff = coeff;
       const absExp = Math.abs(parseInt(exp));
       return `${cleanCoeff}×10⁻${absExp}`;
    };

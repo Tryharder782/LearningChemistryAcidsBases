@@ -19,7 +19,7 @@ const formatValue = (value: number, digits: number): ReactNode => {
    const absVal = Math.abs(value);
 
    // Strictly zero check
-   if (absVal === 0) return (0).toFixed(digits).replace('.', ',');
+   if (absVal === 0) return (0).toFixed(digits);
 
    // Determine if we should use scientific notation:
    // 1. Value is very small (< 0.001)
@@ -30,7 +30,7 @@ const formatValue = (value: number, digits: number): ReactNode => {
    if (absVal < 0.001 || isVisualZero) {
       const expStr = value.toExponential(1); // "1.0e-7"
       const [mantissa, exponent] = expStr.split('e');
-      const formattedMantissa = mantissa.replace('.', ',');
+      const formattedMantissa = mantissa;
       const expVal = parseInt(exponent);
 
       return (
@@ -40,7 +40,7 @@ const formatValue = (value: number, digits: number): ReactNode => {
       );
    }
 
-   return decimalStr.replace('.', ',');
+   return decimalStr;
 };
 
 const EquationValue = ({ value, isPlaceholder = false }: { value: ReactNode, isPlaceholder?: boolean }) => {

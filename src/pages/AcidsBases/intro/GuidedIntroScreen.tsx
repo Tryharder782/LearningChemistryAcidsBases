@@ -129,6 +129,14 @@ export function GuidedIntroScreen() {
    // Exactly calculated based on pixels visible in Beaker
    const rowsVisible = waterLevel * GRID_ROWS_TOTAL;
 
+   const [isMobile, setIsMobile] = useState(false);
+   useEffect(() => {
+      const check = () => setIsMobile(window.innerWidth < 1024);
+      check();
+      window.addEventListener('resize', check);
+      return () => window.removeEventListener('resize', check);
+   }, []);
+
    // Scale particle counts
    // Dynamic limit matching CogSciKit: (cols * rows) / 3
    const maxParticles = Math.ceil((GRID_COLS * rowsVisible) / 3);
@@ -354,7 +362,7 @@ export function GuidedIntroScreen() {
                      const targetTopY = beakerRect.top - 80; // Position above beaker
                      setBottleTranslation({
                         x: targetCenterX - bottleCenterX + 20,
-                        y: targetTopY - bottleTopY + 70
+                        y: targetTopY - bottleTopY + (isMobile ? 120 : 70)
                      });
                   }
                   setActiveBottleIndex(index);
@@ -363,7 +371,7 @@ export function GuidedIntroScreen() {
          },
          onPouringStart: () => {
             if (!substance) return;
-            createPour(substance, index as 0 | 1 | 2 | 3, { particleCount: 5 });
+            createPour(substance, index as 0 | 1 | 2 | 3, { particleCount: 5, speedMultiplier: isMobile ? 0.5 : 1 });
          },
          onPourComplete: () => {
             if (!substance || inputState.type !== 'addSubstance') return;
@@ -378,8 +386,32 @@ export function GuidedIntroScreen() {
    return (
       <AcidsBasesLayout>
          <HighlightOverlay elementIds={elementIds}>
-            <NavMenu />
-            <NavMenu />
+            <div className="absolute top-4 right-4 flex items-center gap-4 z-[100]">
+               <Blockable element="reactionSelection" overrides={{ highlights: currentStepData?.highlights }} className="relative z-50">
+                  <div
+                     id="guide-element-reactionSelection"
+                     className={currentStepData?.highlights.includes('reactionSelection') ? 'w-full max-w-xs' : 'w-fit'}
+                  >
+                     <SubstanceSelector
+                        substances={availableSubstances}
+                        selected={selectedSubstance}
+                        onSelect={(s) => {
+                           selectSubstance(('substanceType' in inputState && inputState.substanceType) ? inputState.substanceType : 'strongAcid', s);
+                           setSubstanceSelectorOpen(false);
+                        }}
+                        placeholder="Choose a substance"
+                        enabled={inputState.type === 'chooseSubstance'}
+                        isOpen={substanceSelectorOpen}
+                        onOpenChange={setSubstanceSelectorOpen}
+                        staticMenu={false}
+                        compact={true}
+                        align="right"
+                     />
+                  </div>
+               </Blockable>
+               <ChapterMenu />
+               <NavMenu />
+            </div>
             <div className="h-full bg-white flex flex-col items-center" style={{ overflowY: 'hidden', overflowX: 'hidden' }}>
                {/* Main Content Wrapper - Centered with max-width */}
                <div className="w-full relative px-8 py-4 h-full flex-1 flex flex-col" style={{ overflowX: 'hidden' }}>
@@ -447,7 +479,7 @@ export function GuidedIntroScreen() {
                                           {pour.particles.map((particle) => (
                                              <div
                                                 key={particle.id}
-                                                className="absolute w-1.5 h-1.5 md:w-3 md:h-3 rounded-full"
+                                                className={`absolute rounded-full ${isMobile ? 'w-1.5 h-1.5' : 'w-1.5 h-1.5 md:w-3 md:h-3'}`}
                                                 style={{
                                                    backgroundColor: pour.substance.color,
                                                    opacity: 0,
@@ -458,7 +490,7 @@ export function GuidedIntroScreen() {
                                                    animationTimingFunction: 'linear',
                                                    animationFillMode: 'forwards',
                                                    animationDelay: `${particle.delayMs}ms`,
-                                                   boxShadow: `0 0 5px ${pour.substance.color}aa`,
+                                                   boxShadow: `0 0 ${isMobile ? '2px' : '5px'} ${pour.substance.color}aa`,
                                                    ['--particle-distance' as string]: `${particle.distancePx}px`,
                                                 }}
                                              />
@@ -502,29 +534,6 @@ export function GuidedIntroScreen() {
 
                      {/* RIGHT COLUMN: Equations, Scale, Graph, Guide */}
                      <div className="flex flex-col gap-6 pt-0" style={{ overflowX: 'hidden' }}>
-                        {/* Top: Substance Selector & Chapters */}
-                        <div className="flex justify-end items-center gap-2 z-10 -mt-2 flex-shrink-0">
-                           <Blockable element="reactionSelection" overrides={{ highlights: currentStepData?.highlights }} className="relative z-50">
-                              <div id="guide-element-reactionSelection" className={currentStepData?.highlights.includes('reactionSelection') ? 'w-full max-w-xs' : 'w-fit'} style={{ transform: 'translateY(10px)' }}>
-                                 <SubstanceSelector
-                                    substances={availableSubstances}
-                                    selected={selectedSubstance}
-                                    onSelect={(s) => {
-                                       selectSubstance(('substanceType' in inputState && inputState.substanceType) ? inputState.substanceType : 'strongAcid', s);
-                                       setSelectorOpen(false);
-                                    }}
-                                    placeholder="Choose a substance"
-                                    enabled={inputState.type === 'chooseSubstance'}
-                                    isOpen={substanceSelectorOpen}
-                                    onOpenChange={setSubstanceSelectorOpen}
-                                    staticMenu={false}
-                                    compact={true}
-                                    align="right"
-                                 />
-                              </div>
-                           </Blockable>
-                           <ChapterMenu />
-                        </div>
                         {/* Row 1: Equations & Controls Combined */}
                         <div className="flex flex-row gap-2 relative">
                            {/* Controls (Relative Flow) */}

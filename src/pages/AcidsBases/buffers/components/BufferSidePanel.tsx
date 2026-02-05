@@ -60,29 +60,6 @@ export const BufferSidePanel = ({
 }: BufferSidePanelProps) => {
    return (
       <div className="flex flex-col pt-0 pl-4 border-l border-gray-100 relative h-full">
-         {/* Substance Selector & Chapters */}
-         <div className="flex justify-end items-center gap-2 z-10 -mt-2 flex-shrink-0">
-            {/* Substance Toggle */}
-            <Blockable element="reactionSelection" overrides={guideOverrides} className="relative">
-               <div className={isChooseSubstanceStep ? 'w-full max-w-xs' : 'w-fit'} style={{ transform: 'translateY(10px)' }}>
-                  <SubstanceSelector
-                     substances={availableSubstances}
-                     selected={selectedSubstance}
-                     onSelect={onSelectSubstance}
-                     placeholder="Choose a substance"
-                     enabled={isChooseSubstanceStep}
-                     isOpen={selectorOpen}
-                     onOpenChange={setSelectorOpen}
-                     staticMenu={false}
-                     compact={true}
-                  />
-               </div>
-            </Blockable>
-
-            {/* Chapters Menu */}
-            <ChapterMenu />
-         </div>
-
          {/* Fixed Grid Layout: Equations (auto) and Guide (flex) */}
          <div className="flex-1 flex flex-col min-h-0 gap-4">
             {/* Equations Area - Auto height */}

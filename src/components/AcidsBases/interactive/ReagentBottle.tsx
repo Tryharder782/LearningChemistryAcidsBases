@@ -143,7 +143,11 @@ export function ReagentBottle({
             transformOrigin: 'center top',
             filter: getFilter(),
          }}
-         onClick={handleClick}
+         onPointerUp={(e) => {
+            // Only handle primary pointer (mouse left click or touch)
+            if (e.pointerType === 'mouse' && e.button !== 0) return;
+            handleClick();
+         }}
          ref={setRef}
       >
          <div className="relative" style={{ width: 40 * scale, height: 72 * scale }}>

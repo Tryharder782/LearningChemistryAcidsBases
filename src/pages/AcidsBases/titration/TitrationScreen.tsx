@@ -82,7 +82,7 @@ export function TitrationScreen() {
    const waterLineOffset = useWaterLineOffset(beakerContainerRef, bottlesContainerRef, liquidLevel);
    const [isMobile, setIsMobile] = useState(false);
    useEffect(() => {
-      const check = () => setIsMobile(window.innerWidth < 768);
+      const check = () => setIsMobile(window.innerWidth < 1024);
       check();
       window.addEventListener('resize', check);
       return () => window.removeEventListener('resize', check);
@@ -538,7 +538,29 @@ export function TitrationScreen() {
    return (
       <AcidsBasesLayout>
          <HighlightOverlay elementIds={elementIds} highlights={guide.guideOverrides.highlights} active={!guide.hasInteracted}>
-            <NavMenu />
+            <div className="absolute top-4 right-4 flex items-center gap-4 z-[100]">
+               <Blockable element="reactionSelection" overrides={guide.guideOverrides} className="relative z-50">
+                  <div
+                     id="guide-element-reactionSelection"
+                     className={guide.currentStep.inputState.type === 'selectSubstance' ? 'w-full max-w-xs' : 'w-fit'}
+                  >
+                     <SubstanceSelector
+                        substances={model.availableSubstances}
+                        selected={model.substance}
+                        onSelect={model.setSelectedSubstance}
+                        placeholder="Choose a substance"
+                        enabled={guide.currentStep.inputState.type === 'selectSubstance'}
+                        isOpen={guide.substanceSelectorOpen}
+                        onOpenChange={guide.setSubstanceSelectorOpen}
+                        staticMenu={false}
+                        compact={true}
+                        align="right"
+                     />
+                  </div>
+               </Blockable>
+               <ChapterMenu />
+               <NavMenu />
+            </div>
             <div
                className="h-full bg-white flex flex-col items-center"
                style={{ overflowY: 'hidden', overflowX: 'hidden' }}
@@ -583,9 +605,10 @@ export function TitrationScreen() {
                                        <button
                                           id="guide-element-indicator"
                                           className="flex flex-col items-center gap-2 bg-transparent border-0 p-0"
-                                          onClick={() => {
+                                          onPointerDown={(e) => {
                                              if (!canAddIndicator) return;
-                                             createPour(indicatorSubstance, 1, { speedMultiplier: 1, particleCount: 5 });
+                                             e.currentTarget.releasePointerCapture(e.pointerId);
+                                             createPour(indicatorSubstance, 1, { speedMultiplier: isMobile ? 0.5 : 1, particleCount: 5 });
                                              model.incrementIndicator(5);
                                           }}
                                        >
@@ -609,8 +632,9 @@ export function TitrationScreen() {
                                     >
                                        <button
                                           className="rounded-md flex justify-center bg-transparent border-0 p-0 relative"
-                                          onClick={() => {
+                                          onPointerDown={(e) => {
                                              if (!canAddTitrant) return;
+                                             e.currentTarget.releasePointerCapture(e.pointerId);
                                              const now = Date.now();
                                              const delta = now - lastBuretteClickRef.current;
                                              lastBuretteClickRef.current = now;
@@ -620,7 +644,7 @@ export function TitrationScreen() {
                                                 });
                                                 return;
                                              }
-                                             createPour(titrantSubstance, 2, { speedMultiplier: 1, particleCount: 1 });
+                                             createPour(titrantSubstance, 2, { speedMultiplier: isMobile ? 0.5 : 1, particleCount: 1 });
                                              model.incrementTitrant(1);
                                           }}
                                        >
@@ -702,7 +726,10 @@ export function TitrationScreen() {
                                                 const bottleTopY = bottleRect.top;
                                                 const targetCenterX = beakerRect.left + beakerRect.width / 2;
                                                 const targetTopY = beakerRect.top - 80;
-                                                setBottleTranslation({ x: targetCenterX - bottleCenterX + 20, y: targetTopY - bottleTopY + 70 });
+                                                setBottleTranslation({
+                                                   x: targetCenterX - bottleCenterX + 20,
+                                                   y: targetTopY - bottleTopY + (isMobile ? 120 : 70)
+                                                });
                                              }
 
                                              setActiveBottleIndex(0);
@@ -710,7 +737,7 @@ export function TitrationScreen() {
                                                 guide.markInteraction();
                                              }
                                           }}
-                                          onPouringStart={() => createPour(model.substance, 0)}
+                                          onPouringStart={() => createPour(model.substance, 0, { speedMultiplier: isMobile ? 0.5 : 1 })}
                                           onPourComplete={() => {
                                              if (!canAddSubstance) return;
                                              model.incrementSubstance(model.substanceParticlesPerShake);
@@ -738,7 +765,7 @@ export function TitrationScreen() {
                                              {pour.particles.map((particle) => (
                                                 <div
                                                    key={particle.id}
-                                                   className="absolute w-1.5 h-1.5 md:w-3 md:h-3 rounded-full"
+                                                   className={`absolute rounded-full ${isMobile ? 'w-1.5 h-1.5' : 'w-1.5 h-1.5 md:w-3 md:h-3'}`}
                                                    style={{
                                                       backgroundColor: pour.substance.color,
                                                       opacity: 0,
@@ -749,7 +776,7 @@ export function TitrationScreen() {
                                                       animationTimingFunction: 'linear',
                                                       animationFillMode: 'forwards',
                                                       animationDelay: `${particle.delayMs}ms`,
-                                                      boxShadow: `0 0 5px ${pour.substance.color}aa`,
+                                                      boxShadow: `0 0 ${isMobile ? '2px' : '5px'} ${pour.substance.color}aa`,
                                                       ['--particle-distance' as string]: `${particle.distancePx}px`,
                                                    }}
                                                 />
@@ -857,29 +884,8 @@ export function TitrationScreen() {
 
                      {/* RIGHT COLUMN */}
                      <div className="flex flex-col gap-6 relative" >
-                        {/* Header: Substance Selector & Chapters */}
-                        <div className="flex justify-end items-center gap-2 z-10 -mt-2 flex-shrink-0">
-                           <Blockable element="reactionSelection" overrides={guide.guideOverrides} className="relative z-50">
-                              <div id="guide-element-reactionSelection" className={guide.currentStep.inputState.type === 'selectSubstance' ? 'w-full max-w-xs' : 'w-fit'} style={{ transform: 'translateY(10px)' }}>
-                                 <SubstanceSelector
-                                    substances={model.availableSubstances}
-                                    selected={model.substance}
-                                    onSelect={model.setSelectedSubstance}
-                                    placeholder="Choose a substance"
-                                    enabled={guide.currentStep.inputState.type === 'selectSubstance'}
-                                    isOpen={guide.substanceSelectorOpen}
-                                    onOpenChange={guide.setSubstanceSelectorOpen}
-                                    staticMenu={false}
-                                    compact={true}
-                                    align="right"
-                                 />
-                              </div>
-                           </Blockable>
-                           <ChapterMenu />
-                        </div>
-
                         {/* Reaction Equation */}
-                        <div className="flex items-center justify-center w-full min-h-[40px]">
+                        <div className="flex items-center justify-start ml-10 w-full min-h-[40px]">
                            <ReactionEquation substance={model.substance} titrant={titrantSubstance} />
                         </div>
                         {/* Premature closing div removed here */}

@@ -44,7 +44,7 @@ export const generateEnergyArray = (arr: any, percentage: any, originVal: number
   // console.log({ originCount, toCount, totalCount })
   const expectedCount = Math.floor(totalCount * (percentage / 100))
   // console.log({ percentage, expectedCount })
-  
+
   const updateCount = expectedCount - toCount
   // console.log({originCount, toCount, percentage, expectedCount, updateCount})
   // const updateCount = count - fromCount
@@ -140,8 +140,11 @@ export const expressWithClass = (str: string, mark: string, className: string) =
 
 export const convertExpToHtml = (exp: string | undefined) => {
   if (!exp) return ''
-  let update = ''
-  update = expressWithClass(exp, '__', 'sm-botom')
+  let update = exp.replace(/\$/g, '') // Remove dollar signs
+  update = update.replace(/,/g, '.') // Replace commas with dots
+  update = expressWithClass(update, '__', 'sm-botom')
+  update = expressWithClass(update, '_', 'sm-botom') // Handle single underscore subscripts
+  update = update.replace(/_(\d+)/g, (_, n) => `<span class="sm-botom">${n}</span>`) // Also handle _2 style from titrationQuiz
   update = expressWithClass(update, '^', 'sm-top')
   update = expressWithClass(update, '**', 'txt-red')
   update = expressWithClass(update, '--', 'sm-botom txt-black')

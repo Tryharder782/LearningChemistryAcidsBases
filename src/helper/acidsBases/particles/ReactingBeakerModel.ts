@@ -17,7 +17,7 @@ export class ReactingBeakerModel {
     * @param rows The floating-point number of rows currently visible on screen
     */
    setWaterLevel(rows: number) {
-      this.effectiveRows = Math.ceil(rows);
+      this.effectiveRows = Math.floor(rows);
 
       // Remove particles that are now "above" the water line (out of new floor bounds)
       const keptParticles: Particle[] = [];
