@@ -6,7 +6,7 @@ import { calculateTitrationPH } from '../../../helper/acidsBases/simulationEngin
 import { ION_COLORS } from '../../../helper/acidsBases/substances';
 import { Blockable, GuideBubble, HighlightOverlay } from '../../../components/AcidsBases/guide';
 import { ReactionEquation, PHMeter, SubstanceSelector, ReagentBottle } from '../../../components/AcidsBases/interactive';
-import ChapterMenu from '../../../layout/ChapterMenu';
+import AcidsBasesNav from '../../../layout/AcidsBasesNav';
 import AcidsBasesLayout from '../../../layout/AcidsBasesLayout';
 import NavMenu from '../../../components/AcidsBases/navigation/NavMenu';
 import { TitrationGraph } from './components/TitrationGraph';
@@ -558,7 +558,7 @@ export function TitrationScreen() {
                      />
                   </div>
                </Blockable>
-               <ChapterMenu />
+               <AcidsBasesNav />
                <NavMenu />
             </div>
             <div
@@ -570,8 +570,8 @@ export function TitrationScreen() {
                   }
                }}
             >
-               <div className="w-full relative px-6 py-4 h-full flex-1 flex flex-col" style={{ overflowX: 'hidden' }}>
-                  <main className="flex-1 w-full grid gap-10" style={{ gridTemplateColumns: '1fr 1fr', overflowX: 'hidden' }}>
+               <div className="w-full relative px-8 py-4 h-full flex-1 flex flex-col" style={{ overflowX: 'hidden' }}>
+                  <main className="flex-1 w-full grid gap-8" style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}>
                      {/* LEFT COLUMN */}
                      <div className="flex flex-col gap-8">
                         {/* Top Row: Menu + Tools + pH Curve */}

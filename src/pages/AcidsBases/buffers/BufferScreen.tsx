@@ -11,6 +11,7 @@ import { usePouringParticles } from './hooks/usePouringParticles';
 // Components
 import { bufferGuideSteps } from '../../../components/AcidsBases/guide/bufferGuideSteps';
 import { HighlightOverlay } from '../../../components/AcidsBases/guide';
+import AcidsBasesNav from '../../../layout/AcidsBasesNav';
 
 import { BufferTopRow } from './components/BufferTopRow';
 import { BufferBottomRow } from './components/BufferBottomRow';
@@ -463,16 +464,16 @@ export function BufferScreen() {
                      />
                   </div>
                </Blockable>
-               <ChapterMenu />
+               <AcidsBasesNav />
                <NavMenu />
             </div>
             <div className="h-full bg-white flex flex-col items-center" style={{ overflowY: 'hidden', overflowX: 'hidden' }}>
                {/* Main Content Wrapper */}
-               <div className="w-full relative px-6 py-4 h-full flex-1 flex flex-col" style={{ overflowX: 'hidden' }}>
+               <div className="w-full relative px-8 py-4 h-full flex-1 flex flex-col" style={{ overflowX: 'hidden' }}>
 
                   {/* Main Grid Content */}
                   <main className="flex-1 w-full grid gap-8"
-                     style={{ gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', overflowX: 'hidden' }}
+                     style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}
                   >
                      {/* LEFT COLUMN: Simulation Area */}
                      <div className="flex flex-col gap-8 pt-0">

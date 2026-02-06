@@ -10,7 +10,7 @@ import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { ChevronUp } from 'lucide-react';
 import { useGuideStore, GuideBubble, Blockable, HighlightOverlay } from '../../../components/AcidsBases/guide';
-import ChapterMenu from '../../../layout/ChapterMenu';
+import AcidsBasesNav from '../../../layout/AcidsBasesNav';
 import AcidsBasesLayout from '../../../layout/AcidsBasesLayout';
 import { getSubstancesByType, hydrogenChloride } from '../../../helper/acidsBases/substances';
 import { calculatePH } from '../../../helper/acidsBases/simulationEngine';
@@ -409,7 +409,7 @@ export function GuidedIntroScreen() {
                      />
                   </div>
                </Blockable>
-               <ChapterMenu />
+               <AcidsBasesNav />
                <NavMenu />
             </div>
             <div className="h-full bg-white flex flex-col items-center" style={{ overflowY: 'hidden', overflowX: 'hidden' }}>
