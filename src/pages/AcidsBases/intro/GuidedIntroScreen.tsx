@@ -566,12 +566,12 @@ export function GuidedIntroScreen() {
 
                         {/* Row 2: pH Scale */}
                         <Blockable element="pHScale">
-                           <div className="px-4 py-2">
+                           <div className="px-4 py-1">
                               {/* Mode Switcher Buttons */}
-                              <div className="flex gap-6 mb-3">
+                              <div className="flex gap-6 mb-2">
                                  <button
                                     onClick={() => setScaleMode('concentration')}
-                                    className={`text-[20px] te  transition-colors ${scaleMode === 'concentration' ? 'text-[#ED5A3B]' : 'text-gray-300 hover:text-gray-400'}`}
+                                    className={`text-base font-medium transition-colors ${scaleMode === 'concentration' ? 'text-[#ED5A3B]' : 'text-gray-300 hover:text-gray-400'}`}
                                     style={{
                                        background: 'none',
                                        border: 'none',
@@ -583,7 +583,7 @@ export function GuidedIntroScreen() {
                                  </button>
                                  <button
                                     onClick={() => setScaleMode('ph')}
-                                    className={`text-[20px] text-[#ED5A3B]  transition-colors ${scaleMode === 'ph' ? 'text-[#ED5A3B]' : 'text-gray-300 hover:text-gray-400'}`}
+                                    className={`text-base font-medium transition-colors ${scaleMode === 'ph' ? 'text-[#ED5A3B]' : 'text-gray-300 hover:text-gray-400'}`}
                                     style={{
                                        background: 'none',
                                        border: 'none',
@@ -597,12 +597,13 @@ export function GuidedIntroScreen() {
                               <PHScaleDetailed
                                  pH={pH}
                                  mode={scaleMode}
+                                 compact
                               />
                            </div>
                         </Blockable>
 
                         {/* Row 3: Graph + Guide (Side by Side) */}
-                        <div className="mt-[20px] flex-1 grid gap-6 min-h-[200px] items-start" style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}>
+                        <div className="mt-[4px] flex-1 grid gap-4 min-h-[160px] items-start" style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}>
                            {/* Concentration Chart */}
                            <div className="flex justify-start items-start">
                               <div style={{ marginLeft: `${ACIDS_BASES_GRAPH_ANCHOR.leftOffsetPx}px` }}>
@@ -612,8 +613,8 @@ export function GuidedIntroScreen() {
                                        molarity={effectiveMolarity}
                                        addedFraction={substanceAddedFraction}
                                        pH={pH}
-                                       height={200}
-                                       graphSizePx={ACIDS_BASES_GRAPH_ANCHOR.squareSizePx}
+                                       height={160}
+                                       graphSizePx={160}
                                        mode={chartMode}
                                        onModeChange={setChartMode}
                                     />

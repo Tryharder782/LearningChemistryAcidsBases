@@ -9,6 +9,8 @@ interface PHScaleDetailedProps {
    className?: string;
    /** Display mode */
    mode: 'concentration' | 'ph';
+   /** Compact mode for constrained vertical space */
+   compact?: boolean;
 }
 
 export function PHScaleDetailed({
@@ -16,6 +18,7 @@ export function PHScaleDetailed({
    mode,
    width = '100%',
    className = '',
+   compact = false,
 }: PHScaleDetailedProps) {
 
    // Clamp pH between 0 and 14
@@ -24,6 +27,11 @@ export function PHScaleDetailed({
 
    // Horizontal inset to prevent labels from clipping the rounded corners
    const hPadding = '24px';
+
+   const barHeight = compact ? 60 : 85;
+   const labelSize = compact ? 'text-base' : 'text-xl';
+   const tickLabelSize = compact ? 'text-[8px]' : 'text-[10px]';
+   const indicatorTextSize = compact ? 'text-xs' : 'text-sm';
 
    // --- DATA PREPARATION ---
    const hConcentration = Math.pow(10, -clampedPH);
@@ -75,8 +83,8 @@ export function PHScaleDetailed({
          <div className="flex items-center justify-between w-full mb-1 relative">
             <div className="w-14" />
             <div className="flex-1 flex justify-between relative" style={{ paddingLeft: hPadding, paddingRight: hPadding }}>
-               <span className="text-xl font-semibold transform -translate-x-1" style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidText }}>Acid</span>
-               <span className="text-xl font-semibold transform translate-x-1" style={{ color: ACIDS_BASES_COLORS.ui.phScale.basicText }}>Basic</span>
+               <span className={`${labelSize} font-semibold transform -translate-x-1`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidText }}>Acid</span>
+               <span className={`${labelSize} font-semibold transform translate-x-1`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.basicText }}>Basic</span>
             </div>
             <div className="w-14" />
          </div>
@@ -85,7 +93,7 @@ export function PHScaleDetailed({
          <div className="flex items-center gap-1 w-full relative">
             {/* FAR LEFT LABEL */}
             <div className="w-14 flex items-start justify-center">
-               <span className="text-xl font-medium transform -translate-y-2" style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>
+               <span className={`${labelSize} font-medium transform -translate-y-2`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>
                   {mode === 'concentration' ? '[H⁺]' : 'pH'}
                </span>
             </div>
@@ -98,7 +106,7 @@ export function PHScaleDetailed({
                      className="absolute bottom-[8px] transform -translate-x-1/2 transition-all duration-300 ease-out flex flex-col items-center"
                      style={{ left: `${indicatorPosition}%` }}
                   >
-                     <div className="text-white px-3 py-1 rounded-lg text-sm font-medium whitespace-nowrap border border-white/20"
+                     <div className={`text-white px-3 py-1 rounded-lg ${indicatorTextSize} font-medium whitespace-nowrap border border-white/20`}
                         style={{ backgroundColor: ACIDS_BASES_COLORS.ui.phScale.acidIndicator }}>
                         {mode === 'concentration'
                            ? `[H⁺]: ${formatConc(hConcentration)}`
@@ -107,8 +115,8 @@ export function PHScaleDetailed({
                      </div>
                      <div
                         style={{
-                           width: 14,
-                           height: 9,
+                           width: compact ? 10 : 14,
+                           height: compact ? 7 : 9,
                            marginTop: -1,
                            background: ACIDS_BASES_COLORS.ui.phScale.acidIndicator,
                            clipPath: 'polygon(50% 100%, 0 0, 100% 0)',
@@ -119,8 +127,8 @@ export function PHScaleDetailed({
 
                {/* ACTUAL SCALE BAR */}
                <div
-                  className="h-[85px] rounded-[10px] relative bg-white overflow-visible shadow-[0_2px_4px_rgba(0,0,0,0.1)]"
-                  style={{ border: '2.5px solid black' }}
+                  className={`h-[${barHeight}px] rounded-[10px] relative bg-white overflow-visible shadow-[0_2px_4px_rgba(0,0,0,0.1)]`}
+                  style={{ border: '2.5px solid black', height: `${barHeight}px` }}
                >
                   <div
                      className="absolute inset-0 rounded-[7px]"
@@ -139,11 +147,11 @@ export function PHScaleDetailed({
                         >
                            <div className="flex flex-col items-center">
                               <div className="w-[1.5px] h-[6px] bg-black mb-[1px]" />
-                              <span className="text-[10px] font-bold text-gray-800 leading-none">{topLabels[i]}</span>
+                              <span className={`${tickLabelSize} font-bold text-gray-800 leading-none`}>{topLabels[i]}</span>
                            </div>
                            <div className="flex flex-col-reverse items-center">
                               <div className="w-[1.5px] h-[6px] bg-black mt-[1px]" />
-                              <span className="text-[10px] font-bold text-gray-800 leading-none">{bottomLabels[i]}</span>
+                              <span className={`${tickLabelSize} font-bold text-gray-800 leading-none`}>{bottomLabels[i]}</span>
                            </div>
                         </div>
                      ))}
@@ -156,7 +164,7 @@ export function PHScaleDetailed({
                      className="absolute top-[8px] transform -translate-x-1/2 transition-all duration-300 ease-out flex flex-col-reverse items-center"
                      style={{ left: `${indicatorPosition}%` }}
                   >
-                     <div className="text-white px-3 py-1 rounded-lg text-sm font-medium whitespace-nowrap border border-white/20"
+                     <div className={`text-white px-3 py-1 rounded-lg ${indicatorTextSize} font-medium whitespace-nowrap border border-white/20`}
                         style={{ backgroundColor: ACIDS_BASES_COLORS.ui.phScale.basicIndicator }}>
                         {mode === 'concentration'
                            ? `[OH⁻]: ${formatConc(ohConcentration)}`
@@ -165,8 +173,8 @@ export function PHScaleDetailed({
                      </div>
                      <div
                         style={{
-                           width: 14,
-                           height: 9,
+                           width: compact ? 10 : 14,
+                           height: compact ? 7 : 9,
                            marginBottom: -1,
                            background: ACIDS_BASES_COLORS.ui.phScale.basicIndicator,
                            clipPath: 'polygon(50% 0, 0 100%, 100% 100%)',
@@ -177,8 +185,8 @@ export function PHScaleDetailed({
             </div>
 
             {/* FAR RIGHT LABEL */}
-            <div className="w-14 flex items-end justify-center pb-2 h-[85px]">
-               <span className="text-xl font-medium" style={{ color: ACIDS_BASES_COLORS.ui.phScale.basicText }}>
+            <div className={`w-14 flex items-end justify-center pb-2`} style={{ height: `${barHeight}px` }}>
+               <span className={`${labelSize} font-medium`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.basicText }}>
                   {mode === 'concentration' ? '[OH⁻]' : 'pOH'}
                </span>
             </div>
