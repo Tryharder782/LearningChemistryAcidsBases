@@ -15,12 +15,18 @@ interface AcidsBasesLayoutProps {
  */
 const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
   const { scrollable } = useAppData()
+  const isIOS =
+    typeof navigator !== 'undefined' &&
+    (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))
 
   // Design size - the content is designed for this resolution
   // Added extra 140px width for mascot overflow on the right
   const contentSize = { width: 1420, height: 780 }
 
   const calculateScale = () => {
+    if (isIOS) return undefined
+
     const innerWidth = window.innerWidth
     const innerHeight = window.innerHeight
     if (innerWidth < contentSize.width || innerHeight < contentSize.height) {
@@ -64,16 +70,16 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
       document.body.style.overflow = 'auto'
       document.body.style.touchAction = 'pan-y'
     } else {
-      document.body.style.overflow = 'hidden'
-      document.body.style.touchAction = 'none'
+      document.body.style.overflow = isIOS ? 'auto' : 'hidden'
+      document.body.style.touchAction = isIOS ? 'manipulation' : 'none'
     }
 
     return () => {
       window.removeEventListener('resize', handleResize)
       document.body.style.overflow = 'hidden'
-      document.body.style.touchAction = 'none'
+      document.body.style.touchAction = 'manipulation'
     }
-  }, [scrollable.current, children])
+  }, [scrollable.current, children, isIOS])
 
   return (
     <div
@@ -87,7 +93,7 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
         width: '100vw',
         justifyContent: 'flex-start',
         overflowX: 'hidden',
-        overflowY: scrollable.current ? 'auto' : 'hidden',
+        overflowY: scrollable.current || isIOS ? 'auto' : 'hidden',
         background: 'white',
       }}
     >
