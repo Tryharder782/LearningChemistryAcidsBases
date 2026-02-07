@@ -99,7 +99,7 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center',
+          alignItems: isIOS ? 'flex-start' : 'center',
           justifyContent: 'flex-start',
           width: '100%',
           minHeight: '100vh',
@@ -107,39 +107,56 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
           overflow: scrollable.current ? 'visible' : 'hidden',
         }}
       >
-        <div
-          style={{
-            // This wrapper takes the EXACT visual space of the scaled content
-            width: `${contentSize.width * (scale || 1)}px`,
-            height: scrollable.current ? 'auto' : `${contentSize.height * (scale || 1)}px`,
-            minHeight: `${contentSize.height * (scale || 1)}px`,
-            position: 'relative',
-          }}
-        >
+        {isIOS ? (
+          /* iOS path: zoom in normal flow (no position:absolute).
+           * zoom scales both visual output AND layout contribution,
+           * so children correctly inherit the pre-zoom dimensions
+           * (1420×780) for their h-full / flex calculations, while
+           * the element takes up scaled space in the parent flow. */
           <div
             style={{
-              // The actual content at full resolution
               width: `${contentSize.width}px`,
               height: scrollable.current ? 'auto' : `${contentSize.height}px`,
               minHeight: `${contentSize.height}px`,
-              position: 'absolute',
-              top: 0,
-              left: 0,
               transformOrigin: 'top left',
-              ...(scale && !isIOS ? {
-                transform: `scale(${scale})`,
-                WebkitTransform: `scale(${scale})`,
-                MozTransform: `scale(${scale})`,
-                msTransform: `scale(${scale})`,
-              } : {}),
-              ...(scale && isIOS ? {
-                zoom: scale,
-              } : {}),
+              ...(scale ? { zoom: scale } : {}),
             }}
           >
             {children}
           </div>
-        </div>
+        ) : (
+          /* Non-iOS path: transform:scale with absolute positioning.
+           * transform doesn't affect layout, so we need a wrapper
+           * sized to the scaled dimensions. */
+          <div
+            style={{
+              width: `${contentSize.width * (scale || 1)}px`,
+              height: scrollable.current ? 'auto' : `${contentSize.height * (scale || 1)}px`,
+              minHeight: `${contentSize.height * (scale || 1)}px`,
+              position: 'relative',
+            }}
+          >
+            <div
+              style={{
+                width: `${contentSize.width}px`,
+                height: scrollable.current ? 'auto' : `${contentSize.height}px`,
+                minHeight: `${contentSize.height}px`,
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                transformOrigin: 'top left',
+                ...(scale ? {
+                  transform: `scale(${scale})`,
+                  WebkitTransform: `scale(${scale})`,
+                  MozTransform: `scale(${scale})`,
+                  msTransform: `scale(${scale})`,
+                } : {}),
+              }}
+            >
+              {children}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
