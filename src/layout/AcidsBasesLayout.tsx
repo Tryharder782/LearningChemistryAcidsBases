@@ -25,8 +25,6 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
   const contentSize = { width: 1420, height: 780 }
 
   const calculateScale = () => {
-    if (isIOS) return undefined
-
     const innerWidth = window.innerWidth
     const innerHeight = window.innerHeight
     if (innerWidth < contentSize.width || innerHeight < contentSize.height) {
