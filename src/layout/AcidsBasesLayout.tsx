@@ -126,11 +126,14 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
               top: 0,
               left: 0,
               transformOrigin: 'top left',
-              ...(scale ? {
+              ...(scale && !isIOS ? {
                 transform: `scale(${scale})`,
                 WebkitTransform: `scale(${scale})`,
                 MozTransform: `scale(${scale})`,
                 msTransform: `scale(${scale})`,
+              } : {}),
+              ...(scale && isIOS ? {
+                zoom: scale,
               } : {}),
             }}
           >
