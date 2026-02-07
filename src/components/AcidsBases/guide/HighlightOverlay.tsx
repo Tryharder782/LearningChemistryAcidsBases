@@ -103,6 +103,7 @@ export function HighlightOverlay({ elementIds, children, highlights: propHighlig
          {targetRect && createPortal(
             <div
                className="fixed z-[9999] pointer-events-none transition-all duration-300 ease-in-out"
+               aria-hidden="true"
                style={{
                   left: targetRect.left - 15,
                   top: targetRect.top - 15,
@@ -110,6 +111,7 @@ export function HighlightOverlay({ elementIds, children, highlights: propHighlig
                   height: targetRect.height + 30,
                   borderRadius: '12px', // Smooth corners
                   boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.30)', // Reduced darkness from 0.75 to 0.60 (20% lighter)
+                  pointerEvents: 'none', // Explicit inline style for iOS Safari reliability
                }}
             />,
             document.body
@@ -177,6 +179,7 @@ export function Blockable({ element, id, relatedElements = [], children, classNa
             ${shouldBlock ? 'pointer-events-none' : ''}
             ${className}
          `}
+         style={{ touchAction: 'manipulation' }}
          onMouseDown={handleInteraction}
          onTouchStart={handleInteraction}
       >

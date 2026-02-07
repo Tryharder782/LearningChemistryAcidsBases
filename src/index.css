@@ -16,8 +16,8 @@ body {
   /* background-color: gray; */
   overflow: hidden;
   /* Prevent scrolling */
-  touch-action: none;
-  /* Disable touch gestures like scrolling */
+  touch-action: manipulation;
+  /* Allow taps but prevent zoom/scroll - JS will override per-page as needed */
 }
 
 #root {

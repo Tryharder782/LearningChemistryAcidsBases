@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { Beaker, Burette, Pipette, VerticalSlider } from '../../../components/AcidsBases/ui';
 import { BufferCharts } from '../buffers/BufferCharts';
 import { calculateTitrationPH } from '../../../helper/acidsBases/simulationEngine';
-import { ION_COLORS } from '../../../helper/acidsBases/substances';
+import { ION_COLORS, potassiumHydroxide, hydrogenChloride } from '../../../helper/acidsBases/substances';
 import { Blockable, GuideBubble, HighlightOverlay } from '../../../components/AcidsBases/guide';
 import { ReactionEquation, PHMeter, SubstanceSelector, ReagentBottle } from '../../../components/AcidsBases/interactive';
 import AcidsBasesNav from '../../../layout/AcidsBasesNav';
@@ -498,7 +498,8 @@ export function TitrationScreen() {
       symbol: model.titrantLabel,
       color: model.isAcid ? ACIDS_BASES_COLORS.substances.titrant.acid : ACIDS_BASES_COLORS.substances.titrant.base,
       primaryColor: model.substance.primaryColor,
-      secondaryColor: model.substance.primaryColor
+      secondaryColor: model.substance.primaryColor,
+      secondaryIon: model.isAcid ? potassiumHydroxide.secondaryIon : hydrogenChloride.secondaryIon
    };
 
    const dismissHighlightOnClick = guide.currentStep.id === 'titr-07';
@@ -622,9 +623,9 @@ export function TitrationScreen() {
                                        <button
                                           id="guide-element-indicator"
                                           className="flex flex-col items-center gap-2 bg-transparent border-0 p-0"
-                                          onPointerDown={(e) => {
+                                          style={{ touchAction: 'manipulation' }}
+                                          onClick={() => {
                                              if (!canAddIndicator) return;
-                                             e.currentTarget.releasePointerCapture(e.pointerId);
                                              createPour(indicatorSubstance, 1, { speedMultiplier: isMobile ? 0.5 : 1, particleCount: 5 });
                                              model.incrementIndicator(5);
                                           }}
@@ -649,9 +650,9 @@ export function TitrationScreen() {
                                     >
                                        <button
                                           className="rounded-md flex justify-center bg-transparent border-0 p-0 relative"
-                                          onPointerDown={(e) => {
+                                          style={{ touchAction: 'manipulation' }}
+                                          onClick={() => {
                                              if (!canAddTitrant) return;
-                                             e.currentTarget.releasePointerCapture(e.pointerId);
                                              const now = Date.now();
                                              const delta = now - lastBuretteClickRef.current;
                                              lastBuretteClickRef.current = now;
@@ -871,15 +872,15 @@ export function TitrationScreen() {
                                  <>
                                     <button
                                        onClick={() => model.setBeakerState('microscopic')}
-                                       className={`bg-transparent border-0 p-0 text-xs font-semibold transition-colors ${model.beakerState !== 'microscopic' ? 'text-slate-400 hover:text-slate-600' : ''}`}
-                                       style={{ color: model.beakerState === 'microscopic' ? ACIDS_BASES_COLORS.ui.primary : undefined }}
+                                       className={`bg-transparent border-0 px-2 py-1 text-xs font-semibold transition-colors ${model.beakerState !== 'microscopic' ? 'text-slate-400 hover:text-slate-600' : ''}`}
+                                       style={{ color: model.beakerState === 'microscopic' ? ACIDS_BASES_COLORS.ui.primary : undefined, touchAction: 'manipulation' }}
                                     >
                                        Microscopic
                                     </button>
                                     <button
                                        onClick={() => model.setBeakerState('macroscopic')}
-                                       className={`bg-transparent border-0 p-0 text-xs font-semibold transition-colors ${model.beakerState !== 'macroscopic' ? 'text-slate-400 hover:text-slate-600' : ''}`}
-                                       style={{ color: model.beakerState === 'macroscopic' ? ACIDS_BASES_COLORS.ui.primary : undefined }}
+                                       className={`bg-transparent border-0 px-2 py-1 text-xs font-semibold transition-colors ${model.beakerState !== 'macroscopic' ? 'text-slate-400 hover:text-slate-600' : ''}`}
+                                       style={{ color: model.beakerState === 'macroscopic' ? ACIDS_BASES_COLORS.ui.primary : undefined, touchAction: 'manipulation' }}
                                     >
                                        Macroscopic
                                     </button>

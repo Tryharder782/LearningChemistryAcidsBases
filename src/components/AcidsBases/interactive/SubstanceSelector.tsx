@@ -55,13 +55,17 @@ export function SubstanceSelector({
 
    // Close dropdown when clicking outside
    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
+      const handleClickOutside = (event: Event) => {
          if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
             handleOpenChange(false);
          }
       };
       document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      document.addEventListener('touchstart', handleClickOutside);
+      return () => {
+         document.removeEventListener('mousedown', handleClickOutside);
+         document.removeEventListener('touchstart', handleClickOutside);
+      };
    }, [isControlled, onOpenChange]); // Add dependencies as these might change
 
    useEffect(() => {
