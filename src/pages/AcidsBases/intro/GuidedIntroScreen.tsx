@@ -390,33 +390,6 @@ export function GuidedIntroScreen() {
    return (
       <AcidsBasesLayout>
          <HighlightOverlay elementIds={elementIds}>
-            <div className="absolute top-4 right-4 flex items-center gap-4 z-[100]">
-               <Blockable element="reactionSelection" overrides={{ highlights: currentStepData?.highlights }} className="relative z-50">
-                  <div
-                     id="guide-element-reactionSelection"
-                     className={currentStepData?.highlights.includes('reactionSelection') ? 'w-full max-w-xs' : 'w-fit'}
-                  >
-                     <SubstanceSelector
-                        substances={availableSubstances}
-                        selected={selectedSubstance}
-                        onSelect={(s) => {
-                           selectSubstance(('substanceType' in inputState && inputState.substanceType) ? inputState.substanceType : 'strongAcid', s);
-                           setSubstanceSelectorOpen(false);
-                        }}
-                        placeholder="Choose a substance"
-                        enabled={inputState.type === 'chooseSubstance'}
-                        isOpen={substanceSelectorOpen}
-                        onOpenChange={setSubstanceSelectorOpen}
-                        staticMenu={false}
-                        compact={true}
-                        align="right"
-                     />
-                  </div>
-               </Blockable>
-               {showChapterTabs && <AcidsBasesNav />}
-               <AcidsHomeButton />
-               <NavMenu />
-            </div>
             <div className="h-full bg-white flex flex-col items-center" style={{ overflowY: 'hidden', overflowX: 'hidden' }}>
                {/* Main Content Wrapper - Centered with max-width */}
                <div
@@ -549,20 +522,44 @@ export function GuidedIntroScreen() {
                      </div>
 
                      {/* RIGHT COLUMN: Equations, Scale, Graph, Guide */}
-                     <div className="flex flex-col gap-6 pt-0" style={{ overflowX: 'hidden' }}>
-                        {/* Row 1: Equations & Controls Combined */}
-                        <div className="flex flex-row gap-2 relative">
-                           {/* Controls (Relative Flow) */}
-
-                           {/* Equation Display */}
-                           <div className="pt-2 pb-4">
+                     <div className="flex flex-col gap-4 pt-0" style={{ overflowX: 'hidden' }}>
+                        {/* Row 0: Controls + Equations */}
+                        <div className="flex items-start gap-4">
+                           {/* Equation Display - takes available space */}
+                           <div className="flex-1 min-w-0 pt-2 pb-2">
                               <EquationDisplay
                                  equations={createDynamicEquations(pH)}
                                  highlightedIndex={inputState.type === 'none' ? undefined : 0}
                               />
                            </div>
-                           {/* Old selector location removed */}
-
+                           {/* Controls - fixed to the right */}
+                           <div className="flex items-center gap-4 flex-shrink-0 pt-1 z-[100]">
+                              <Blockable element="reactionSelection" overrides={{ highlights: currentStepData?.highlights }} className="relative z-50">
+                                 <div
+                                    id="guide-element-reactionSelection"
+                                    className={currentStepData?.highlights.includes('reactionSelection') ? 'w-full max-w-xs' : 'w-fit'}
+                                 >
+                                    <SubstanceSelector
+                                       substances={availableSubstances}
+                                       selected={selectedSubstance}
+                                       onSelect={(s) => {
+                                          selectSubstance(('substanceType' in inputState && inputState.substanceType) ? inputState.substanceType : 'strongAcid', s);
+                                          setSubstanceSelectorOpen(false);
+                                       }}
+                                       placeholder="Choose a substance"
+                                       enabled={inputState.type === 'chooseSubstance'}
+                                       isOpen={substanceSelectorOpen}
+                                       onOpenChange={setSubstanceSelectorOpen}
+                                       staticMenu={false}
+                                       compact={true}
+                                       align="right"
+                                    />
+                                 </div>
+                              </Blockable>
+                              {showChapterTabs && <AcidsBasesNav />}
+                              <AcidsHomeButton />
+                              <NavMenu />
+                           </div>
                         </div>
 
 

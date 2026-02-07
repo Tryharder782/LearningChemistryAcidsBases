@@ -35,18 +35,18 @@ export function EquationDisplay({
    const ids = ['guide-element-pHFormula', 'guide-element-pOHFormula', 'guide-element-pHSumEquation'];
 
    return (
-      <div className={`grid grid-cols-3 gap-4 w-full font-mono ${className}`}>
+      <div className={`grid grid-cols-3 gap-2 w-full font-mono ${className}`}>
          {equations.map((eq, index) => (
             <div
                key={index}
                id={ids[index]} // Assign predictable IDs for highlighting
                className={`
-                  flex flex-col items-start justify-center gap-2 px-3 py-4 rounded-xl transition-all
+                  flex flex-col items-start justify-center gap-2 px-2 py-3 rounded-xl transition-all min-w-0 overflow-hidden
                   ${highlightedIndex === index ? '' : 'bg-transparent'}
                `}
             >
                {/* Top: Abstract Formula */}
-               <div className="text-gray-700 text-base lg:text-lg whitespace-nowrap">
+               <div className="text-gray-700 text-sm lg:text-base whitespace-nowrap">
                   {parseFormulaText(eq.formula)}
                   {eq.operator && <span className="mx-1 text-gray-500">{eq.operator}</span>}
                </div>
@@ -54,7 +54,7 @@ export function EquationDisplay({
                {/* Bottom: Substituted Values */}
                {(eq.valueParts || eq.value) && (
                   <div
-                     className="text-sm lg:text-base whitespace-nowrap"
+                     className="text-xs lg:text-sm whitespace-nowrap"
                   >
                      {eq.valueParts ? (
                         <span>
