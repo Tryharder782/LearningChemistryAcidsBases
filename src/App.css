@@ -44,6 +44,17 @@
   }
 }
 
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
   html {
     overflow: hidden;

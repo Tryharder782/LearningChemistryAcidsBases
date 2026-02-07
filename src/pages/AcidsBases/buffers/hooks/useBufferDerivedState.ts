@@ -55,11 +55,14 @@ export const useBufferDerivedState = ({
    waterLevelMin,
    waterLevelMax
 }: UseBufferDerivedStateParams): UseBufferDerivedStateResult => {
+   const currentRows = useMemo(
+      () => getGridRowsForWaterLevel(waterLevel, waterLevelMin, waterLevelMax),
+      [waterLevel, waterLevelMin, waterLevelMax]
+   );
+
    const modelLevel = getModelLevelForWaterLevel(waterLevel, waterLevelMin, waterLevelMax);
    const rowsVisible = GRID_ROWS_MIN + (GRID_ROWS_MAX - GRID_ROWS_MIN) * modelLevel;
-   const currentRows = Math.ceil(rowsVisible);
-
-   const totalSlots = GRID_COLS * rowsVisible;
+   const totalSlots = GRID_COLS * currentRows;
    const currentMolarity = Math.max(1e-10, particleCount / totalSlots);
 
    const isStrongPhaseStep =
@@ -84,7 +87,9 @@ export const useBufferDerivedState = ({
       const finalIonCoordCount = Math.floor(INITIAL_ION_FRACTION * particleCount);
 
       const equilibriumCounts = {
-         substance: Math.max(0, particleCount - finalIonCoordCount * 2),
+         // iOS BufferSaltComponents uses the full weak-substance count here.
+         // Visible beaker coordinates are filtered later when entering salt phase.
+         substance: particleCount,
          primary: finalIonCoordCount,
          secondary: finalIonCoordCount
       };

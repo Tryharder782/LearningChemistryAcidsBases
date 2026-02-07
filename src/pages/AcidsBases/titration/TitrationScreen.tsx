@@ -9,6 +9,7 @@ import { ReactionEquation, PHMeter, SubstanceSelector, ReagentBottle } from '../
 import AcidsBasesNav from '../../../layout/AcidsBasesNav';
 import AcidsBasesLayout from '../../../layout/AcidsBasesLayout';
 import NavMenu from '../../../components/AcidsBases/navigation/NavMenu';
+import AcidsHomeButton from '../../../components/AcidsBases/navigation/AcidsHomeButton';
 import { TitrationGraph } from './components/TitrationGraph';
 import { TitrationMathPanel } from './components/TitrationMathPanel';
 import { useTitrationModel } from './hooks/useTitrationModel';
@@ -25,12 +26,17 @@ import titrationGuideJson from '../../../data/acidsBases/guide/titration.json';
 import { BufferDevOverlay } from '../buffers/components/BufferDevOverlay';
 import { ACIDS_BASES_COLORS } from '../../../theme/acidsBasesColors';
 import { getGridRowsForWaterLevel } from '../../../helper/acidsBases/beakerMath';
+import { shouldShowAcidsChapterTabs } from '../shared/debugUi';
+import { ACIDS_BASES_GRAPH_ANCHOR, ACIDS_BASES_INNER_GRID, ACIDS_BASES_LAYOUT_PADDING_PX, ACIDS_BASES_MAIN_GRID, ACIDS_BASES_RIGHT_PANEL_SLOTS, ACIDS_BASES_STABLE_ROW_SLOTS } from '../shared/layoutPresets';
+import { AnchoredBeakerBlock } from '../shared/AnchoredBeakerBlock';
+import { AnchoredBottomGraphSlot } from '../shared/AnchoredBottomGraphSlot';
 
 const WATER_LEVEL_MIN = 0.31818;
 const WATER_LEVEL_MAX = 0.681818;
 
 export function TitrationScreen() {
    const toolScale = 1;
+   const showChapterTabs = useMemo(() => shouldShowAcidsChapterTabs(), []);
    const model = useTitrationModel();
    const guide = useTitrationGuideState(model);
    const [activeBottleIndex, setActiveBottleIndex] = useState<number | null>(null);
@@ -558,7 +564,8 @@ export function TitrationScreen() {
                      />
                   </div>
                </Blockable>
-               <AcidsBasesNav />
+               {showChapterTabs && <AcidsBasesNav />}
+               <AcidsHomeButton />
                <NavMenu />
             </div>
             <div
@@ -570,17 +577,27 @@ export function TitrationScreen() {
                   }
                }}
             >
-               <div className="w-full relative px-8 py-4 h-full flex-1 flex flex-col" style={{ overflowX: 'hidden' }}>
-                  <main className="flex-1 w-full grid gap-8" style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}>
+               <div
+                  className="w-full relative h-full flex-1 flex flex-col"
+                  style={{ overflowX: 'hidden', padding: `${ACIDS_BASES_LAYOUT_PADDING_PX}px` }}
+               >
+                  <main className="flex-1 w-full grid gap-8" style={{ gridTemplateColumns: ACIDS_BASES_MAIN_GRID.titration, overflowX: 'hidden' }}>
                      {/* LEFT COLUMN */}
-                     <div className="flex flex-col gap-8">
-                        {/* Top Row: Menu + Tools + pH Curve */}
-                        <div className="grid " style={{ gridTemplateColumns: '55% 45%' }}>
+                     <div
+                        className="grid h-full"
+                        style={{
+                           gridTemplateColumns: ACIDS_BASES_INNER_GRID.titration.columns,
+                           gridTemplateRows: `${ACIDS_BASES_STABLE_ROW_SLOTS.titration.topRowHeightPx}px ${ACIDS_BASES_STABLE_ROW_SLOTS.titration.bottomRowHeightPx}px`,
+                           columnGap: `${ACIDS_BASES_INNER_GRID.titration.gapPx}px`,
+                           rowGap: `${ACIDS_BASES_STABLE_ROW_SLOTS.titration.rowGapPx}px`
+                        }}
+                     >
+                        {/* Top-left: tools */}
                            <div className="flex flex-col items-start justify-end gap-4">
                               {/* Tools in same container as menu */}
                               <div
                                  ref={bottlesContainerRef}
-                                 className="relative flex items-end justify-end w-full gap-2"
+                                 className="relative flex items-end justify-end w-full mb-8 gap-2"
                                  style={{ minHeight: toolSizes.toolsMinHeight }}
                               >
                                  {/* pH Meter Start Position */}
@@ -789,8 +806,16 @@ export function TitrationScreen() {
                               </div>
                            </div>
 
-                           <Blockable element="phChart" overrides={guide.guideOverrides} className="flex flex-col justify-center items-center">
-                              <div id="guide-element-phChart" className="ml-10 w-[200px] h-[200px]" style={{ border: '1px solid black' }}>
+                           <Blockable element="phChart" overrides={guide.guideOverrides} className="flex flex-col justify-center items-start">
+                              <div
+                                 id="guide-element-phChart"
+                                 style={{
+                                    border: '1px solid black',
+                                    width: `${ACIDS_BASES_GRAPH_ANCHOR.squareSizePx}px`,
+                                    height: `${ACIDS_BASES_GRAPH_ANCHOR.squareSizePx}px`,
+                                    marginLeft: `${ACIDS_BASES_GRAPH_ANCHOR.leftOffsetPx}px`
+                                 }}
+                              >
                                  <TitrationGraph
                                     data={graphData}
                                     currentVolume={model.titrantVolume}
@@ -800,12 +825,9 @@ export function TitrationScreen() {
                                  />
                               </div>
                            </Blockable>
-                        </div>
-
-                        {/* Bottom Row: Tools + Beaker + Bars */}
-                        <div className="grid gap-2" style={{ gridTemplateColumns: '55% 45%' }}>
-                           <div className="flex flex-col items-center gap-4">
-                              <div className="flex items-end">
+                        {/* Bottom-left: beaker */}
+                           <AnchoredBeakerBlock
+                              slider={(
                                  <Blockable element="waterSlider" overrides={guide.guideOverrides}>
                                     <div id="guide-element-waterSlider" style={{ height: toolSizes.sliderHeight }}>
                                        <VerticalSlider
@@ -825,7 +847,8 @@ export function TitrationScreen() {
                                        />
                                     </div>
                                  </Blockable>
-
+                              )}
+                              beaker={(
                                  <div
                                     ref={beakerContainerRef}
                                     className="relative"
@@ -843,29 +866,29 @@ export function TitrationScreen() {
                                        particles={model.beakerState === 'microscopic' ? displayParticles : []}
                                     />
                                  </div>
-                              </div>
+                              )}
+                              footer={(
+                                 <>
+                                    <button
+                                       onClick={() => model.setBeakerState('microscopic')}
+                                       className={`bg-transparent border-0 p-0 text-xs font-semibold transition-colors ${model.beakerState !== 'microscopic' ? 'text-slate-400 hover:text-slate-600' : ''}`}
+                                       style={{ color: model.beakerState === 'microscopic' ? ACIDS_BASES_COLORS.ui.primary : undefined }}
+                                    >
+                                       Microscopic
+                                    </button>
+                                    <button
+                                       onClick={() => model.setBeakerState('macroscopic')}
+                                       className={`bg-transparent border-0 p-0 text-xs font-semibold transition-colors ${model.beakerState !== 'macroscopic' ? 'text-slate-400 hover:text-slate-600' : ''}`}
+                                       style={{ color: model.beakerState === 'macroscopic' ? ACIDS_BASES_COLORS.ui.primary : undefined }}
+                                    >
+                                       Macroscopic
+                                    </button>
+                                 </>
+                              )}
+                           />
 
-                              <div className="flex justify-center gap-6">
-                                 <button
-                                    onClick={() => model.setBeakerState('microscopic')}
-                                    className={`bg-transparent border-0 p-0 text-xs font-semibold transition-colors ${model.beakerState !== 'microscopic' ? 'text-slate-400 hover:text-slate-600' : ''}`}
-                                    style={{ color: model.beakerState === 'microscopic' ? ACIDS_BASES_COLORS.ui.primary : undefined }}
-                                 >
-                                    Microscopic
-                                 </button>
-                                 <button
-                                    onClick={() => model.setBeakerState('macroscopic')}
-                                    className={`bg-transparent border-0 p-0 text-xs font-semibold transition-colors ${model.beakerState !== 'macroscopic' ? 'text-slate-400 hover:text-slate-600' : ''}`}
-                                    style={{ color: model.beakerState === 'macroscopic' ? ACIDS_BASES_COLORS.ui.primary : undefined }}
-                                 >
-                                    Macroscopic
-                                 </button>
-                              </div>
-                           </div>
-
-                           <div className="flex flex-col gap-2 justify-center ">
-                              <div className="w-full px-2 flex justify-center">
-                                 <div className=" w-[200px] h-[280px]">
+                           <div className="w-full h-full">
+                              <AnchoredBottomGraphSlot>
                                     <BufferCharts
                                        substance={model.substance}
                                        pH={model.currentPH}
@@ -874,27 +897,33 @@ export function TitrationScreen() {
                                        showCurveToggle={false}
                                        barsConfig={barsConfig}
                                        variant="titration"
+                                       graphSizePx={ACIDS_BASES_GRAPH_ANCHOR.squareSizePx}
+                                       graphAnchorLeftPx={ACIDS_BASES_GRAPH_ANCHOR.leftOffsetPx}
+                                       controlsPosition="bottom"
                                        className="h-full"
                                     />
-                                 </div>
-                              </div>
+                              </AnchoredBottomGraphSlot>
                            </div>
-                        </div>
                      </div>
 
                      {/* RIGHT COLUMN */}
-                     <div className="flex flex-col gap-6 relative" >
+                     <div
+                        className="grid relative min-h-0"
+                        style={{
+                           gridTemplateRows: `${ACIDS_BASES_RIGHT_PANEL_SLOTS.titration.reactionHeightPx}px ${ACIDS_BASES_RIGHT_PANEL_SLOTS.titration.mathHeightPx}px minmax(0, 1fr)`,
+                           rowGap: `${ACIDS_BASES_RIGHT_PANEL_SLOTS.titration.panelGapPx}px`
+                        }}
+                     >
                         {/* Reaction Equation */}
-                        <div className="flex items-center justify-start ml-10 w-full min-h-[40px]">
+                        <div className="flex items-center justify-start ml-10 w-full min-h-0">
                            <ReactionEquation substance={model.substance} titrant={titrantSubstance} />
                         </div>
-                        {/* Premature closing div removed here */}
 
-                        <div className="px-2">
+                        <div className="px-2 min-h-0 overflow-hidden">
                            <TitrationMathPanel {...mathValues} />
                         </div>
 
-                        <div className="pl-4 mt-4 overflow-hidden pr-8">
+                        <div className="pl-4 overflow-y-auto overflow-x-hidden pr-8 min-h-0">
                            <GuideBubble
                               position="relative"
                               statement={guide.statement}

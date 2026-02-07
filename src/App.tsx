@@ -26,6 +26,7 @@ import { TitrationScreen as AcidsTitration } from './pages/AcidsBases/titration/
 import AcidsIntroQuiz from './pages/AcidsBases/introQuiz';
 import AcidsBuffersQuiz from './pages/AcidsBases/buffersQuiz';
 import AcidsTitrationQuiz from './pages/AcidsBases/titrationQuiz';
+import AcidsChaptersScreen from './pages/AcidsBases/chapters/AcidsChaptersScreen';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
       <Route path={routes.introduction.path} element={<AcidsIntroduction />} />
       <Route path={routes.buffers.path} element={<AcidsBuffers />} />
       <Route path={routes.titration.path} element={<AcidsTitration />} />
+      <Route path="/acids/chapters" element={<AcidsChaptersScreen />} />
       <Route path="/acids/introduction/quiz" element={<AcidsIntroQuiz />} />
       <Route path="/acids/buffers/quiz" element={<AcidsBuffersQuiz />} />
       <Route path="/acids/titration/quiz" element={<AcidsTitrationQuiz />} />

@@ -1,5 +1,5 @@
 import type { Particle, MoleculeType, GridPosition, ReactionRule } from './types';
-import { GRID_ROWS_MIN, GRID_ROWS_MAX } from './types';
+import { GRID_ROWS_MAX } from './types';
 import { ParticleGrid } from './ParticleGrid';
 
 export class ReactingBeakerModel {
@@ -17,7 +17,14 @@ export class ReactingBeakerModel {
     * @param rows The floating-point number of rows currently visible on screen
     */
    setWaterLevel(rows: number) {
-      this.effectiveRows = Math.floor(rows);
+      const baseRows = Math.floor(rows);
+      const fractionalPart = rows - baseRows;
+      const nextRows = fractionalPart > 0.4 ? Math.ceil(rows) : baseRows;
+      const clampedRows = Math.max(1, Math.min(GRID_ROWS_MAX, nextRows));
+      if (clampedRows === this.effectiveRows) {
+         return;
+      }
+      this.effectiveRows = clampedRows;
 
       // Remove particles that are now "above" the water line (out of new floor bounds)
       const keptParticles: Particle[] = [];
@@ -35,9 +42,6 @@ export class ReactingBeakerModel {
          this.particles = keptParticles;
          // Ensure grid is synced (release occupied slots)
          removedParticles.forEach(p => this.grid.release(p.position));
-         this.notify();
-      } else {
-         // Even if no particles were removed, we might need to notify of row changes
          this.notify();
       }
    }

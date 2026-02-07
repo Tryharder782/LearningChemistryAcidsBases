@@ -68,6 +68,9 @@ interface BufferChartsProps {
    };
    variant?: 'default' | 'titration';
    barsStyle?: 'default' | 'titration';
+   graphSizePx?: number;
+   graphAnchorLeftPx?: number;
+   controlsPosition?: 'top' | 'bottom';
    className?: string;
 }
 
@@ -83,10 +86,14 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
    barsConfig,
    variant = 'default',
    barsStyle,
+   graphSizePx = 200,
+   graphAnchorLeftPx = 0,
+   controlsPosition,
    className = ''
 }) => {
    const [internalMode, setInternalMode] = useState<ChartMode>('bars');
    const isTitration = variant === 'titration';
+   const resolvedControlsPosition = controlsPosition ?? (isTitration ? 'bottom' : 'top');
 
    // Use controlled mode if provided, otherwise use internal state
    const activeMode = mode ?? internalMode;
@@ -106,41 +113,58 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
       }
    }, [activeMode, showCurveToggle, setActiveMode]);
 
+   const renderModeControls = (position: 'top' | 'bottom') => {
+      const isTop = position === 'top';
+      return (
+         <div className={`flex gap-6 ${isTop ? 'text-lg font-medium' : 'font-semibold justify-center'}`}>
+            <button
+               onClick={() => setActiveMode('bars')}
+               className={`${activeMode === 'bars' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
+               style={{ background: 'none', border: 'none', padding: 0 }}
+            >
+               Bars
+            </button>
+            {showCurveToggle && (
+               <button
+                  onClick={() => setActiveMode('curve')}
+                  className={`${activeMode === 'curve' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
+                  style={{ background: 'none', border: 'none', padding: 0 }}
+               >
+                  Curve
+               </button>
+            )}
+            <button
+               onClick={() => setActiveMode('neutralization')}
+               className={`${activeMode === 'neutralization' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
+               style={{ background: 'none', border: 'none', padding: 0 }}
+            >
+               Neutralization
+            </button>
+         </div>
+      );
+   };
+
    return (
       <div
-         className={`flex flex-col h-full ${isTitration ? 'bg-transparent shadow-none p-0' : 'bg-white rounded-lg shadow-sm p-2'} ${className}`}
+         className={`relative flex flex-col h-full ${isTitration ? 'bg-transparent shadow-none p-0' : 'bg-white rounded-lg shadow-sm'} ${className}`}
       >
-         {/* Toggle Headers - Top for non-titration */}
-         {!isTitration && (
-            <div className={`flex gap-6 mb-2 text-lg font-medium`}>
-               <button
-                  onClick={() => setActiveMode('bars')}
-                  className={`${activeMode === 'bars' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
-                  style={{ background: 'none', border: 'none', padding: 0 }}
-               >
-                  Bars
-               </button>
-               {showCurveToggle && (
-                  <button
-                     onClick={() => setActiveMode('curve')}
-                     className={`${activeMode === 'curve' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
-                     style={{ background: 'none', border: 'none', padding: 0 }}
-                  >
-                     Curve
-                  </button>
-               )}
-               <button
-                  onClick={() => setActiveMode('neutralization')}
-                  className={`${activeMode === 'neutralization' ? 'text-orange-500 text-[16px]' : 'text-gray-400 text-[16px]'}`}
-                  style={{ background: 'none', border: 'none', padding: 0 }}
-               >
-                  Neutralization
-               </button>
+         {/* Top controls */}
+         {!isTitration && resolvedControlsPosition === 'top' && (
+            <div className="mb-2">
+               {renderModeControls('top')}
+            </div>
+         )}
+         {isTitration && resolvedControlsPosition === 'top' && (
+            <div className="absolute top-0 left-0 right-0 z-10">
+               {renderModeControls('top')}
             </div>
          )}
 
          {/* Chart Content */}
-         <div className="flex-1 w-full min-h-0 relative">
+         <div
+            className="flex-1 w-full min-h-0 relative"
+            style={isTitration ? { paddingTop: 28, paddingBottom: 28 } : undefined}
+         >
             {activeMode === 'bars' && (
                <BarsView
                   substance={substance}
@@ -149,12 +173,16 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
                   barsConfig={barsConfig}
                   variant={variant}
                   barsStyle={barsStyle}
+                  graphSizePx={graphSizePx}
+                  graphAnchorLeftPx={graphAnchorLeftPx}
                />
             )}
             {activeMode === 'curve' && (
                <CurveView
                   substance={substance}
                   curveMeta={curveMeta}
+                  graphSizePx={graphSizePx}
+                  graphAnchorLeftPx={graphAnchorLeftPx}
                />
             )}
             {activeMode === 'neutralization' && (
@@ -162,36 +190,21 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
                   substance={substance}
                   counts={animatedCounts}
                   barsConfig={barsConfig}
+                  graphSizePx={graphSizePx}
+                  graphAnchorLeftPx={graphAnchorLeftPx}
                />
             )}
          </div>
 
-         {/* Toggle Headers - Bottom for titration */}
-         {isTitration && (
-            <div className={`flex gap-6 mt-4  font-semibold justify-center`}>
-               <button
-                  onClick={() => setActiveMode('bars')}
-                  className={`${activeMode === 'bars' ? 'text-orange-500' : 'text-gray-400'}`}
-                  style={{ background: 'none', border: 'none', padding: 0 }}
-               >
-                  Bars
-               </button>
-               {showCurveToggle && (
-                  <button
-                     onClick={() => setActiveMode('curve')}
-                     className={`text-[16px] ${activeMode === 'curve' ? 'text-orange-500 text-[16px]' : 'text-gray-400'}`}
-                     style={{ background: 'none', border: 'none', padding: 0 }}
-                  >
-                     Curve
-                  </button>
-               )}
-               <button
-                  onClick={() => setActiveMode('neutralization')}
-                  className={`${activeMode === 'neutralization' ? 'text-orange-500' : 'text-gray-400'}`}
-                  style={{ background: 'none', border: 'none', padding: 0 }}
-               >
-                  Neutralization
-               </button>
+         {/* Bottom controls */}
+         {!isTitration && resolvedControlsPosition === 'bottom' && (
+            <div className="mt-4">
+               {renderModeControls('bottom')}
+            </div>
+         )}
+         {isTitration && resolvedControlsPosition === 'bottom' && (
+            <div className="absolute bottom-0 left-0 right-0 z-10">
+               {renderModeControls('bottom')}
             </div>
          )}
       </div>
@@ -201,13 +214,15 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
 // ----------------------------------------------------------------------------
 // BARS VIEW (Particles Ratio Logic)
 // ----------------------------------------------------------------------------
-const BarsView = ({ substance, counts, max, barsConfig, variant, barsStyle }: {
+const BarsView = ({ substance, counts, max, barsConfig, variant, barsStyle, graphSizePx, graphAnchorLeftPx }: {
    substance: AcidOrBase | null,
    counts?: { substance: number, primary: number, secondary: number },
    max: number,
    barsConfig?: BufferChartsProps['barsConfig'],
    variant?: BufferChartsProps['variant'],
-   barsStyle?: BufferChartsProps['barsStyle']
+   barsStyle?: BufferChartsProps['barsStyle'],
+   graphSizePx: number,
+   graphAnchorLeftPx: number
 }) => {
    const isTitration = (barsStyle ?? (variant === 'titration' ? 'titration' : 'default')) === 'titration';
    const data = useMemo(() => {
@@ -274,16 +289,14 @@ const BarsView = ({ substance, counts, max, barsConfig, variant, barsStyle }: {
       <div className="w-full h-full flex flex-col">
          {/* Main content: Y-label spacer + Chart */}
          <div className="flex flex-1 min-h-0">
-            {/* Left spacer to match "Fraction of species" width */}
-            <div className={`flex items-center justify-center flex-shrink-0 ${isTitration ? 'w-2' : 'w-5'}`}>
-               {/* Empty spacer - matches CurveView Y-label width */}
-            </div>
-
             {/* Chart Area */}
             <div
-               className={isTitration ? 'w-full max-w-[280px] aspect-square' : 'flex-1'}
+               className="relative flex-shrink-0"
                style={isTitration
                   ? {
+                     width: `${graphSizePx}px`,
+                     height: `${graphSizePx}px`,
+                     marginLeft: `${graphAnchorLeftPx}px`,
                      border: '3px solid #000',
                      borderTop: '0',
                      borderRadius: 2,
@@ -291,6 +304,9 @@ const BarsView = ({ substance, counts, max, barsConfig, variant, barsStyle }: {
                      overflow: 'hidden'
                   }
                   : {
+                     width: `${graphSizePx}px`,
+                     height: `${graphSizePx}px`,
+                     marginLeft: `${graphAnchorLeftPx}px`,
                      border: '2px solid #000',
                      borderRadius: 2,
                      background: '#fff',
@@ -371,7 +387,10 @@ const BarsView = ({ substance, counts, max, barsConfig, variant, barsStyle }: {
          </div>
 
          {/* Bottom legend - matches "pH" label position in CurveView */}
-         <div className={`flex justify-around items-center py-1 ${isTitration ? 'w-full max-w-[280px] mx-auto px-6 justify-between' : ''}`}>
+         <div
+            className={`flex justify-around items-center py-1 ${isTitration ? 'mx-auto px-6 justify-between' : ''}`}
+            style={isTitration ? { width: `${graphSizePx}px`, marginLeft: `${graphAnchorLeftPx}px` } : undefined}
+         >
             {(barsConfig?.showSubstance ?? true) && (
                <div className={`flex ${isTitration ? 'flex-col items-center gap-1' : 'items-center gap-1'}`}>
                   <div className="w-4 h-4 rounded-full" style={{ backgroundColor: barsConfig?.substanceColor ?? substance?.color ?? ACIDS_BASES_COLORS.substances.weakAcidHA }}></div>
@@ -402,10 +421,14 @@ const BarsView = ({ substance, counts, max, barsConfig, variant, barsStyle }: {
 // ----------------------------------------------------------------------------
 const CurveView = ({
    substance,
-   curveMeta
+   curveMeta,
+   graphSizePx,
+   graphAnchorLeftPx
 }: {
    substance: AcidOrBase | null;
    curveMeta?: { currentPh: number; initialPh: number; finalPh: number };
+   graphSizePx: number;
+   graphAnchorLeftPx: number;
 }) => {
    const safeSubstance = substance ?? fallbackSubstance;
 
@@ -481,10 +504,10 @@ const CurveView = ({
          {/* Main content: Y-label + Chart */}
          <div className="flex flex-1 min-h-0">
             {/* Y-Axis Label - Rotated on the left */}
-            <div className="flex items-center justify-center w-5 flex-shrink-0">
+            <div className="flex items-center justify-center w-0 flex-shrink-0 overflow-visible">
                <span
                   className="text-[11px] text-gray-500 font-medium whitespace-nowrap"
-                  style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+                  style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg) translateX(14px)' }}
                >
                   Fraction of species
                </span>
@@ -492,8 +515,15 @@ const CurveView = ({
 
             {/* Chart Area */}
             <div
-               className="flex-1 relative"
-               style={{ borderRadius: 2, background: '#fff', overflow: 'hidden' }}
+               className="relative flex-shrink-0"
+               style={{
+                  width: `${graphSizePx}px`,
+                  height: `${graphSizePx}px`,
+                  marginLeft: `${graphAnchorLeftPx}px`,
+                  borderRadius: 2,
+                  background: '#fff',
+                  overflow: 'hidden'
+               }}
             >
                <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={data} margin={{ top: 10, right: 10, bottom: 5, left: 0 }}>
@@ -589,11 +619,15 @@ const CurveView = ({
 const NeutralizationView = ({
    substance,
    counts,
-   barsConfig
+   barsConfig,
+   graphSizePx,
+   graphAnchorLeftPx
 }: {
    substance: AcidOrBase | null;
    counts?: { substance: number, primary: number, secondary: number };
    barsConfig?: BufferChartsProps['barsConfig']
+   graphSizePx: number;
+   graphAnchorLeftPx: number;
 }) => {
 
    const MAX_DOTS = 10; // iOS: AcidAppSettings.maxReactionProgressMolecules = 10
@@ -625,13 +659,19 @@ const NeutralizationView = ({
       <div className="w-full h-full flex flex-col">
          {/* Main content: Y-label spacer + Chart area */}
          <div className="flex flex-1 min-h-0">
-            {/* Left spacer to match "Fraction of species" width */}
-            <div className="w-2 flex-shrink-0"></div>
-
             {/* Chart Area - matches Bars/Curve canvas */}
             <div
-               className="flex-1 relative"
-               style={{ border: '2px solid #000', borderTop: '0', borderRadius: 2, background: '#fff', overflow: 'hidden' }}
+               className="relative flex-shrink-0"
+               style={{
+                  width: `${graphSizePx}px`,
+                  height: `${graphSizePx}px`,
+                  marginLeft: `${graphAnchorLeftPx}px`,
+                  border: '2px solid #000',
+                  borderTop: '0',
+                  borderRadius: 2,
+                  background: '#fff',
+                  overflow: 'hidden'
+               }}
             >
                <div className="w-full h-full flex items-end justify-around px-4 pb-2 pt-2">
                   {cols.map((col, idx) => (

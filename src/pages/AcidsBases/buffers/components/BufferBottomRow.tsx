@@ -6,6 +6,9 @@ import { Beaker, VerticalSlider } from '../../../../components/AcidsBases/ui';
 import { Blockable } from '../../../../components/AcidsBases/guide';
 import { BufferCharts } from '../BufferCharts';
 import { ACIDS_BASES_COLORS } from '../../../../theme/acidsBasesColors';
+import { ACIDS_BASES_GRAPH_ANCHOR } from '../../shared/layoutPresets';
+import { AnchoredBeakerBlock } from '../../shared/AnchoredBeakerBlock';
+import { AnchoredBottomGraphSlot } from '../../shared/AnchoredBottomGraphSlot';
 
 type GuideOverrides = {
    highlights?: IntroScreenElement[];
@@ -74,55 +77,64 @@ export const BufferBottomRow = ({
    onChartModeChange
 }: BufferBottomRowProps) => {
    return (
-      <div className="grid gap-4 items-start" style={{ gridTemplateColumns: '58% 42%' }}>
+      <>
          {/* Beaker + Slider */}
-         <div className="flex items-end justify-center gap-4 relative">
-            {/* Vertical Slider */}
-            <Blockable element="waterSlider" overrides={guideOverrides}>
-               <VerticalSlider
-                  value={waterLevel}
-                  min={waterLevelMin}
-                  max={waterLevelMax}
-                  onChange={onWaterLevelChange}
-                  height={280}
-                  enabled={guideOverrides.highlights?.includes('waterSlider')}
-               />
-            </Blockable>
-
-            {/* Beaker Container */}
-            <div ref={beakerContainerRef} className="relative w-[280px] h-[350px]">
-               <Beaker
-                  liquidLevel={waterLevel}
-                  liquidColor={selectedSubstance?.color || ACIDS_BASES_COLORS.substances.beakerLiquid}
-                  pH={pH}
-                  width={280}
-                  height={350}
-                  gridRows={currentRows}
-                  visualizationMode="micro"
-                  particles={displayParticles}
-               />
-            </div>
+         <div className="flex items-start justify-start relative h-full">
+            <AnchoredBeakerBlock
+               slider={(
+                  <Blockable element="waterSlider" overrides={guideOverrides}>
+                     <VerticalSlider
+                        value={waterLevel}
+                        min={waterLevelMin}
+                        max={waterLevelMax}
+                        onChange={onWaterLevelChange}
+                        height={280}
+                        enabled={guideOverrides.highlights?.includes('waterSlider')}
+                     />
+                  </Blockable>
+               )}
+               beaker={(
+                  <div ref={beakerContainerRef} className="relative w-[280px] h-[350px]">
+                     <Beaker
+                        liquidLevel={waterLevel}
+                        liquidColor={selectedSubstance?.color || ACIDS_BASES_COLORS.substances.beakerLiquid}
+                        pH={pH}
+                        width={280}
+                        height={350}
+                        gridRows={currentRows}
+                        visualizationMode="micro"
+                        particles={displayParticles}
+                     />
+                  </div>
+               )}
+            />
          </div>
 
          {/* Bottom: Charts */}
          <div
             id="bottom-chart-container"
-            className="w-full"
-            style={{ height: 300 }}
+            className="w-full h-full"
          >
-            <BufferCharts
-               substance={selectedSubstance}
-               pH={pH}
-               concentrations={concentrations}
-               curveMeta={curveMeta}
-               animatedCounts={animatedCounts}
-               maxParticles={maxParticles}
-               forcedMode={forcedChartMode}
-               mode={chartMode}
-               onModeChange={onChartModeChange}
-               barsStyle="titration"
-            />
+            <AnchoredBottomGraphSlot>
+               <BufferCharts
+                  substance={selectedSubstance}
+                  pH={pH}
+                  concentrations={concentrations}
+                  curveMeta={curveMeta}
+                  animatedCounts={animatedCounts}
+                  maxParticles={maxParticles}
+                  forcedMode={forcedChartMode}
+                  mode={chartMode}
+                  onModeChange={onChartModeChange}
+                  variant="titration"
+                  graphSizePx={ACIDS_BASES_GRAPH_ANCHOR.squareSizePx}
+                  graphAnchorLeftPx={ACIDS_BASES_GRAPH_ANCHOR.leftOffsetPx}
+                  barsStyle="titration"
+                  controlsPosition="top"
+                  className="h-full"
+               />
+            </AnchoredBottomGraphSlot>
          </div>
-      </div>
+      </>
    );
 };

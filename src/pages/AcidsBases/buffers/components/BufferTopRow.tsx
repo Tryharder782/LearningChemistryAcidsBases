@@ -9,6 +9,7 @@ import { ReagentBottles, ReactionEquation } from '../../../../components/AcidsBa
 import { Blockable } from '../../../../components/AcidsBases/guide';
 import { BufferPhMolesChart } from './BufferPhMolesChart';
 import { ACIDS_BASES_COLORS } from '../../../../theme/acidsBasesColors';
+import { ACIDS_BASES_GRAPH_ANCHOR } from '../../shared/layoutPresets';
 
 type GuideOverrides = {
    highlights?: IntroScreenElement[];
@@ -122,8 +123,8 @@ export const BufferTopRow = ({
       ? `${displaySubstance.secondaryIon}⁺`
       : `${displaySubstance.secondaryIon}⁻`;
    return (
-      <div className="grid gap-4" style={{ gridTemplateColumns: '58% 42%' }}>
-         <div className="flex flex-col items-center gap-4">
+      <>
+         <div className="flex flex-col items-center gap-4 h-full">
             {/* Header: Menu Button + Reaction Equation */}
             <Blockable
                element="reactionEquation"
@@ -194,7 +195,7 @@ export const BufferTopRow = ({
          </div>
 
          {/* Top: Graph / Table */}
-         <Blockable element="phChart" overrides={guideOverrides} className="flex flex-col items-center">
+         <Blockable element="phChart" overrides={guideOverrides} className="flex flex-col items-start h-full">
             <div className="flex gap-4 mb-1 text-sm text-gray-400 font-medium">
                <button
                   type="button"
@@ -214,7 +215,14 @@ export const BufferTopRow = ({
                </button>
             </div>
             {topView === 'graph' ? (
-               <div id="ph-graph" className="w-[200px] aspect-square">
+               <div
+                  id="ph-graph"
+                  style={{
+                     width: `${ACIDS_BASES_GRAPH_ANCHOR.squareSizePx}px`,
+                     height: `${ACIDS_BASES_GRAPH_ANCHOR.squareSizePx}px`,
+                     marginLeft: `${ACIDS_BASES_GRAPH_ANCHOR.leftOffsetPx}px`
+                  }}
+               >
                   <BufferPhMolesChart
                      substance={selectedSubstance}
                      saltModel={saltModel}
@@ -259,6 +267,6 @@ export const BufferTopRow = ({
                </div>
             )}
          </Blockable>
-      </div>
+      </>
    );
 };

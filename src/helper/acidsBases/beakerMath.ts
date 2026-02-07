@@ -1,5 +1,11 @@
 import { GRID_ROWS_MIN, GRID_ROWS_MAX } from './particles/types';
 
+const getAvailableRows = (rowsFloat: number): number => {
+   const baseRows = Math.floor(rowsFloat);
+   const fractionalPart = rowsFloat - baseRows;
+   return fractionalPart > 0.4 ? Math.ceil(rowsFloat) : baseRows;
+};
+
 export const getGridRowsForWaterLevel = (
    waterLevel: number,
    waterLevelMin: number,
@@ -10,8 +16,8 @@ export const getGridRowsForWaterLevel = (
    const clamped = Math.max(waterLevelMin, Math.min(waterLevelMax, waterLevel));
    const normalized = (clamped - waterLevelMin) / (waterLevelMax - waterLevelMin);
    const rowsFloat = rowsMin + (rowsMax - rowsMin) * normalized;
-   // Use ceil to ensure partial bottom rows are counted as active
-   const availableRows = Math.ceil(rowsFloat);
+   // Matches iOS GridCoordinateList.availableRows(for:)
+   const availableRows = getAvailableRows(rowsFloat);
    return Math.max(rowsMin, Math.min(rowsMax, availableRows));
 };
 

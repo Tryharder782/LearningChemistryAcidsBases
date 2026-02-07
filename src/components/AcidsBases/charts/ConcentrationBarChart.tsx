@@ -13,6 +13,7 @@ interface ConcentrationBarChartProps {
    addedFraction: number;
    pH: number;
    height?: number;
+   graphSizePx?: number;
    className?: string;
    mode?: 'concentration' | 'ph';
    onModeChange?: (mode: 'concentration' | 'ph') => void;
@@ -25,6 +26,7 @@ export function ConcentrationBarChart({
    addedFraction,
    pH,
    height = 180,
+   graphSizePx = 200,
    className = '',
    mode,
    onModeChange,
@@ -158,9 +160,11 @@ export function ConcentrationBarChart({
 
          {currentMode === 'concentration' ? (
             <>
-               <div 
-                  className="flex-1 relative mx-auto w-full max-w-[210px] rounded-sm overflow-hidden"
-                  style={{ 
+               <div
+                  className="relative mx-auto rounded-sm overflow-hidden"
+                  style={{
+                     width: `${graphSizePx}px`,
+                     height: `${graphSizePx}px`,
                      border: '3px solid black',
                      borderTop: 'none'
                   }}
@@ -197,11 +201,11 @@ export function ConcentrationBarChart({
                </div>
             </>
          ) : (
-            <div className="flex-1 flex flex-col items-center mt-2 px-6">
-               <div 
-                  className="relative w-full aspect-square bg-white"
-                  style={{ border: '2px solid black' }}
-               >
+               <div className="flex-1 flex flex-col items-center mt-2 px-6">
+                  <div
+                     className="relative bg-white"
+                     style={{ border: '2px solid black', width: `${graphSizePx}px`, height: `${graphSizePx}px` }}
+                  >
                   <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
                      {/* Y-axis ticks */}
                      {[1, 2.3, 3.6, 4.9, 6.2, 7.5, 8.8, 10.1, 11.4, 12.7, 14].map((phTick) => (

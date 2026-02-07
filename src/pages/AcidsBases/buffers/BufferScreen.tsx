@@ -28,12 +28,15 @@ import { useBufferParticlesSync } from './hooks/useBufferParticlesSync';
 
 import { useBufferGuideState } from './hooks/useBufferGuideState';
 import NavMenu from '../../../components/AcidsBases/navigation/NavMenu';
+import AcidsHomeButton from '../../../components/AcidsBases/navigation/AcidsHomeButton';
 import AcidsBasesLayout from '../../../layout/AcidsBasesLayout';
-import ChapterMenu from '../../../layout/ChapterMenu';
 import { SubstanceSelector } from '../../../components/AcidsBases/interactive/SubstanceSelector';
 import { Blockable } from '../../../components/AcidsBases/guide';
+import { shouldShowAcidsChapterTabs } from '../shared/debugUi';
+import { ACIDS_BASES_INNER_GRID, ACIDS_BASES_LAYOUT_PADDING_PX, ACIDS_BASES_MAIN_GRID, ACIDS_BASES_STABLE_ROW_SLOTS } from '../shared/layoutPresets';
 
 export function BufferScreen() {
+   const showChapterTabs = useMemo(() => shouldShowAcidsChapterTabs(), []);
    // Local State
    const [waterLevel, setWaterLevel] = useState(0.5);
    const [particleCount, setParticleCount] = useState(0); // Exact particle count (5 per shake)
@@ -464,20 +467,32 @@ export function BufferScreen() {
                      />
                   </div>
                </Blockable>
-               <AcidsBasesNav />
+               {showChapterTabs && <AcidsBasesNav />}
+               <AcidsHomeButton />
                <NavMenu />
             </div>
             <div className="h-full bg-white flex flex-col items-center" style={{ overflowY: 'hidden', overflowX: 'hidden' }}>
                {/* Main Content Wrapper */}
-               <div className="w-full relative px-8 py-4 h-full flex-1 flex flex-col" style={{ overflowX: 'hidden' }}>
+               <div
+                  className="w-full relative h-full flex-1 flex flex-col"
+                  style={{ overflowX: 'hidden', padding: `${ACIDS_BASES_LAYOUT_PADDING_PX}px` }}
+               >
 
                   {/* Main Grid Content */}
                   <main className="flex-1 w-full grid gap-8"
-                     style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}
+                     style={{ gridTemplateColumns: ACIDS_BASES_MAIN_GRID.buffers, overflowX: 'hidden' }}
                   >
                      {/* LEFT COLUMN: Simulation Area */}
-                     <div className="flex flex-col gap-8 pt-0">
-                        {/* Top Row: Equation + Bottles (left) and pH chart (right) */}
+                     <div
+                        className="grid pt-0 h-full"
+                        style={{
+                           gridTemplateColumns: ACIDS_BASES_INNER_GRID.buffers.columns,
+                           gridTemplateRows: `${ACIDS_BASES_STABLE_ROW_SLOTS.buffers.topRowHeightPx}px ${ACIDS_BASES_STABLE_ROW_SLOTS.buffers.bottomRowHeightPx}px`,
+                           columnGap: `${ACIDS_BASES_INNER_GRID.buffers.gapPx}px`,
+                           rowGap: `${ACIDS_BASES_STABLE_ROW_SLOTS.buffers.rowGapPx}px`
+                        }}
+                     >
+                        {/* Top-left / Top-right */}
                         <BufferTopRow
                            guideOverrides={guideOverrides}
                            selectedSubstance={selectedSubstance}
@@ -491,7 +506,7 @@ export function BufferScreen() {
                            isStrongPhaseStep={isStrongPhaseStep}
                         />
 
-                        {/* Bottom Row: Beaker (left) and Curve/Bars/Neutralization (right) */}
+                        {/* Bottom-left / Bottom-right */}
                         <BufferBottomRow
                            guideOverrides={guideOverrides}
                            waterLevel={waterLevel}

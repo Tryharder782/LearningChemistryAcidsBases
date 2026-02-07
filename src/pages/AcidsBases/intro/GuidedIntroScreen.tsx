@@ -16,6 +16,7 @@ import { getSubstancesByType, hydrogenChloride } from '../../../helper/acidsBase
 import { calculatePH } from '../../../helper/acidsBases/simulationEngine';
 import type { SubstanceType } from '../../../helper/acidsBases/types';
 import NavMenu from '../../../components/AcidsBases/navigation/NavMenu';
+import AcidsHomeButton from '../../../components/AcidsBases/navigation/AcidsHomeButton';
 
 // Components
 import { Beaker, VerticalSlider, PHScaleDetailed, EquationDisplay, createDynamicEquations } from '../../../components/AcidsBases/ui';
@@ -28,12 +29,15 @@ import { useParticleAnimation } from '../../../hooks/useParticleAnimation';
 import type { Particle } from '../../../helper/acidsBases/particles/types';
 import { getGridRowsForWaterLevel } from '../../../helper/acidsBases/beakerMath';
 import { GRID_COLS, GRID_ROWS_MIN, GRID_ROWS_MAX, GRID_ROWS_TOTAL } from '../../../helper/acidsBases/particles/types';
+import { shouldShowAcidsChapterTabs } from '../shared/debugUi';
+import { ACIDS_BASES_BEAKER_ANCHOR, ACIDS_BASES_GRAPH_ANCHOR, ACIDS_BASES_LAYOUT_PADDING_PX, ACIDS_BASES_MAIN_GRID } from '../shared/layoutPresets';
 
 const WATER_LEVEL_MIN = 0.31818;
 const WATER_LEVEL_MAX = 0.681818;
 
 export function GuidedIntroScreen() {
    const navigate = useNavigate();
+   const showChapterTabs = useMemo(() => shouldShowAcidsChapterTabs(), []);
    const {
       currentStep,
       currentStepData,
@@ -409,17 +413,21 @@ export function GuidedIntroScreen() {
                      />
                   </div>
                </Blockable>
-               <AcidsBasesNav />
+               {showChapterTabs && <AcidsBasesNav />}
+               <AcidsHomeButton />
                <NavMenu />
             </div>
             <div className="h-full bg-white flex flex-col items-center" style={{ overflowY: 'hidden', overflowX: 'hidden' }}>
                {/* Main Content Wrapper - Centered with max-width */}
-               <div className="w-full relative px-8 py-4 h-full flex-1 flex flex-col" style={{ overflowX: 'hidden' }}>
+               <div
+                  className="w-full relative h-full flex-1 flex flex-col"
+                  style={{ overflowX: 'hidden', padding: `${ACIDS_BASES_LAYOUT_PADDING_PX}px` }}
+               >
 
 
                   {/* Main Grid Content */}
                   <main className="flex-1 w-full grid gap-8"
-                     style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}
+                     style={{ gridTemplateColumns: ACIDS_BASES_MAIN_GRID.introduction, overflowX: 'hidden' }}
                   >
                      {/* LEFT COLUMN: Equation, Tools, Beaker */}
                      <div className="flex flex-col gap-6 pt-0">
@@ -503,31 +511,39 @@ export function GuidedIntroScreen() {
                         </Blockable>
 
                         {/* Bottom: Beaker + Slider */}
-                        <div className="flex-1 flex items-start mt-[50px] justify-center gap-4 relative">
-                           {/* Vertical Slider */}
-                           <Blockable className='top-9' element="waterSlider" id="guide-element-waterSlider">
-                              <VerticalSlider
-                                 value={waterLevel}
-                                 min={WATER_LEVEL_MIN}
-                                 max={WATER_LEVEL_MAX}
-                                 onChange={setWaterLevel}
-                                 height={280}
-                                 enabled={currentStepData?.highlights.includes('waterSlider')}
-                              />
-                           </Blockable>
+                        <div className="flex-1 flex items-start mt-[50px] justify-start relative">
+                           <div
+                              className="flex items-start gap-4"
+                              style={{
+                                 width: `${ACIDS_BASES_BEAKER_ANCHOR.blockWidthPx}px`,
+                                 marginLeft: `${ACIDS_BASES_BEAKER_ANCHOR.leftOffsetPx}px`
+                              }}
+                           >
+                              {/* Vertical Slider */}
+                              <Blockable className='top-9' element="waterSlider" id="guide-element-waterSlider">
+                                 <VerticalSlider
+                                    value={waterLevel}
+                                    min={WATER_LEVEL_MIN}
+                                    max={WATER_LEVEL_MAX}
+                                    onChange={setWaterLevel}
+                                    height={280}
+                                    enabled={currentStepData?.highlights.includes('waterSlider')}
+                                 />
+                              </Blockable>
 
-                           {/* Beaker Container */}
-                           <div ref={beakerContainerRef} className="relative w-[280px] h-[350px]">
-                              <Beaker
-                                 liquidLevel={waterLevel}
-                                 liquidColor={selectedSubstance?.color || '#ADD8E6'}
-                                 pH={pH}
-                                 width={280}
-                                 height={350}
-                                 gridRows={rowsVisible}
-                                 visualizationMode="micro"
-                                 particles={displayParticles}
-                              />
+                              {/* Beaker Container */}
+                              <div ref={beakerContainerRef} className="relative w-[280px] h-[350px]">
+                                 <Beaker
+                                    liquidLevel={waterLevel}
+                                    liquidColor={selectedSubstance?.color || '#ADD8E6'}
+                                    pH={pH}
+                                    width={280}
+                                    height={350}
+                                    gridRows={rowsVisible}
+                                    visualizationMode="micro"
+                                    particles={displayParticles}
+                                 />
+                              </div>
                            </div>
                         </div>
                      </div>
@@ -591,19 +607,21 @@ export function GuidedIntroScreen() {
                         {/* Row 3: Graph + Guide (Side by Side) */}
                         <div className="mt-[20px] flex-1 grid gap-6 min-h-[200px] items-start" style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}>
                            {/* Concentration Chart */}
-                           <div className="flex justify-center  items-start">
-
-                              <Blockable element="phChart" id="guide-element-phChart">
-                                 <ConcentrationBarChart
-                                    substance={selectedSubstance}
-                                    molarity={effectiveMolarity}
-                                    addedFraction={substanceAddedFraction}
-                                    pH={pH}
-                                    height={200}
-                                    mode={chartMode}
-                                    onModeChange={setChartMode}
-                                 />
-                              </Blockable>
+                           <div className="flex justify-start items-start">
+                              <div style={{ marginLeft: `${ACIDS_BASES_GRAPH_ANCHOR.leftOffsetPx}px` }}>
+                                 <Blockable element="phChart" id="guide-element-phChart">
+                                    <ConcentrationBarChart
+                                       substance={selectedSubstance}
+                                       molarity={effectiveMolarity}
+                                       addedFraction={substanceAddedFraction}
+                                       pH={pH}
+                                       height={200}
+                                       graphSizePx={ACIDS_BASES_GRAPH_ANCHOR.squareSizePx}
+                                       mode={chartMode}
+                                       onModeChange={setChartMode}
+                                    />
+                                 </Blockable>
+                              </div>
                            </div>
 
                            {/* Guide Bubble - Positioned relative to this cell */}

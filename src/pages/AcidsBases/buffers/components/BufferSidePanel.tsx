@@ -1,10 +1,9 @@
 import type { AcidOrBase } from '../../../../helper/acidsBases/types';
 import type { InputState, IntroScreenElement } from '../../../../components/AcidsBases/guide/types';
 import type { EquationState } from '../types';
-import ChapterMenu from '../../../../layout/ChapterMenu';
-import { SubstanceSelector } from '../../../../components/AcidsBases/interactive';
 import { BufferEquationsNew } from '../BufferEquationsNew';
 import { GuideBubble, Blockable } from '../../../../components/AcidsBases/guide';
+import { ACIDS_BASES_RIGHT_PANEL_SLOTS } from '../../shared/layoutPresets';
 
 type GuideOverrides = {
    highlights?: IntroScreenElement[];
@@ -59,11 +58,16 @@ export const BufferSidePanel = ({
    isChooseSubstanceStep
 }: BufferSidePanelProps) => {
    return (
-      <div className="flex flex-col pt-0 pl-4 border-l border-gray-100 relative h-full">
-         {/* Fixed Grid Layout: Equations (auto) and Guide (flex) */}
-         <div className="flex-1 flex flex-col min-h-0 gap-4">
-            {/* Equations Area - Auto height */}
-            <div className="w-full shrink-0">
+      <div className="pt-0 relative h-full">
+         <div
+            className="h-full grid min-h-0"
+            style={{
+               gridTemplateRows: `${ACIDS_BASES_RIGHT_PANEL_SLOTS.buffers.equationsHeightPx}px minmax(0, 1fr)`,
+               rowGap: `${ACIDS_BASES_RIGHT_PANEL_SLOTS.buffers.panelGapPx}px`
+            }}
+         >
+            {/* Equations Area - Fixed slot (prevents guide bubble Y-shift) */}
+            <div className="w-full min-h-0 overflow-hidden">
                <BufferEquationsNew
                   overrides={guideOverrides}
                   state={equationState}
@@ -73,7 +77,7 @@ export const BufferSidePanel = ({
                />
             </div>
 
-            {/* Guide Area - Fill remaining */}
+            {/* Guide Area - Stable start position */}
             <div className="flex-1 flex flex-col pb-8 overflow-y-auto min-h-0 overflow-x-visible">
                <div className="relative overflow-visible pr-8">
                   <GuideBubble

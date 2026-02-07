@@ -11,6 +11,7 @@ import QuestionStep from './QuestionStep'
 import QuestionDifficulty from './QuestionDifficulty'
 import { getQuestionsByDifficulty } from '../../pages/AcidsBases/quiz/quizData'
 import NavMenu from '../AcidsBases/navigation/NavMenu'
+import AcidsHomeButton from '../AcidsBases/navigation/AcidsHomeButton'
 import AcidsBasesLayout from '../../layout/AcidsBasesLayout'
 
 // Main page
@@ -276,6 +277,9 @@ const QuizReaction = ({
     return (
       <AcidsBasesLayout>
         <div className={styles.headerBar} />
+        <div className="absolute top-4 right-20 z-[100]">
+          <AcidsHomeButton />
+        </div>
         <NavMenu />
         <div className={styles.quizWrapper}>
           {quizControls}
