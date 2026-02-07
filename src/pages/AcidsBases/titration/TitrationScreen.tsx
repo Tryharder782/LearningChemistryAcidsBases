@@ -545,30 +545,6 @@ export function TitrationScreen() {
    return (
       <AcidsBasesLayout>
          <HighlightOverlay elementIds={elementIds} highlights={guide.guideOverrides.highlights} active={!guide.hasInteracted}>
-            <div className="absolute top-4 right-4 flex items-center gap-4 z-[100]">
-               <Blockable element="reactionSelection" overrides={guide.guideOverrides} className="relative z-50">
-                  <div
-                     id="guide-element-reactionSelection"
-                     className={guide.currentStep.inputState.type === 'selectSubstance' ? 'w-full max-w-xs' : 'w-fit'}
-                  >
-                     <SubstanceSelector
-                        substances={model.availableSubstances}
-                        selected={model.substance}
-                        onSelect={model.setSelectedSubstance}
-                        placeholder="Choose a substance"
-                        enabled={guide.currentStep.inputState.type === 'selectSubstance'}
-                        isOpen={guide.substanceSelectorOpen}
-                        onOpenChange={guide.setSubstanceSelectorOpen}
-                        staticMenu={false}
-                        compact={true}
-                        align="right"
-                     />
-                  </div>
-               </Blockable>
-               {showChapterTabs && <AcidsBasesNav />}
-               <AcidsHomeButton />
-               <NavMenu />
-            </div>
             <div
                className="h-full bg-white flex flex-col items-center"
                style={{ overflowY: 'hidden', overflowX: 'hidden' }}
@@ -916,8 +892,34 @@ export function TitrationScreen() {
                         }}
                      >
                         {/* Reaction Equation */}
-                        <div className="flex items-center justify-start ml-10 w-full min-h-0">
-                           <ReactionEquation substance={model.substance} titrant={titrantSubstance} />
+                        <div className="flex items-start gap-4 min-h-0">
+                           <div className="flex-1 flex items-center justify-start ml-10 min-w-0">
+                              <ReactionEquation substance={model.substance} titrant={titrantSubstance} />
+                           </div>
+                           <div className="flex items-center gap-4 flex-shrink-0 pt-1 z-[100]">
+                              <Blockable element="reactionSelection" overrides={guide.guideOverrides} className="relative z-50">
+                                 <div
+                                    id="guide-element-reactionSelection"
+                                    className={guide.currentStep.inputState.type === 'selectSubstance' ? 'w-full max-w-xs' : 'w-fit'}
+                                 >
+                                    <SubstanceSelector
+                                       substances={model.availableSubstances}
+                                       selected={model.substance}
+                                       onSelect={model.setSelectedSubstance}
+                                       placeholder="Choose a substance"
+                                       enabled={guide.currentStep.inputState.type === 'selectSubstance'}
+                                       isOpen={guide.substanceSelectorOpen}
+                                       onOpenChange={guide.setSubstanceSelectorOpen}
+                                       staticMenu={false}
+                                       compact={true}
+                                       align="right"
+                                    />
+                                 </div>
+                              </Blockable>
+                              {showChapterTabs && <AcidsBasesNav />}
+                              <AcidsHomeButton />
+                              <NavMenu />
+                           </div>
                         </div>
 
                         <div className="px-2 min-h-0 overflow-hidden">

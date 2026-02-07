@@ -443,34 +443,6 @@ export function BufferScreen() {
             highlights={highlights}
             active={!hasInteracted}
          >
-            <div className="absolute top-4 right-4 flex items-center gap-4 z-[100]">
-               <Blockable element="reactionSelection" overrides={guideOverrides} className="relative">
-                  <div className={isChooseSubstanceStep ? 'w-full max-w-xs' : 'w-fit'}>
-                     <SubstanceSelector
-                        substances={availableSubstances}
-                        selected={selectedSubstance}
-                        onSelect={(s) => {
-                           setSelectedSubstance(s);
-                           setParticleCount(0);
-                           setSimulationPhase('adding');
-                           setWaterLevel(0.5);
-                           setSelectorOpen(false);
-                           markInteraction();
-                        }}
-                        placeholder="Choose a substance"
-                        enabled={isChooseSubstanceStep}
-                        isOpen={selectorOpen}
-                        onOpenChange={setSelectorOpen}
-                        staticMenu={false}
-                        compact={true}
-                        align="right"
-                     />
-                  </div>
-               </Blockable>
-               {showChapterTabs && <AcidsBasesNav />}
-               <AcidsHomeButton />
-               <NavMenu />
-            </div>
             <div className="h-full bg-white flex flex-col items-center" style={{ overflowY: 'hidden', overflowX: 'hidden' }}>
                {/* Main Content Wrapper */}
                <div
@@ -557,6 +529,36 @@ export function BufferScreen() {
                         currentStepIndex={currentStepIndex}
                         totalSteps={bufferGuideSteps.length}
                         isChooseSubstanceStep={currentStep.highlights?.includes('reactionSelection')}
+                        controls={
+                           <>
+                              <Blockable element="reactionSelection" overrides={guideOverrides} className="relative">
+                                 <div className={isChooseSubstanceStep ? 'w-full max-w-xs' : 'w-fit'}>
+                                    <SubstanceSelector
+                                       substances={availableSubstances}
+                                       selected={selectedSubstance}
+                                       onSelect={(s) => {
+                                          setSelectedSubstance(s);
+                                          setParticleCount(0);
+                                          setSimulationPhase('adding');
+                                          setWaterLevel(0.5);
+                                          setSelectorOpen(false);
+                                          markInteraction();
+                                       }}
+                                       placeholder="Choose a substance"
+                                       enabled={isChooseSubstanceStep}
+                                       isOpen={selectorOpen}
+                                       onOpenChange={setSelectorOpen}
+                                       staticMenu={false}
+                                       compact={true}
+                                       align="right"
+                                    />
+                                 </div>
+                              </Blockable>
+                              {showChapterTabs && <AcidsBasesNav />}
+                              <AcidsHomeButton />
+                              <NavMenu />
+                           </>
+                        }
                      />
                   </main>
                </div>

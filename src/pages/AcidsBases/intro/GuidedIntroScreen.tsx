@@ -522,11 +522,11 @@ export function GuidedIntroScreen() {
                      </div>
 
                      {/* RIGHT COLUMN: Equations, Scale, Graph, Guide */}
-                     <div className="flex flex-col gap-4 pt-0" style={{ overflowX: 'hidden' }}>
+                     <div className="flex flex-col gap-2 pt-0" style={{ overflowX: 'hidden' }}>
                         {/* Row 0: Controls + Equations */}
                         <div className="flex items-start gap-4">
                            {/* Equation Display - takes available space */}
-                           <div className="flex-1 min-w-0 pt-2 pb-2">
+                           <div className="flex-1 min-w-0 pt-2">
                               <EquationDisplay
                                  equations={createDynamicEquations(pH)}
                                  highlightedIndex={inputState.type === 'none' ? undefined : 0}
@@ -603,7 +603,7 @@ export function GuidedIntroScreen() {
                         </Blockable>
 
                         {/* Row 3: Graph + Guide (Side by Side) */}
-                        <div className="mt-[4px] flex-1 grid gap-4 min-h-[160px] items-start" style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}>
+                        <div className="flex-1 grid gap-2 min-h-[160px] items-start" style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}>
                            {/* Concentration Chart */}
                            <div className="flex justify-start items-start">
                               <div style={{ marginLeft: `${ACIDS_BASES_GRAPH_ANCHOR.leftOffsetPx}px` }}>

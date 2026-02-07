@@ -4,6 +4,7 @@ import type { EquationState } from '../types';
 import { BufferEquationsNew } from '../BufferEquationsNew';
 import { GuideBubble, Blockable } from '../../../../components/AcidsBases/guide';
 import { ACIDS_BASES_RIGHT_PANEL_SLOTS } from '../../shared/layoutPresets';
+import React from 'react';
 
 type GuideOverrides = {
    highlights?: IntroScreenElement[];
@@ -36,6 +37,7 @@ type BufferSidePanelProps = {
    currentStepIndex: number;
    totalSteps: number;
    isChooseSubstanceStep: boolean;
+   controls?: React.ReactNode;
 };
 
 export const BufferSidePanel = ({
@@ -55,7 +57,8 @@ export const BufferSidePanel = ({
    canGoBack,
    currentStepIndex,
    totalSteps,
-   isChooseSubstanceStep
+   isChooseSubstanceStep,
+   controls
 }: BufferSidePanelProps) => {
    return (
       <div className="pt-0 relative h-full">
@@ -67,14 +70,21 @@ export const BufferSidePanel = ({
             }}
          >
             {/* Equations Area - Fixed slot (prevents guide bubble Y-shift) */}
-            <div className="w-full min-h-0 overflow-hidden">
-               <BufferEquationsNew
-                  overrides={guideOverrides}
-                  state={equationState}
-                  substance={selectedSubstance}
-                  pH={pH}
-                  concentrations={concentrations}
-               />
+            <div className="w-full min-h-0 overflow-hidden flex items-start gap-4">
+               <div className="flex-1 min-w-0">
+                  <BufferEquationsNew
+                     overrides={guideOverrides}
+                     state={equationState}
+                     substance={selectedSubstance}
+                     pH={pH}
+                     concentrations={concentrations}
+                  />
+               </div>
+               {controls && (
+                  <div className="flex items-center gap-4 flex-shrink-0 pt-1 z-[100]">
+                     {controls}
+                  </div>
+               )}
             </div>
 
             {/* Guide Area - Stable start position */}
