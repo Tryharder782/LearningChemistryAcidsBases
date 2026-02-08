@@ -15,6 +15,7 @@
   .content {
     overflow-y: auto;
     overflow-x: hidden;
+    max-height: 620px;
     padding: 10px 25px 10px 10px;
     // background-color: moccasin;
 
@@ -247,6 +248,43 @@
     width: auto !important;
   }
 
+  .diffCard {
+    width: 80%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .quizStep .quizCard {
+    width: min(900px, 100%);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .quizStep {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .quizStep .explanation {
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .selectQuiz {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .prevBtn {
     left: -10px;
     bottom: 50%;
@@ -302,6 +340,43 @@
   .refreshBtn {
     right: 44px;
     bottom: calc(18% + 60px);
+  }
+
+  .diffCard {
+    width: 80%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .quizStep .quizCard {
+    width: min(900px, 100%);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .quizStep {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .quizStep .explanation {
+    max-width: 100%;
+    box-sizing: border-box;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .selectQuiz {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 }
 
@@ -365,6 +440,8 @@
     font-size: 20px;
     font-weight: 500;
     padding: 10px 20px;
+    margin-left: auto;
+    margin-right: auto;
 
 
     &.correctBorder {
