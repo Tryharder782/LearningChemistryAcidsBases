@@ -146,7 +146,7 @@ export const useBufferBottles = ({
          ...s,
          id: `${s.id}-salt`,
          symbol: s.saltName || 'Salt',
-         color: s.secondaryColor,
+         color: s.id === 'HCN' ? ACIDS_BASES_COLORS.ui.primary : s.secondaryColor,
       };
 
       const isSaltStep = currentStep.id === 'instructToAddSalt' || currentStep.id === 'instructToAddSaltToBase';

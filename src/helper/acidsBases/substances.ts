@@ -193,7 +193,7 @@ export const hydrogenCyanide = createWeakAcid(
    'HCN', 'HCN', 'CN', 4,
    ION_COLORS.hydrogenCyanide, ION_COLORS.cyanide,
    9e-5, // Ka for HCN - note: should be ~6.2e-10, using app value
-   'NaCN'
+   'MCN'
 );
 
 // --- Weak Bases ---
