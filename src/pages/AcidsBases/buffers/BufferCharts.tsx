@@ -150,12 +150,12 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
       >
          {/* Top controls */}
          {!isTitration && resolvedControlsPosition === 'top' && (
-            <div className="mb-2">
+            <div className="mb-2" style={{ marginLeft: `${graphAnchorLeftPx}px` }}>
                {renderModeControls('top')}
             </div>
          )}
          {isTitration && resolvedControlsPosition === 'top' && (
-            <div className="absolute top-0 left-0 right-0 z-10">
+            <div className="absolute top-0 z-10 -left-3" style={{ width: `${graphSizePx}px`, marginLeft: `${graphAnchorLeftPx}px` }}>
                {renderModeControls('top')}
             </div>
          )}
@@ -198,12 +198,12 @@ export const BufferCharts: React.FC<BufferChartsProps> = ({
 
          {/* Bottom controls */}
          {!isTitration && resolvedControlsPosition === 'bottom' && (
-            <div className="mt-4">
+            <div className="mt-4" style={{ marginLeft: `${graphAnchorLeftPx}px` }}>
                {renderModeControls('bottom')}
             </div>
          )}
          {isTitration && resolvedControlsPosition === 'bottom' && (
-            <div className="absolute bottom-0 left-0 right-0 z-10">
+            <div className="absolute bottom-0 z-10 px-6" style={{ width: `${graphSizePx}px`, marginLeft: `${graphAnchorLeftPx}px` }}>
                {renderModeControls('bottom')}
             </div>
          )}
@@ -389,25 +389,37 @@ const BarsView = ({ substance, counts, max, barsConfig, variant, barsStyle, grap
          {/* Bottom legend - matches "pH" label position in CurveView */}
          <div
             className={`flex justify-around items-center py-1 ${isTitration ? 'mx-auto px-6 justify-between' : ''}`}
-            style={isTitration ? { width: `${graphSizePx}px`, marginLeft: `${graphAnchorLeftPx}px` } : undefined}
+            style={{ width: `${graphSizePx}px`, marginLeft: `${graphAnchorLeftPx}px` }}
          >
             {(barsConfig?.showSubstance ?? true) && (
                <div className={`flex ${isTitration ? 'flex-col items-center gap-1' : 'items-center gap-1'}`}>
-                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: barsConfig?.substanceColor ?? substance?.color ?? ACIDS_BASES_COLORS.substances.weakAcidHA }}></div>
+                  <div
+                     className="w-4 h-4 rounded-full"
+                     style={{ backgroundColor: barsConfig?.substanceColor ?? substance?.color ?? ACIDS_BASES_COLORS.substances.weakAcidHA }}
+                  />
                   <span className={`font-bold ${isTitration ? 'text-sm text-gray-900' : 'text-sm text-gray-700'}`}>{barsConfig?.substanceLabel ?? substance?.symbol ?? 'HA'}</span>
                </div>
             )}
             <div className={`flex ${isTitration ? 'flex-col items-center gap-1' : 'items-center gap-1'}`}>
-               <div className="w-4 h-4 rounded-full" style={{ backgroundColor: barsConfig?.primaryColor ?? substance?.primaryColor ?? ACIDS_BASES_COLORS.ions.hydrogen }}></div>
+               <div
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: barsConfig?.primaryColor ?? substance?.primaryColor ?? ACIDS_BASES_COLORS.ions.hydrogen }}
+               />
                <span className={`font-bold ${isTitration ? 'text-sm text-gray-900' : 'text-sm text-gray-700'}`}>{barsConfig?.primaryLabel ?? (substance ? getPrimaryLabel(substance) : 'H⁺')}</span>
             </div>
             <div className={`flex ${isTitration ? 'flex-col items-center gap-1' : 'items-center gap-1'}`}>
-               <div className="w-4 h-4 rounded-full" style={{ backgroundColor: barsConfig?.secondaryColor ?? substance?.secondaryColor ?? ACIDS_BASES_COLORS.ions.ionA }}></div>
+               <div
+                  className="w-4 h-4 rounded-full"
+                  style={{ backgroundColor: barsConfig?.secondaryColor ?? substance?.secondaryColor ?? ACIDS_BASES_COLORS.ions.ionA }}
+               />
                <span className={`font-bold ${isTitration ? 'text-sm text-gray-900' : 'text-sm text-gray-700'}`}>{barsConfig?.secondaryLabel ?? (substance ? getSecondaryLabel(substance) : 'A⁻')}</span>
             </div>
             {(barsConfig?.extraBars ?? []).map((bar, index) => (
                <div key={`${bar.label}-${index}`} className={`flex ${isTitration ? 'flex-col items-center gap-1' : 'items-center gap-1'}`}>
-                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: bar.color }}></div>
+                  <div
+                     className="w-4 h-4 rounded-full"
+                     style={{ backgroundColor: bar.color }}
+                  />
                   <span className={`font-bold ${isTitration ? 'text-sm text-gray-900' : 'text-sm text-gray-700'}`}>{bar.label}</span>
                </div>
             ))}
@@ -694,15 +706,16 @@ const NeutralizationView = ({
          </div>
 
          {/* Bottom legend - positioned under columns */}
-         <div className="flex items-center py-1" style={{ marginLeft: 5 }}>
-            <div className="flex-1 flex justify-around px-4">
-               {cols.map((col, idx) => (
-                  <div key={idx} className="flex flex-col items-center">
-                     <div className="w-4 h-4 rounded-full mt-0.5" style={{ backgroundColor: col.color }}></div>
-                     <span className="font-bold text-sm text-gray-700">{col.label}</span>
-                  </div>
-               ))}
-            </div>
+         <div
+            className="flex justify-around items-center py-1 px-6"
+            style={{ width: `${graphSizePx}px`, marginLeft: `${graphAnchorLeftPx}px` }}
+         >
+            {cols.map((col, idx) => (
+               <div key={idx} className="flex flex-col items-center gap-1">
+                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: col.color }}></div>
+                  <span className="font-bold text-sm text-gray-900">{col.label}</span>
+               </div>
+            ))}
          </div>
       </div>
    );

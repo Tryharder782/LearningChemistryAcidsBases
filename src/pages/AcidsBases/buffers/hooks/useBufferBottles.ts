@@ -22,7 +22,7 @@ type UseBufferBottlesParams = {
    setSimulationPhase: (value: 'adding' | 'equilibrium' | 'saltAdded') => void;
    markInteraction: () => void;
    modelRef: React.RefObject<ReactingBeakerModel>;
-   createPour: (substance: AcidOrBase, bottleIndex: 0 | 1 | 2) => void;
+   createPour: (substance: AcidOrBase, bottleIndex: 0 | 1 | 2, options?: { speedMultiplier?: number; particleCount?: number }) => void;
    registerBottle: (bottleIndex: 0 | 1 | 2, element: HTMLDivElement | null) => void;
    maxParticles: number;
    minFinalPrimaryIonCount: number;
@@ -69,7 +69,6 @@ export const useBufferBottles = ({
 }: UseBufferBottlesParams): BottleConfig[] => {
    const saltShakesRef = useRef(saltShakes);
    const strongSubstanceAddedRef = useRef(strongSubstanceAdded);
-   const pourTransition = { initialColor: ACIDS_BASES_COLORS.substances.beakerLiquid, transitionMs: 600, staggerMs: 80 };
 
    const buildBottleConfig = ({
       bottleIndex,
@@ -88,11 +87,14 @@ export const useBufferBottles = ({
       onRegister: (element: HTMLDivElement | null) => { registerBottle(bottleIndex, element); },
       onPouringStart: () => {
          if (!isActive) return;
-         createPour(substance, bottleIndex);
+         const isMobile = window.innerWidth < 768;
+         createPour(substance, bottleIndex, { speedMultiplier: isMobile ? 0.5 : 1.5 });
       },
       onPourComplete: () => {
          if (!isActive) return;
-         onPourComplete();
+         // Delay to match particle travel time
+         const delay = window.innerWidth < 1024 ? 400 : 280;
+         setTimeout(() => onPourComplete(), delay);
       }
    });
 
@@ -133,7 +135,7 @@ export const useBufferBottles = ({
             setParticleCount(prev => Math.min(maxParticles, prev + amount));
             markInteraction();
             if (modelRef.current) {
-               modelRef.current?.addDirectly('substance', amount, s.color, pourTransition);
+               modelRef.current?.addDirectly('substance', amount, s.color);
             }
          }
       });
@@ -218,8 +220,7 @@ export const useBufferBottles = ({
                modelRef.current?.addDirectly(
                   'primaryIon',
                   primaryToAdd,
-                  selectedSubstance?.primaryColor || '#ED64A6',
-                  pourTransition
+                  selectedSubstance?.primaryColor || '#ED64A6'
                );
             }
 

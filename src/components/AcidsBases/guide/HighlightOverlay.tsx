@@ -3,8 +3,7 @@
  * Uses CSS to create a "cutout" effect showing only the target element.
  */
 
-import { useEffect, useState, useCallback, type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useState, useRef, useCallback, type ReactNode } from 'react';
 import { useGuideStore } from './useGuideStore';
 import type { IntroScreenElement, InputState } from './types';
 
@@ -23,22 +22,43 @@ interface HighlightOverlayProps {
    active?: boolean;
 }
 
+/**
+ * Spotlight style with coordinates relative to the container (not viewport).
+ * Rendered INSIDE the transform stacking context to avoid iOS Safari
+ * pointer-events: none bugs with cross-context portals.
+ */
+interface SpotlightStyle {
+   left: number;
+   top: number;
+   width: number;
+   height: number;
+}
+
 export function HighlightOverlay({ elementIds, children, highlights: propHighlights, active: propActive }: HighlightOverlayProps) {
    const store = useGuideStore();
+   const containerRef = useRef<HTMLDivElement>(null);
 
    const highlights = propHighlights ?? store.highlights;
    const isActive = propActive ?? !store.hasInteracted;
 
-   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
+   const [spotlightStyle, setSpotlightStyle] = useState<SpotlightStyle | null>(null);
 
-   // Find the highlighted element's position
+   const needsOverlay = highlights.length > 0 && isActive;
+
+   // Find the highlighted element's position and convert to container-relative coords
    useEffect(() => {
-      if (highlights.length === 0 || !isActive) {
-         setTargetRect(null);
+      if (!needsOverlay) {
+         setSpotlightStyle(null);
          return;
       }
 
       const updateRect = () => {
+         const container = containerRef.current;
+         if (!container) {
+            setSpotlightStyle(null);
+            return;
+         }
+
          for (const highlight of highlights) {
             const id = elementIds[highlight] ?? `guide-element-${highlight}`;
             const element = document.getElementById(id);
@@ -46,33 +66,33 @@ export function HighlightOverlay({ elementIds, children, highlights: propHighlig
                let rect = element.getBoundingClientRect();
 
                // If element has a dropdown child that's open, expand rect to include it
-               const dropdownMenu = element.querySelector('[class*="absolute z-50"]');
+               const dropdownMenu = element.querySelector('[data-dropdown-menu="true"]');
                if (dropdownMenu) {
                   const dropdownRect = dropdownMenu.getBoundingClientRect();
-                  // Expand rect to include both button and dropdown
                   const top = Math.min(rect.top, dropdownRect.top);
                   const left = Math.min(rect.left, dropdownRect.left);
                   const bottom = Math.max(rect.bottom, dropdownRect.bottom);
                   const right = Math.max(rect.right, dropdownRect.right);
-
-                  // Create a synthetic DOMRect-like object
-                  rect = {
-                     top,
-                     left,
-                     bottom,
-                     right,
-                     width: right - left,
-                     height: bottom - top,
-                     x: left,
-                     y: top,
-                  } as DOMRect;
+                  rect = { top, left, bottom, right, width: right - left, height: bottom - top, x: left, y: top } as DOMRect;
                }
 
-               setTargetRect(rect);
+               // Convert viewport coords to container-relative coords
+               // Inside transform: scale(), position:absolute uses unscaled coords
+               const containerRect = container.getBoundingClientRect();
+               const scaleX = containerRect.width / container.offsetWidth || 1;
+               const scaleY = containerRect.height / container.offsetHeight || 1;
+
+               const padding = 15;
+               setSpotlightStyle({
+                  left: (rect.left - containerRect.left) / scaleX - padding,
+                  top: (rect.top - containerRect.top) / scaleY - padding,
+                  width: rect.width / scaleX + padding * 2,
+                  height: rect.height / scaleY + padding * 2,
+               });
                return;
             }
          }
-         setTargetRect(null);
+         setSpotlightStyle(null);
       };
 
       updateRect();
@@ -85,38 +105,33 @@ export function HighlightOverlay({ elementIds, children, highlights: propHighlig
          window.removeEventListener('scroll', updateRect);
          window.removeEventListener('guide:highlight-update', updateRect);
       };
-   }, [highlights, elementIds, isActive]);
+   }, [needsOverlay, highlights, elementIds]);
 
-   // If no highlights or user has interacted (inactive), just render children
-   if (highlights.length === 0 || !isActive || !targetRect) {
-      return <>{children}</>;
-   }
-
-   // Create overlay with spotlight effect using box-shadow
-   // This creates a "hole" in the dark overlay where the element is
-
+   // Always render wrapper div so containerRef is available for coordinate calculations
    return (
-      <>
+      <div ref={containerRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
          {children}
 
-         {/* Spotlight effect */}
-         {targetRect && createPortal(
+         {/* Spotlight effect — rendered INSIDE the transform stacking context */}
+         {needsOverlay && spotlightStyle && (
             <div
-               className="fixed z-[9999] pointer-events-none transition-all duration-300 ease-in-out"
+               className="pointer-events-none"
                aria-hidden="true"
                style={{
-                  left: targetRect.left - 15,
-                  top: targetRect.top - 15,
-                  width: targetRect.width + 30,
-                  height: targetRect.height + 30,
-                  borderRadius: '12px', // Smooth corners
-                  boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.30)', // Reduced darkness from 0.75 to 0.60 (20% lighter)
-                  pointerEvents: 'none', // Explicit inline style for iOS Safari reliability
+                  position: 'absolute',
+                  zIndex: 9999,
+                  left: spotlightStyle.left,
+                  top: spotlightStyle.top,
+                  width: spotlightStyle.width,
+                  height: spotlightStyle.height,
+                  borderRadius: '12px',
+                  boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.30)',
+                  pointerEvents: 'none',
+                  transition: 'all 300ms ease-in-out',
                }}
-            />,
-            document.body
+            />
          )}
-      </>
+      </div>
    );
 }
 

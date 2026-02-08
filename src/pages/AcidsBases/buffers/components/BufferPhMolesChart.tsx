@@ -249,6 +249,12 @@ export const BufferPhMolesChart = ({
                   <div key={i} className="w-1.5 h-[2px] bg-black"></div>
                ))}
             </div>
+            {/* Bottom X-axis ticks */}
+            <div className="absolute left-0 right-0 -bottom-1 h-2 flex justify-between px-[10px] pointer-events-none">
+               {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-1.5 w-[2px] bg-black"></div>
+               ))}
+            </div>
 
          </div>
 
@@ -256,7 +262,7 @@ export const BufferPhMolesChart = ({
          {/* Acid (Decreasing): Line TL->BR. Legend BL (Safe). */}
          {/* Base (Increasing): Line BL->TR. Legend TL (Safe). */}
          <div
-            className={`absolute left-[35px] flex flex-col gap-0 text-xs font-semibold text-gray-800 bg-white/10 backdrop-blur-[0px] rounded p-1 pointer-events-none ${isAcidAddition ? 'bottom-[30px]' : 'top-[30px]'
+            className={`absolute left-[15px] flex flex-col gap-0 text-xs font-semibold text-gray-800 bg-white/10 backdrop-blur-[0px] rounded p-1 pointer-events-none ${isAcidAddition ? 'bottom-[10px]' : 'top-[10px]'
                }`}
          >
             <div className="flex items-center gap-2">

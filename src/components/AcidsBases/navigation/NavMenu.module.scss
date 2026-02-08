@@ -66,6 +66,7 @@
     opacity: 0; // animation
     margin-left: -400px; // animation
     margin-top: -40px; // animation
+    pointer-events: none; // prevent invisible panel from capturing touches
     // background-color: white;
     width: 300px;
     position: absolute;
@@ -86,6 +87,7 @@
       opacity: 1;
       margin-left: -90px;
       margin-top: -40px;
+      pointer-events: auto; // re-enable when visible
     }
 
     .navContent {

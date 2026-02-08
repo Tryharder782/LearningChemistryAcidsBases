@@ -84,7 +84,7 @@ export const usePouringParticles = (
       const distancePx = Math.max(40, waterY - anchor.y - 5); // -5 to stop slightly above/at line
 
       const speedPxPerMs = 0.15; // Slower speed (~150px/s)
-      const speedMultiplier = Math.min(3, Math.max(1, options?.speedMultiplier ?? 1));
+      const speedMultiplier = Math.min(3, Math.max(0.3, options?.speedMultiplier ?? 1));
       const durationMs = Math.max(120, (distancePx / speedPxPerMs) / speedMultiplier);
       const particleCount = Math.max(1, options?.particleCount ?? particlesPerPour?.[bottleIndex] ?? 5);
 

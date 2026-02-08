@@ -225,9 +225,9 @@ export function ConcentrationBarChart({
                         <line
                            key={`x-${frac}`}
                            x1={ frac * (100 - GRAPH_PADDING * 3)}
-                           y1={100 - GRAPH_PADDING + 8}
+                           y1={100 - GRAPH_PADDING + 7}
                            x2={frac * (100 - GRAPH_PADDING * 3)}
-                           y2={100 - GRAPH_PADDING + 11}
+                           y2={100 - GRAPH_PADDING + 10}
                            stroke="black"
                            strokeWidth={1}
                         />
@@ -254,12 +254,12 @@ export function ConcentrationBarChart({
 
                      {/* Y-axis label (pH) */}
                      <text
-                        x={GRAPH_PADDING / 2}
-                        y={40}
+                        x={-2}
+                        y={50}
                         fontSize={8}
                         textAnchor="middle"
                         className="fill-black "
-                        transform={`rotate(-90, ${GRAPH_PADDING / 2}, 50)`}
+                        transform={`rotate(-90, -2, 50)`}
                      >
                         pH
                      </text>

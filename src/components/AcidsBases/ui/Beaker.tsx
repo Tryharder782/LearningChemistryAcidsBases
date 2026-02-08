@@ -58,8 +58,12 @@ export function Beaker({
          left: `${p.position.col * colWidth + colWidth / 2}%`,
          top: `${p.position.row * rowHeight + rowHeight / 2}%`,
          backgroundColor: p.displayColor,
-         transition: `background-color ${p.transitionMs ?? 500}ms ease, opacity 300ms ease`,
-         transitionDelay: `${p.transitionDelayMs ?? 0}ms`,
+         transition: p.isInitialAppearance
+            ? 'none'
+            : `background-color ${p.transitionMs ?? 500}ms ease`,
+         transitionDelay: p.isInitialAppearance
+            ? undefined
+            : `${p.transitionDelayMs ?? 0}ms`,
          opacity: p.opacity ?? 1,
          width: '12px',
          height: '12px',

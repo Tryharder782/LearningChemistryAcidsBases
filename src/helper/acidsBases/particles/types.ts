@@ -17,6 +17,7 @@ export interface Particle {
    transitionDelayMs?: number; // Optional stagger delay before color transition
    opacity?: number;        // Appearance animation (0..1)
    scale?: number;          // Appearance animation scale
+   isInitialAppearance?: boolean; // True for first-time appearance from empty cell (no fade-in, stagger only)
 
    // Metadata
    createdAt: number;

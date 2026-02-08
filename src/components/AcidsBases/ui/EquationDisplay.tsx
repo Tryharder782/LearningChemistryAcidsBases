@@ -41,20 +41,20 @@ export function EquationDisplay({
                key={index}
                id={ids[index]} // Assign predictable IDs for highlighting
                className={`
-                  flex flex-col items-start justify-center gap-2 px-2 py-3 rounded-xl transition-all min-w-0 overflow-hidden
+                  flex flex-col items-start justify-center gap-2 rounded-xl transition-all
                   ${highlightedIndex === index ? '' : 'bg-transparent'}
                `}
             >
                {/* Top: Abstract Formula */}
-               <div className="text-gray-700 text-sm lg:text-base whitespace-nowrap">
+               <div className="text-gray-700 text-xl whitespace-nowrap tracking-tight">
                   {parseFormulaText(eq.formula)}
-                  {eq.operator && <span className="mx-1 text-gray-500">{eq.operator}</span>}
+                  {eq.operator && <span className="mx-0.5 text-gray-500">{eq.operator}</span>}
                </div>
 
                {/* Bottom: Substituted Values */}
                {(eq.valueParts || eq.value) && (
                   <div
-                     className="text-xs lg:text-sm whitespace-nowrap"
+                     className="text-xl whitespace-nowrap tracking-tight"
                   >
                      {eq.valueParts ? (
                         <span>

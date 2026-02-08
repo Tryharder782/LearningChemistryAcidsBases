@@ -2,6 +2,9 @@ import type { Particle, MoleculeType, GridPosition, ReactionRule } from './types
 import { GRID_ROWS_MAX } from './types';
 import { ParticleGrid } from './ParticleGrid';
 
+/** Stagger interval (ms) between individual particles within a single add batch */
+const BATCH_STAGGER_MS = 50;
+
 export class ReactingBeakerModel {
    private particles: Particle[] = [];
    private grid: ParticleGrid;
@@ -76,7 +79,7 @@ export class ReactingBeakerModel {
          // Remove consumed reactants
          this.particles = this.particles.filter(p => !consumedIds.has(p.id));
 
-         // 1) Existing consumed coords -> product (color transition)
+         // 1) Existing consumed coords -> product (color transition, NOT initial appearance)
          const transitionedFromConsumed = consumedParticles.map((p, index) =>
             this.createParticleAt(
                p.position,
@@ -88,79 +91,47 @@ export class ReactingBeakerModel {
             )
          );
 
-         // 2) New reactant coords -> product (color transition)
+         // 2) New reactant coords -> product (instant appearance, staggered)
          const reactantCoords = this.grid.getRandomAvailablePositions(
             reactionCount,
             this.particles.map(p => p.position),
             this.effectiveRows
          );
-         const transitionedFromReactant = reactantCoords.map((pos, index) =>
-            this.createParticleAt(
-               pos,
-               rule.producing,
-               colors.reactant,
-               colors.produced,
-               durationMs,
-               (index + transitionedFromConsumed.length) * staggerMs
-            )
-         );
+         reactantCoords.forEach((pos, index) => {
+            this.addParticleAt(pos, rule.producing, colors.produced, index * BATCH_STAGGER_MS);
+         });
 
-         this.particles.push(...transitionedFromConsumed, ...transitionedFromReactant);
+         this.particles.push(...transitionedFromConsumed);
          this.scheduleColorTransition(
-            [...transitionedFromConsumed, ...transitionedFromReactant].map(p => p.id),
+            transitionedFromConsumed.map(p => p.id),
             colors.produced,
             0
          );
       }
 
-      // 3) Surplus reactant (no reaction)
+      // 3) Surplus reactant (no reaction) — new particles, staggered
       if (remainingCount > 0) {
-         this.addDirectly(rule.reactant, remainingCount, colors.reactant, {
-            initialColor: '#ADD8E6',
-            transitionMs: durationMs,
-            staggerMs
-         });
+         this.addDirectly(rule.reactant, remainingCount, colors.reactant);
       }
 
       this.notify();
    }
 
    /**
-    * Add particles directly without reaction
+    * Add particles directly without reaction.
+    * All new particles appear instantly at target color, staggered within the batch.
     */
    addDirectly(
       type: MoleculeType,
       count: number,
       color: string,
-      options?: { initialColor?: string; transitionMs?: number; staggerMs?: number }
+      _options?: { initialColor?: string; transitionMs?: number; staggerMs?: number }
    ) {
       const positions = this.grid.getRandomAvailablePositions(count, [], this.effectiveRows);
-      const initialColor = options?.initialColor ?? color;
-      const transitionMs = options?.transitionMs;
-      const staggerMs = options?.staggerMs ?? 0;
-
-      const transitionedIds: string[] = [];
 
       positions.forEach((pos, index) => {
-         if (transitionMs && initialColor !== color) {
-            const particle = this.createParticleAt(
-               pos,
-               type,
-               initialColor,
-               color,
-               transitionMs,
-               index * staggerMs
-            );
-            this.particles.push(particle);
-            transitionedIds.push(particle.id);
-         } else {
-            this.addParticleAt(pos, type, color);
-         }
+         this.addParticleAt(pos, type, color, index * BATCH_STAGGER_MS);
       });
-
-      if (transitionedIds.length > 0) {
-         this.scheduleColorTransition(transitionedIds, color, 0);
-      }
 
       this.notify();
    }
@@ -233,38 +204,12 @@ export class ReactingBeakerModel {
          });
          deficit -= fromSurplus.length;
 
-         // Add remaining as new particles
+         // Add remaining as new particles (instant appearance, staggered)
          if (deficit > 0) {
-            const initialColor = options?.initialColors?.[type] ?? typeColors[type];
-            const skipFadeIn = options?.skipFadeInTypes?.includes(type) ?? false;
-            const transitionDelayMs = options?.transitionDelayMsByType?.[type] ?? 0;
-            const perTypeStaggerMs = options?.staggerMsByType?.[type] ?? staggerMs;
-
-            if (initialColor !== typeColors[type] || skipFadeIn) {
-               const positions = this.grid.getRandomAvailablePositions(deficit, [], this.effectiveRows);
-               const createdAt = skipFadeIn ? Date.now() - 1000 : Date.now();
-
-               const createdIds: string[] = [];
-               positions.forEach((pos, index) => {
-                  const particle = this.createParticleAt(
-                     pos,
-                     type,
-                     initialColor,
-                     typeColors[type],
-                     durationMs,
-                     index * perTypeStaggerMs,
-                     createdAt
-                  );
-                  this.particles.push(particle);
-                  createdIds.push(particle.id);
-               });
-
-               if (createdIds.length > 0) {
-                  this.scheduleColorTransition(createdIds, typeColors[type], transitionDelayMs);
-               }
-            } else {
-               this.addDirectly(type, deficit, typeColors[type]);
-            }
+            const positions = this.grid.getRandomAvailablePositions(deficit, [], this.effectiveRows);
+            positions.forEach((pos, index) => {
+               this.addParticleAt(pos, type, typeColors[type], index * BATCH_STAGGER_MS);
+            });
          }
       });
 
@@ -280,6 +225,7 @@ export class ReactingBeakerModel {
             if (p.displayColor !== typeColors[type]) {
                p.transitionMs = durationMs;
                p.transitionDelayMs = index * perTypeStaggerMs;
+               p.isInitialAppearance = false; // Enable CSS transition for recoloring
                idsToUpdate.push(p.id);
             }
          });
@@ -309,23 +255,25 @@ export class ReactingBeakerModel {
     * Restore an exact particle snapshot (positions/colors) and rebuild occupancy.
     */
    setParticles(particles: Particle[]) {
-      this.particles = particles.map(p => ({ ...p }));
+      this.particles = particles.map(p => ({ ...p, isInitialAppearance: false }));
       this.grid.clear();
       this.particles.forEach(p => this.grid.occupy(p.position));
       this.notify();
    }
 
    /**
-    * Helper to add single particle
+    * Helper to add single particle with optional stagger delay.
+    * New particles are marked as initial appearance (no fade-in).
     */
-   private addParticleAt(pos: GridPosition, type: MoleculeType, color: string) {
+   private addParticleAt(pos: GridPosition, type: MoleculeType, color: string, staggerDelayMs: number = 0) {
       const particle: Particle = {
          id: Math.random().toString(36).substr(2, 9),
          position: pos,
          type,
          displayColor: color,
          targetColor: color,
-         createdAt: Date.now()
+         isInitialAppearance: true,
+         createdAt: Date.now() + staggerDelayMs
       };
 
       this.particles.push(particle);
@@ -348,6 +296,7 @@ export class ReactingBeakerModel {
          targetColor,
          transitionMs,
          transitionDelayMs,
+         isInitialAppearance: false, // Explicitly enable CSS transition
          createdAt: createdAt ?? Date.now()
       };
       this.grid.occupy(pos);
@@ -356,17 +305,22 @@ export class ReactingBeakerModel {
 
    private scheduleColorTransition(ids: string[], targetColor: string, delayMs: number = 0) {
       if (ids.length === 0) return;
+      
+      // Add 16ms (1 frame) to ensure React renders with initial color before transition
+      const minDelay = Math.max(delayMs, 16);
+      
       setTimeout(() => {
          let changed = false;
          this.particles.forEach(p => {
             if (ids.includes(p.id)) {
                p.displayColor = targetColor;
                p.targetColor = targetColor;
+               p.isInitialAppearance = false; // Enable CSS transition for future changes
                changed = true;
             }
          });
          if (changed) this.notify();
-      }, delayMs);
+      }, minDelay);
    }
 
    subscribe(listener: () => void) {

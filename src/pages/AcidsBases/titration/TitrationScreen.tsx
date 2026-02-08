@@ -38,14 +38,14 @@ export function TitrationScreen() {
    const toolScale = 1;
    const showChapterTabs = useMemo(() => shouldShowAcidsChapterTabs(), []);
    const model = useTitrationModel();
-   const guide = useTitrationGuideState(model);
+   const beakerModelRef = useRef(new ReactingBeakerModel());
+   const guide = useTitrationGuideState(model, beakerModelRef);
    const [activeBottleIndex, setActiveBottleIndex] = useState<number | null>(null);
    const lastBuretteClickRef = useRef(0);
    const buretteRapidUntilRef = useRef(0);
    const buretteRapidTimerRef = useRef<number | null>(null);
    const beakerContainerRef = useRef<HTMLDivElement>(null);
    const bottlesContainerRef = useRef<HTMLDivElement>(null);
-   const beakerModelRef = useRef(new ReactingBeakerModel());
    const [particles, setParticles] = useState<Particle[]>([]);
 
    const [bottleTranslation, setBottleTranslation] = useState<{ x: number; y: number } | undefined>(undefined);
@@ -127,13 +127,14 @@ export function TitrationScreen() {
             }
             return;
          }
-         createPour(substance, bottleIndex, { speedMultiplier: 1, particleCount: 1 });
-         onEmit(1);
+         createPour(substance, bottleIndex, { speedMultiplier: isMobile ? 0.5 : 1.5, particleCount: 1 });
+         // Immediate increment for rapid stream (visual feedback synced with animation)
+         onEmit(0.8);
       };
 
       if (timerRef.current === null) {
          emit();
-         timerRef.current = window.setInterval(emit, 40);
+         timerRef.current = window.setInterval(emit, 60);
       }
    };
 
@@ -574,7 +575,7 @@ export function TitrationScreen() {
                               {/* Tools in same container as menu */}
                               <div
                                  ref={bottlesContainerRef}
-                                 className="relative flex items-end justify-end w-full mb-8 gap-2"
+                                 className="relative flex items-end justify-center w-full mb-8 gap-2"
                                  style={{ minHeight: toolSizes.toolsMinHeight }}
                               >
                                  {/* pH Meter Start Position */}
@@ -602,7 +603,7 @@ export function TitrationScreen() {
                                           style={{ touchAction: 'manipulation' }}
                                           onClick={() => {
                                              if (!canAddIndicator) return;
-                                             createPour(indicatorSubstance, 1, { speedMultiplier: isMobile ? 0.5 : 1, particleCount: 5 });
+                                             createPour(indicatorSubstance, 1, { speedMultiplier: isMobile ? 0.5 : 1.5, particleCount: 5 });
                                              model.incrementIndicator(5);
                                           }}
                                        >
@@ -632,14 +633,15 @@ export function TitrationScreen() {
                                              const now = Date.now();
                                              const delta = now - lastBuretteClickRef.current;
                                              lastBuretteClickRef.current = now;
-                                             if (delta < 400) {
+                                             if (delta < 200) {
                                                 startRapidStream(buretteRapidUntilRef, buretteRapidTimerRef, titrantSubstance, 2, (count) => {
                                                    model.incrementTitrant(count);
                                                 });
                                                 return;
                                              }
-                                             createPour(titrantSubstance, 2, { speedMultiplier: isMobile ? 0.5 : 1, particleCount: 1 });
-                                             model.incrementTitrant(1);
+                                             createPour(titrantSubstance, 2, { speedMultiplier: isMobile ? 0.5 : 1.5, particleCount: 1 });
+                                             // Delay increment to match particle travel time (~1200ms average, 1800ms on mobile)
+                                             setTimeout(() => model.incrementTitrant(1), isMobile ? 400 : 280);
                                           }}
                                        >
                                           <Burette
@@ -731,7 +733,7 @@ export function TitrationScreen() {
                                                 guide.markInteraction();
                                              }
                                           }}
-                                          onPouringStart={() => createPour(model.substance, 0, { speedMultiplier: isMobile ? 0.5 : 1 })}
+                                          onPouringStart={() => createPour(model.substance, 0, { speedMultiplier: isMobile ? 0.5 : 1.5 })}
                                           onPourComplete={() => {
                                              if (!canAddSubstance) return;
                                              model.incrementSubstance(model.substanceParticlesPerShake);
@@ -884,19 +886,11 @@ export function TitrationScreen() {
                      </div>
 
                      {/* RIGHT COLUMN */}
-                     <div
-                        className="grid relative min-h-0"
-                        style={{
-                           gridTemplateRows: `${ACIDS_BASES_RIGHT_PANEL_SLOTS.titration.reactionHeightPx}px ${ACIDS_BASES_RIGHT_PANEL_SLOTS.titration.mathHeightPx}px minmax(0, 1fr)`,
-                           rowGap: `${ACIDS_BASES_RIGHT_PANEL_SLOTS.titration.panelGapPx}px`
-                        }}
-                     >
-                        {/* Reaction Equation */}
-                        <div className="flex items-start gap-4 min-h-0">
-                           <div className="flex-1 flex items-center justify-start ml-10 min-w-0">
-                              <ReactionEquation substance={model.substance} titrant={titrantSubstance} />
-                           </div>
-                           <div className="flex items-center gap-4 flex-shrink-0 pt-1 z-[100]">
+                     <div className="flex flex-col gap-2">
+                        {/* Controls row - same structure as Intro */}
+                        <div className="flex items-start gap-4" style={{ position: 'relative', zIndex: 10001 }}>
+                           <div className="flex-1" />
+                           <div className="flex items-center gap-4 flex-shrink-0 pt-1">
                               <Blockable element="reactionSelection" overrides={guide.guideOverrides} className="relative z-50">
                                  <div
                                     id="guide-element-reactionSelection"
@@ -921,12 +915,23 @@ export function TitrationScreen() {
                               <NavMenu />
                            </div>
                         </div>
+                        <div className="flex-1 min-h-0">
+                           <div
+                              className="grid relative h-full min-h-0"
+                              style={{
+                                 gridTemplateRows: `${ACIDS_BASES_RIGHT_PANEL_SLOTS.titration.reactionHeightPx}px ${ACIDS_BASES_RIGHT_PANEL_SLOTS.titration.mathHeightPx}px minmax(0, 1fr)`,
+                                 rowGap: `${ACIDS_BASES_RIGHT_PANEL_SLOTS.titration.panelGapPx}px`
+                              }}
+                           >
+                        <div className="flex items-center justify-start ml-10 w-full min-h-0">
+                           <ReactionEquation substance={model.substance} titrant={titrantSubstance} />
+                        </div>
 
                         <div className="px-2 min-h-0 overflow-hidden">
                            <TitrationMathPanel {...mathValues} />
                         </div>
 
-                        <div className="pl-4 overflow-y-auto overflow-x-hidden pr-8 min-h-0">
+                        <div className="pl-4 overflow-y-auto overflow-x-hidden pr-8 min-h-0 flex justify-end">
                            <GuideBubble
                               position="relative"
                               statement={guide.statement}
@@ -936,9 +941,11 @@ export function TitrationScreen() {
                               canGoBackwards={guide.currentStepIndex > 0}
                               currentStep={guide.currentStepIndex}
                               totalSteps={titrationGuideSteps.length}
-                              className="shadow-none !bg-transparent scale-90 origin-top-left"
+                              className="shadow-none !bg-transparent scale-90 origin-top-right"
                            />
                         </div>
+                        </div>
+                     </div>
                      </div>
                      {/* End of Right Column */}
                   </main>

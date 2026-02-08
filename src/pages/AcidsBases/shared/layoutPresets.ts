@@ -2,7 +2,7 @@ export const ACIDS_BASES_MAIN_GRID = {
    // iOS-derived: intro uses a narrower beaker side and wider theory side.
    introduction: 'minmax(0, 34fr) minmax(0, 66fr)',
    buffers: 'minmax(0, 50fr) minmax(0, 50fr)',
-   titration: 'minmax(0, 50fr) minmax(0, 50fr)'
+   titration: 'minmax(0, 55fr) minmax(0, 55fr)'
 } as const;
 
 export const ACIDS_BASES_LAYOUT_PADDING_PX = 10;
@@ -32,7 +32,7 @@ export const ACIDS_BASES_GRAPH_ANCHOR = {
 
 export const ACIDS_BASES_BOTTOM_GRAPH_SLOT = {
    widthPx: 292,
-   heightPx: 280
+   heightPx: 310
 } as const;
 
 export const ACIDS_BASES_STABLE_ROW_SLOTS = {
@@ -55,7 +55,7 @@ export const ACIDS_BASES_RIGHT_PANEL_SLOTS = {
    },
    titration: {
       reactionHeightPx: 48,
-      mathHeightPx: 312,
+      mathHeightPx: 290,
       panelGapPx: 16
    }
 } as const;

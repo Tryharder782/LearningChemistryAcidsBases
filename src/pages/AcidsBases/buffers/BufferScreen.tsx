@@ -504,33 +504,10 @@ export function BufferScreen() {
                      </div>
 
                      {/* RIGHT COLUMN: Theory & Guide */}
-                     <BufferSidePanel
-                        guideOverrides={guideOverrides}
-                        availableSubstances={availableSubstances}
-                        selectedSubstance={selectedSubstance}
-                        onSelectSubstance={(s) => {
-                           setSelectedSubstance(s);
-                           setParticleCount(0);
-                           setSimulationPhase('adding');
-                           setWaterLevel(0.5);
-                           setSelectorOpen(false);
-                           markInteraction();
-                        }}
-                        selectorOpen={selectorOpen}
-                        setSelectorOpen={setSelectorOpen}
-                        equationState={currentStep.equationState as any}
-                        pH={pH}
-                        concentrations={scientificConcentrations}
-                        statement={statement}
-                        onNext={handleNext}
-                        onBack={handleBack}
-                        canGoNext={canGoNext()}
-                        canGoBack={currentStepIndex > 0}
-                        currentStepIndex={currentStepIndex}
-                        totalSteps={bufferGuideSteps.length}
-                        isChooseSubstanceStep={currentStep.highlights?.includes('reactionSelection')}
-                        controls={
-                           <>
+                     <div className="flex flex-col gap-2">
+                        {/* Controls row - same structure as Intro */}
+                        <div className="flex items-center justify-end gap-2 flex-wrap" style={{ position: 'relative', zIndex: 10001 }}>
+                           <div className="flex items-center gap-2 flex-shrink-0 pt-1">
                               <Blockable element="reactionSelection" overrides={guideOverrides} className="relative">
                                  <div className={isChooseSubstanceStep ? 'w-full max-w-xs' : 'w-fit'}>
                                     <SubstanceSelector
@@ -557,9 +534,37 @@ export function BufferScreen() {
                               {showChapterTabs && <AcidsBasesNav />}
                               <AcidsHomeButton />
                               <NavMenu />
-                           </>
-                        }
-                     />
+                           </div>
+                        </div>
+                        <div className="flex-1 min-h-0">
+                           <BufferSidePanel
+                              guideOverrides={guideOverrides}
+                              availableSubstances={availableSubstances}
+                              selectedSubstance={selectedSubstance}
+                              onSelectSubstance={(s) => {
+                                 setSelectedSubstance(s);
+                                 setParticleCount(0);
+                                 setSimulationPhase('adding');
+                                 setWaterLevel(0.5);
+                                 setSelectorOpen(false);
+                                 markInteraction();
+                              }}
+                              selectorOpen={selectorOpen}
+                              setSelectorOpen={setSelectorOpen}
+                              equationState={currentStep.equationState as any}
+                              pH={pH}
+                              concentrations={scientificConcentrations}
+                              statement={statement}
+                              onNext={handleNext}
+                              onBack={handleBack}
+                              canGoNext={canGoNext()}
+                              canGoBack={currentStepIndex > 0}
+                              currentStepIndex={currentStepIndex}
+                              totalSteps={bufferGuideSteps.length}
+                              isChooseSubstanceStep={currentStep.highlights?.includes('reactionSelection')}
+                           />
+                        </div>
+                     </div>
                   </main>
                </div>
 

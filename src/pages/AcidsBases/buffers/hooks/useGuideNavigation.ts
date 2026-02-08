@@ -55,9 +55,7 @@ export const useGuideNavigation = ({
    const navigate = useNavigate();
    const handleNext = () => {
       // Save snapshot of current step before moving to next
-      if (snapshotStepIds.includes(currentStep.id)) {
-         saveSnapshotForStep(currentStep.id);
-      }
+      saveSnapshotForStep(currentStep.id);
 
       if (currentStep.inputState.type === 'chooseSubstance' && !selectedSubstance) {
          if (availableSubstances.length > 0) {
@@ -109,10 +107,7 @@ export const useGuideNavigation = ({
          const prevIndex = currentStepIndex - 1;
          const prevStep = steps[prevIndex];
          setCurrentStepIndex(prevIndex);
-
-         if (snapshotStepIds.includes(prevStep.id)) {
-            restoreSnapshotForStep(prevStep.id);
-         }
+         restoreSnapshotForStep(prevStep.id);
 
          const isSetup = prevStep.inputState.type === 'chooseSubstance' || prevStep.inputState.type === 'setWaterLevel';
          if (isSetup) {

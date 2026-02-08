@@ -5,7 +5,7 @@
  * - 65% Right: Equations, Scale, Graph, Guide
  */
 
-import { useEffect, useState, useRef, useMemo } from 'react';
+import { useEffect, useState, useRef, useMemo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { ChevronUp } from 'lucide-react';
@@ -35,9 +35,16 @@ import { ACIDS_BASES_BEAKER_ANCHOR, ACIDS_BASES_GRAPH_ANCHOR, ACIDS_BASES_LAYOUT
 const WATER_LEVEL_MIN = 0.31818;
 const WATER_LEVEL_MAX = 0.681818;
 
+type IntroSnapshot = {
+   waterLevel: number;
+   substanceAddedFraction: number;
+   particles: Particle[];
+};
+
 export function GuidedIntroScreen() {
    const navigate = useNavigate();
    const showChapterTabs = useMemo(() => shouldShowAcidsChapterTabs(), []);
+   const store = useGuideStore();
    const {
       currentStep,
       currentStepData,
@@ -53,16 +60,9 @@ export function GuidedIntroScreen() {
       canGoNext,
       substanceSelectorOpen,
       setSubstanceSelectorOpen,
-   } = useGuideStore();
+   } = store;
 
    const isLastStep = currentStep >= totalSteps - 1 || currentStepData?.dynamicTextId === 'end';
-   const handleNext = () => {
-      if (isLastStep) {
-         navigate('/acids/introduction/quiz');
-         return;
-      }
-      next();
-   };
    const canNext = isLastStep ? true : canGoNext();
 
    // Beaker ref for pH meter collision detection
@@ -70,6 +70,42 @@ export function GuidedIntroScreen() {
    const bottlesContainerRef = useRef<HTMLDivElement>(null);
    const beakerModelRef = useRef(new ReactingBeakerModel());
    const [particles, setParticles] = useState<Particle[]>([]);
+
+   // Snapshot system for back navigation
+   const snapshotsRef = useRef<Record<number, IntroSnapshot>>({});
+
+   const handleNext = useCallback(() => {
+      if (isLastStep) {
+         navigate('/acids/introduction/quiz');
+         return;
+      }
+      // Save snapshot of current step before advancing
+      snapshotsRef.current[currentStep] = {
+         waterLevel,
+         substanceAddedFraction,
+         particles: beakerModelRef.current?.getParticles() ?? [],
+      };
+      next();
+   }, [isLastStep, currentStep, waterLevel, substanceAddedFraction, next, navigate]);
+
+   const handleBack = useCallback(() => {
+      if (currentStep <= 0) return;
+      const prevStep = currentStep - 1;
+      const snapshot = snapshotsRef.current[prevStep];
+
+      // Navigate to previous step
+      store.goToStep(prevStep);
+
+      // Restore snapshot state if available
+      if (snapshot) {
+         // Use setState directly to avoid hasInteracted side effects
+         useGuideStore.setState({
+            waterLevel: snapshot.waterLevel,
+            substanceAddedFraction: snapshot.substanceAddedFraction,
+         });
+         beakerModelRef.current?.setParticles(snapshot.particles);
+      }
+   }, [currentStep, store]);
    const [beakerBounds, setBeakerBounds] = useState<{
       x: number; y: number; width: number; height: number; liquidLevel: number
    } | undefined>();
@@ -375,11 +411,12 @@ export function GuidedIntroScreen() {
          },
          onPouringStart: () => {
             if (!substance) return;
-            createPour(substance, index as 0 | 1 | 2 | 3, { particleCount: 5, speedMultiplier: isMobile ? 0.5 : 1 });
+            createPour(substance, index as 0 | 1 | 2 | 3, { particleCount: 5, speedMultiplier: isMobile ? 0.5 : 1.5 });
          },
          onPourComplete: () => {
             if (!substance || inputState.type !== 'addSubstance') return;
-            addSubstance(0);
+            // Delay to match particle travel time
+            setTimeout(() => addSubstance(0), isMobile ? 400 : 280);
          }
       };
    }), [bottleSlots, selectedSubstances, currentStep, inputState, activeBottleIndex, usedSubstanceTypes, bottleTranslation, selectSubstance, registerBottle, createPour, addSubstance]);
@@ -522,18 +559,18 @@ export function GuidedIntroScreen() {
                      </div>
 
                      {/* RIGHT COLUMN: Equations, Scale, Graph, Guide */}
-                     <div className="flex flex-col gap-2 pt-0" style={{ overflowX: 'hidden' }}>
+                     <div className="flex flex-col gap-6 pt-0" style={{ overflowX: 'hidden' }}>
                         {/* Row 0: Controls + Equations */}
-                        <div className="flex items-start gap-4">
+                        <div className="flex items-start gap-4" style={{ position: 'relative', zIndex: 10001 }}>
                            {/* Equation Display - takes available space */}
-                           <div className="flex-1 min-w-0 pt-2">
+                           <div className="flex-1 min-w-0 pt-2 pb-2">
                               <EquationDisplay
                                  equations={createDynamicEquations(pH)}
                                  highlightedIndex={inputState.type === 'none' ? undefined : 0}
                               />
                            </div>
                            {/* Controls - fixed to the right */}
-                           <div className="flex items-center gap-4 flex-shrink-0 pt-1 z-[100]">
+                           <div className="flex items-center gap-4 flex-shrink-0 pt-1">
                               <Blockable element="reactionSelection" overrides={{ highlights: currentStepData?.highlights }} className="relative z-50">
                                  <div
                                     id="guide-element-reactionSelection"
@@ -568,10 +605,10 @@ export function GuidedIntroScreen() {
                         <Blockable element="pHScale">
                            <div className="px-4 py-1">
                               {/* Mode Switcher Buttons */}
-                              <div className="flex gap-6 mb-2">
+                              <div className="flex gap-6 mb-3">
                                  <button
                                     onClick={() => setScaleMode('concentration')}
-                                    className={`text-base font-medium transition-colors ${scaleMode === 'concentration' ? 'text-[#ED5A3B]' : 'text-gray-300 hover:text-gray-400'}`}
+                                    className={`text-[20px] font-semibold transition-colors ${scaleMode === 'concentration' ? 'text-[#ED5A3B]' : 'text-gray-300 hover:text-gray-400'}`}
                                     style={{
                                        background: 'none',
                                        border: 'none',
@@ -583,7 +620,7 @@ export function GuidedIntroScreen() {
                                  </button>
                                  <button
                                     onClick={() => setScaleMode('ph')}
-                                    className={`text-base font-medium transition-colors ${scaleMode === 'ph' ? 'text-[#ED5A3B]' : 'text-gray-300 hover:text-gray-400'}`}
+                                    className={`text-[20px] font-semibold transition-colors ${scaleMode === 'ph' ? 'text-[#ED5A3B]' : 'text-gray-300 hover:text-gray-400'}`}
                                     style={{
                                        background: 'none',
                                        border: 'none',
@@ -597,13 +634,12 @@ export function GuidedIntroScreen() {
                               <PHScaleDetailed
                                  pH={pH}
                                  mode={scaleMode}
-                                 compact
                               />
                            </div>
                         </Blockable>
 
                         {/* Row 3: Graph + Guide (Side by Side) */}
-                        <div className="flex-1 grid gap-2 min-h-[160px] items-start" style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}>
+                        <div className="mt-[20px] flex-1 grid gap-6 min-h-[250px] items-start" style={{ gridTemplateColumns: 'minmax(0, 40fr) minmax(0, 60fr)', overflowX: 'hidden' }}>
                            {/* Concentration Chart */}
                            <div className="flex justify-start items-start">
                               <div style={{ marginLeft: `${ACIDS_BASES_GRAPH_ANCHOR.leftOffsetPx}px` }}>
@@ -613,8 +649,8 @@ export function GuidedIntroScreen() {
                                        molarity={effectiveMolarity}
                                        addedFraction={substanceAddedFraction}
                                        pH={pH}
-                                       height={160}
-                                       graphSizePx={160}
+                                       height={240}
+                                       graphSizePx={240}
                                        mode={chartMode}
                                        onModeChange={setChartMode}
                                     />
@@ -628,6 +664,7 @@ export function GuidedIntroScreen() {
                                  position="relative"
                                  className="bg-transparent shadow-none"
                                  onNext={handleNext}
+                                 onBack={handleBack}
                                  canGoForwards={canNext}
                               />
                            </div>

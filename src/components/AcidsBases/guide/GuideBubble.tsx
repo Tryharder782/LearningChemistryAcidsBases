@@ -52,7 +52,7 @@ export function GuideBubble({
          {/* Left Column: Bubble + Buttons */}
          <div className="flex flex-col gap-2">
             {/* Speech bubble Container */}
-            <div className={`relative w-[360px] h-[240px] flex flex-col justify-between ${position === 'relative' ? 'mx-auto' : ''}`}>
+            <div className={`relative w-[360px] h-[240px] flex flex-col justify-between ${position === 'relative' ? 'ml-auto' : ''}`}>
                {/* Background Image */}
                <img
                   src="/source-images/GuideBubble.svg"
@@ -103,14 +103,14 @@ export function GuideBubble({
                   onClick={next}
                   disabled={!canNext}
                   className={`
-                     flex items-center gap-3 pl-5 mr-10 rounded-full transition-all bg-white border-2 border-[#Eaeaea] shadow-sm hover:border-gray-300
+                     flex items-center gap-3 pl-5 mr-10 rounded-full transition-all bg-white border-4  border-[#Eaeaea] shadow-sm hover:border-gray-300 pr-0
                      ${canNext ? '' : 'cursor-not-allowed'}
                   `}
                   style={{ borderColor: canNext ? "#DD523A" : "#939293" }}
                >
                   <span className="font-bold text-lg text-gray-500" style={{ color: canNext ? "#DD523A" : "#939293" }}>Next</span>
                   <div className={`
-                     w-8 h-8 rounded-full flex items-center justify-center text-white
+                     w-8 h-8 border-[0px] rounded-full flex items-center justify-center text-white
                   `} style={{ backgroundColor: canNext ? "#DD523A" : "#939293" }}>
                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" className="ml-0.5">
                         <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />

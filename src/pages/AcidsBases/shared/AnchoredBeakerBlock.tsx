@@ -18,9 +18,11 @@ export const AnchoredBeakerBlock = ({ slider, beaker, footer }: AnchoredBeakerBl
             }}
          >
             {slider}
-            {beaker}
+            <div className="flex flex-col items-center">
+               {beaker}
+               {footer ? <div className="flex justify-center gap-6 mt-2">{footer}</div> : null}
+            </div>
          </div>
-         {footer ? <div className="flex justify-center gap-6">{footer}</div> : null}
       </div>
    );
 };

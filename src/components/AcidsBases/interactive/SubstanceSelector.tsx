@@ -104,7 +104,9 @@ export function SubstanceSelector({
 
          {/* Dropdown Options */}
          {isOpen && (
-            <div className={`
+            <div 
+               data-dropdown-menu="true"
+               className={`
                w-full mt-1 bg-white border-2 border-black rounded-sm shadow-lg max-h-60 overflow-auto
                ${staticMenu ? 'relative' : 'absolute z-[200]'}
                ${align === 'right' ? 'right-0' : 'left-0'}

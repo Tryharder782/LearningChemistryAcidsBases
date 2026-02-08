@@ -8,6 +8,8 @@ import { getSubstancesByType } from '../../../../helper/acidsBases/substances';
 import { calculateTitrationPH } from '../../../../helper/acidsBases/simulationEngine';
 import type { TitrationModel } from './useTitrationModel';
 import { resolveTitrationStatement } from '../../../../components/AcidsBases/guide/titrationStatements';
+import type { ReactingBeakerModel } from '../../../../helper/acidsBases/particles/ReactingBeakerModel';
+import type { Particle } from '../../../../helper/acidsBases/particles/types';
 
 interface RawGuideStep {
    id?: string;
@@ -60,7 +62,28 @@ const WEAK_BASE_EQUIVALENCE_PH = 5.32;
 const WEAK_ACID_END_PH = 13.0;
 const WEAK_BASE_END_PH = 1.0;
 
-export const useTitrationGuideState = (model: TitrationModel): UseTitrationGuideStateResult => {
+type TitrationSnapshot = {
+   rows: number;
+   substanceAdded: number;
+   titrantAdded: number;
+   indicatorAdded: number;
+   indicatorEmitted: number;
+   titrantMolarity: number;
+   phase: TitrationModel['phase'];
+   weakTitrantLimit: TitrationModel['weakTitrantLimit'];
+   beakerState: TitrationModel['beakerState'];
+   macroBeakerState: TitrationModel['macroBeakerState'];
+   showIndicatorFill: boolean;
+   showTitrantFill: boolean;
+   showPhString: boolean;
+   substanceId: string;
+   particles: Particle[];
+};
+
+export const useTitrationGuideState = (
+   model: TitrationModel,
+   beakerModelRef?: React.RefObject<ReactingBeakerModel>
+): UseTitrationGuideStateResult => {
    const navigate = useNavigate();
    const [currentStepIndex, setCurrentStepIndex] = useState(0);
    const [hasInteracted, setHasInteracted] = useState(false);
@@ -69,24 +92,8 @@ export const useTitrationGuideState = (model: TitrationModel): UseTitrationGuide
    const suppressAutoAdvanceOnceRef = useRef(false);
    const prevStepIdRef = useRef<string>('');
    const stepEntryTitrantRef = useRef(0);
-   const snapshotStepsRef = useRef(new Set(['titr-06', 'titr-11', 'titr-36', 'titr-56']));
-   const snapshotRef = useRef<{
-      stepId: string;
-      rows: number;
-      substanceAdded: number;
-      titrantAdded: number;
-      indicatorAdded: number;
-      indicatorEmitted: number;
-      titrantMolarity: number;
-      phase: TitrationModel['phase'];
-      weakTitrantLimit: TitrationModel['weakTitrantLimit'];
-      beakerState: TitrationModel['beakerState'];
-      macroBeakerState: TitrationModel['macroBeakerState'];
-      showIndicatorFill: boolean;
-      showTitrantFill: boolean;
-      showPhString: boolean;
-      substanceId: string;
-   } | null>(null);
+   const snapshotsRef = useRef<Record<string, TitrationSnapshot>>({});
+   const skipActionsOnBackRef = useRef(false);
 
    const currentStep = titrationGuideSteps[currentStepIndex];
    const rawStep = rawSteps[currentStepIndex];
@@ -223,26 +230,12 @@ export const useTitrationGuideState = (model: TitrationModel): UseTitrationGuide
       prevStepIdRef.current = nextStepId;
       setHasInteracted(false);
       stepEntryTitrantRef.current = model.titrantAdded;
-      applyStepActions(rawStep);
-      if (rawStep?.id && snapshotStepsRef.current.has(rawStep.id)) {
-         snapshotRef.current = {
-            stepId: rawStep.id,
-            rows: model.rows,
-            substanceAdded: model.substanceAdded,
-            titrantAdded: model.titrantAdded,
-            indicatorAdded: model.indicatorAdded,
-            indicatorEmitted: model.indicatorEmitted,
-            titrantMolarity: model.titrantMolarity,
-            phase: model.phase,
-            weakTitrantLimit: model.weakTitrantLimit,
-            beakerState: model.beakerState,
-            macroBeakerState: model.macroBeakerState,
-            showIndicatorFill: model.showIndicatorFill,
-            showTitrantFill: model.showTitrantFill,
-            showPhString: model.showPhString,
-            substanceId: model.substance.id
-         };
+
+      if (!skipActionsOnBackRef.current) {
+         applyStepActions(rawStep);
       }
+      skipActionsOnBackRef.current = false;
+
       if (currentStep.highlights.includes('reactionSelection')) {
          setSubstanceSelectorOpen(true);
       } else {
@@ -261,6 +254,26 @@ export const useTitrationGuideState = (model: TitrationModel): UseTitrationGuide
       return () => window.clearTimeout(timeout);
    }, [rawStep, currentStepIndex]);
 
+   const saveSnapshot = useCallback((stepId: string) => {
+      snapshotsRef.current[stepId] = {
+         rows: model.rows,
+         substanceAdded: model.substanceAdded,
+         titrantAdded: model.titrantAdded,
+         indicatorAdded: model.indicatorAdded,
+         indicatorEmitted: model.indicatorEmitted,
+         titrantMolarity: model.titrantMolarity,
+         phase: model.phase,
+         weakTitrantLimit: model.weakTitrantLimit,
+         beakerState: model.beakerState,
+         macroBeakerState: model.macroBeakerState,
+         showIndicatorFill: model.showIndicatorFill,
+         showTitrantFill: model.showTitrantFill,
+         showPhString: model.showPhString,
+         substanceId: model.substance.id,
+         particles: beakerModelRef?.current?.getParticles() ?? [],
+      };
+   }, [model, beakerModelRef]);
+
    const handleNext = useCallback(() => {
       if (currentStep.inputState.type === 'selectSubstance' && !model.substance) {
          const list = getSubstancesByType(model.substanceType);
@@ -268,6 +281,9 @@ export const useTitrationGuideState = (model: TitrationModel): UseTitrationGuide
             model.setSelectedSubstance(list[0]);
          }
       }
+
+      // Save snapshot of current step before advancing
+      saveSnapshot(currentStep.id);
 
       if (currentStepIndex >= titrationGuideSteps.length - 1) {
          navigate('/acids/titration/quiz');
@@ -277,41 +293,41 @@ export const useTitrationGuideState = (model: TitrationModel): UseTitrationGuide
       if (currentStepIndex < titrationGuideSteps.length - 1) {
          setCurrentStepIndex(currentStepIndex + 1);
       }
-   }, [currentStepIndex, currentStep.inputState.type, model, navigate]);
+   }, [currentStepIndex, currentStep.inputState.type, currentStep.id, model, navigate, saveSnapshot]);
 
    const handleBack = useCallback(() => {
-      if (currentStepIndex > 0) {
-         const snapshotPairs: Record<string, string> = {
-            'titr-07': 'titr-06',
-            'titr-12': 'titr-11',
-            'titr-37': 'titr-36',
-            'titr-57': 'titr-56'
-         };
-         const targetSnapshotId = snapshotPairs[currentStep.id];
-         if (targetSnapshotId && snapshotRef.current?.stepId === targetSnapshotId) {
-            const snapshot = snapshotRef.current;
-            suppressAutoAdvanceOnceRef.current = true;
-            const substanceMatch = model.availableSubstances.find(item => item.id === snapshot.substanceId);
-            if (substanceMatch) {
-               model.setSelectedSubstance(substanceMatch);
-            }
-            model.setRows(snapshot.rows);
-            model.setSubstanceAddedValue(snapshot.substanceAdded);
-            model.setTitrantAddedValue(snapshot.titrantAdded);
-            model.setIndicatorAddedValue(snapshot.indicatorAdded);
-            model.setIndicatorEmittedValue(snapshot.indicatorEmitted);
-            model.setTitrantMolarity(snapshot.titrantMolarity);
-            model.setPhase(snapshot.phase);
-            model.setWeakTitrantLimit(snapshot.weakTitrantLimit);
-            model.setBeakerState(snapshot.beakerState);
-            model.setMacroBeakerState(snapshot.macroBeakerState);
-            model.setShowIndicatorFill(snapshot.showIndicatorFill);
-            model.setShowTitrantFill(snapshot.showTitrantFill);
-            model.setShowPhString(snapshot.showPhString);
+      if (currentStepIndex <= 0) return;
+
+      const prevIndex = currentStepIndex - 1;
+      const prevStep = titrationGuideSteps[prevIndex];
+      const snapshot = snapshotsRef.current[prevStep.id];
+
+      if (snapshot) {
+         skipActionsOnBackRef.current = true;
+         suppressAutoAdvanceOnceRef.current = true;
+
+         const substanceMatch = model.availableSubstances.find(item => item.id === snapshot.substanceId);
+         if (substanceMatch) {
+            model.setSelectedSubstance(substanceMatch);
          }
-         setCurrentStepIndex(currentStepIndex - 1);
+         model.setRows(snapshot.rows);
+         model.setSubstanceAddedValue(snapshot.substanceAdded);
+         model.setTitrantAddedValue(snapshot.titrantAdded);
+         model.setIndicatorAddedValue(snapshot.indicatorAdded);
+         model.setIndicatorEmittedValue(snapshot.indicatorEmitted);
+         model.setTitrantMolarity(snapshot.titrantMolarity);
+         model.setPhase(snapshot.phase);
+         model.setWeakTitrantLimit(snapshot.weakTitrantLimit);
+         model.setBeakerState(snapshot.beakerState);
+         model.setMacroBeakerState(snapshot.macroBeakerState);
+         model.setShowIndicatorFill(snapshot.showIndicatorFill);
+         model.setShowTitrantFill(snapshot.showTitrantFill);
+         model.setShowPhString(snapshot.showPhString);
+         beakerModelRef?.current?.setParticles(snapshot.particles);
       }
-   }, [currentStepIndex, currentStep.id, model]);
+
+      setCurrentStepIndex(prevIndex);
+   }, [currentStepIndex, model, beakerModelRef]);
 
    const canGoNext = useCallback(() => {
       const inputType = currentStep.inputState.type;

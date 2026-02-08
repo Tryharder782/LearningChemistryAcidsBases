@@ -189,7 +189,7 @@ export function BufferEquationsNew({
             )}
 
             {/* Fraction line (Left) */}
-            <div className="col-span-3 self-center" style={{ borderBottom: '1px solid black', width: '100%', height: '1px' }} />
+            <div className="col-span-3 self-start mr-auto" style={{ borderBottom: '1px solid black', width: '70%', height: '1px' }} />
 
             {/* Fraction denominator (Left) */}
             <div className="col-span-3 self-center -translate-x-6">[{substanceLabel}]</div>
@@ -205,9 +205,9 @@ export function BufferEquationsNew({
                {showAllTerms ? <Val>{toScientific(animatedK)}</Val> : <Placeholder />}
             </div>
             <div className={`${span3}`} style={{ color: ACIDS_BASES_COLORS.ui.phScale.acidLabel }}>=</div>
-            <div>{showIonConcentration ? <Val>{toScientific(animatedValH)}</Val> : <Placeholder />}</div>
+            <div>({showIonConcentration ? <Val>{toScientific(animatedValH)}</Val> : <Placeholder />})</div>
             <div><Val>·</Val></div>
-            <div className="-translate-x-6">{showIonConcentration ? <Val>{toScientific(animatedValA)}</Val> : <Placeholder />}</div>
+            <div className="-translate-x-6">({showIonConcentration ? <Val>{toScientific(animatedValA)}</Val> : <Placeholder />})</div>
 
             {/* Spacer Col 6 */}
             <div className={`w-8 ${span3}`} />
@@ -238,10 +238,10 @@ export function BufferEquationsNew({
             )}
 
             {/* Fraction line (Left) */}
-            <div className="col-span-3 self-center" style={{ borderBottom: '1px solid black', width: '100%', height: '1px' }} />
+            <div className="col-span-3 self-start mr-auto" style={{ borderBottom: '1px solid black', width: '70%', height: '1px' }} />
 
             {/* Fraction denominator value (Left) */}
-            <div className={`col-span-3 self-center -translate-x-6`}>{showSubstance ? <Val>{toScientific(animatedValHA)}</Val> : <Placeholder />}</div>
+            <div className={`col-span-3 self-center -translate-x-6`}>({showSubstance ? <Val>{toScientific(animatedValHA)}</Val> : <Placeholder />})</div>
             <div />
             <div />
 
