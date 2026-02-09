@@ -87,11 +87,12 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
       if (moved > 10) return // Not a tap — scroll or drag
 
       const el = e.target as HTMLElement
-      const btn = el.closest('button, a, [role="button"]') as HTMLElement | null
-      if (btn) {
-        e.preventDefault()   // Prevent broken native click synthesis
-        btn.click()          // Fire click manually
-      }
+      // Skip form elements that handle their own touch→click
+      const tag = el.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+
+      e.preventDefault()   // Prevent broken native click synthesis inside transform:scale()
+      el.click()           // Fire click on exact target — React event delegation handles the rest
     }
 
     container.addEventListener('touchstart', onTouchStart, { passive: true })
