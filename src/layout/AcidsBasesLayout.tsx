@@ -92,7 +92,14 @@ const AcidsBasesLayout = ({ children }: AcidsBasesLayoutProps) => {
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
 
       e.preventDefault()   // Prevent broken native click synthesis inside transform:scale()
-      el.click()           // Fire click on exact target — React event delegation handles the rest
+
+      // SVG elements (path, circle, g, etc.) don't have .click() — walk up to
+      // the nearest HTMLElement or dispatch a synthetic MouseEvent as fallback
+      if (typeof el.click === 'function') {
+        el.click()
+      } else {
+        el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }))
+      }
     }
 
     container.addEventListener('touchstart', onTouchStart, { passive: true })
